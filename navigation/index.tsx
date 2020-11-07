@@ -10,7 +10,7 @@ import {
 import * as React from 'react';
 import { Button, ColorSchemeName } from 'react-native';
 
-import LoginScreen from '../screens/Login/Login';
+import LoginScreen from '../screens/Authentication/Authentication';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import { RootStackParamList } from '../types';
 import BottomTabNavigator from './BottomTabNavigator';

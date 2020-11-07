@@ -2,7 +2,7 @@ import * as eva from '@eva-design/eva';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { ApplicationProvider, Layout, Text } from 'react-native-ui-kitten';
+import { ApplicationProvider } from 'react-native-ui-kitten';
 
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
@@ -17,7 +17,7 @@ export default function App() {
   } else {
     return (
       <SafeAreaProvider>
-        <ApplicationProvider {...eva} theme={eva.light}>
+        <ApplicationProvider {...eva} theme={eva[colorScheme]}>
           <Navigation colorScheme={colorScheme} />
           <StatusBar />
         </ApplicationProvider>
