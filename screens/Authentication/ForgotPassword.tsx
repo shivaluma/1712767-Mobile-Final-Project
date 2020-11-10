@@ -1,14 +1,33 @@
+import { Layout } from '@ui-kitten/components';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Layout } from 'react-native-ui-kitten';
+
+import Field from '../../components/Authentication/LoginForm/Field';
 interface Props {}
 
 const ForgotPassword = (props: Props) => {
+  const [formData, setFormData] = useState({ email: '' });
+
+  const handleChangeValue = (field: 'email', value: string) => {
+    setFormData({ ...formData, [field]: value });
+  };
+
+  const onEmailChange = (email: string) => {
+    handleChangeValue('email', email);
+  };
+
   return (
     <Layout style={styles.container}>
       <KeyboardAwareScrollView>
-        <Layout style={styles.form} />
+        <Layout style={styles.form}>
+          <Field
+            label="email"
+            value={formData.email}
+            placeholder="Input or email adddress..."
+            onChangeText={onEmailChange}
+          />
+        </Layout>
       </KeyboardAwareScrollView>
     </Layout>
   );

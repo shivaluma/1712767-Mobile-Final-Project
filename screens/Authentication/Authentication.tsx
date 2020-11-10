@@ -1,12 +1,16 @@
+import { Button, Layout } from '@ui-kitten/components';
 import React, { useState } from 'react';
-import { Dimensions, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Button, Layout, Input, Text } from 'react-native-ui-kitten';
 
 import LoginForm from '../../components/Authentication/LoginForm';
 import RegisterForm from '../../components/Authentication/RegisterForm';
 
-const LoginScreen = () => {
+interface Props {
+  navigation: Navigator;
+}
+
+const LoginScreen = ({ navigation }) => {
   const [authData, setAuthData] = useState<AuthenticationForm>({
     username: '',
     password: '',
@@ -24,12 +28,20 @@ const LoginScreen = () => {
 
   const handleToggleMode = () => setIsLogin((prev) => !prev);
 
+  const onLoginHandler = () => {
+    navigation.navigate('Root');
+  };
+
   return (
     <Layout style={styles.container}>
       <KeyboardAwareScrollView>
         <Layout style={styles.form}>
           {isLogin ? (
-            <LoginForm value={authData} onChange={handleChangeValue} />
+            <LoginForm
+              value={authData}
+              onChange={handleChangeValue}
+              onLogin={onLoginHandler}
+            />
           ) : (
             <RegisterForm value={authData} onChange={handleChangeValue} />
           )}

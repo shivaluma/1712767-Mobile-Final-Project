@@ -1,7 +1,8 @@
+import { Button, Layout } from '@ui-kitten/components';
 import React, { ReactElement } from 'react';
-import { Button, Layout } from 'react-native-ui-kitten';
 
 import Field from './LoginForm/Field';
+import ProtectedField from './LoginForm/ProtectedField';
 
 interface Props {
   value: AuthenticationForm;
@@ -9,9 +10,14 @@ interface Props {
     field: 'username' | 'password' | 'confirmPassword',
     value: string
   ) => void;
+  onLogin: () => void;
 }
 
-export default function LoginForm({ value, onChange }: Props): ReactElement {
+export default function LoginForm({
+  value,
+  onChange,
+  onLogin,
+}: Props): ReactElement {
   return (
     <Layout>
       <Field
@@ -20,15 +26,14 @@ export default function LoginForm({ value, onChange }: Props): ReactElement {
         value={value.username}
         onChangeText={(text) => onChange('username', text)}
       />
-      <Field
+      <ProtectedField
         label="Password"
         placeholder="Input your password"
         value={value.password}
-        secureTextEntry
         onChangeText={(text) => onChange('password', text)}
       />
 
-      <Button>Login</Button>
+      <Button onPress={onLogin}>Login</Button>
     </Layout>
   );
 }

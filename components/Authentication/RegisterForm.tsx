@@ -1,5 +1,5 @@
+import { Button, Layout } from '@ui-kitten/components';
 import React, { ReactElement } from 'react';
-import { Button, Layout } from 'react-native-ui-kitten';
 
 import Field from './LoginForm/Field';
 

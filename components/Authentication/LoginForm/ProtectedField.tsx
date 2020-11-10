@@ -1,22 +1,27 @@
-import { Layout, Input, Text } from '@ui-kitten/components';
-import React from 'react';
-import { StyleSheet } from 'react-native';
+import { Input, Layout, Text, Icon } from '@ui-kitten/components';
+import React, { useState } from 'react';
+import { StyleSheet, TouchableWithoutFeedback } from 'react-native';
+
 interface Props {
   label: string;
   placeholder: string;
   value: string;
   onChangeText: (text: string) => void;
-  secureTextEntry?: boolean;
 }
 
-const Field = (props: Props) => {
-  const {
-    label,
-    placeholder,
-    value,
-    onChangeText,
-    secureTextEntry = false,
-  } = props;
+const ProtectedField = (props: Props) => {
+  const { label, placeholder, value, onChangeText } = props;
+
+  const [show, setShow] = useState(true);
+
+  const toggleSecureEntry = () => setShow((prev) => !prev);
+
+  const renderIcon = (props: unknown) => (
+    <TouchableWithoutFeedback onPress={toggleSecureEntry}>
+      <Icon {...props} name={!show ? 'eye-off' : 'eye'} />
+    </TouchableWithoutFeedback>
+  );
+
   return (
     <Layout>
       <Text style={styles.text} category="s2">
@@ -26,7 +31,8 @@ const Field = (props: Props) => {
         style={styles.inputField}
         placeholder={placeholder}
         value={value}
-        secureTextEntry={secureTextEntry}
+        accessoryRight={renderIcon}
+        secureTextEntry={show}
         onChangeText={onChangeText}
       />
     </Layout>
@@ -58,4 +64,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Field;
+export default ProtectedField;
