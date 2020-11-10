@@ -1,0 +1,62 @@
+.card {
+  width: 16.5rem;
+  margin-bottom: 0.5rem;
+  margin-left: 0.4rem;
+  border-radius: 1.4rem;
+  margin-right: 1rem;
+  overflow: hidden;
+
+  position: relative;
+}
+
+.thumbnail {
+  height: 11rem;
+  width: 100%;
+}
+
+.info {
+  padding: 0.5rem;
+  border-radius: 2rem;
+}
+
+.price {
+  top: 16;
+  right: 16;
+  border-radius: 0.8rem;
+  position: absolute;
+  background: rgb(255, 255, 255);
+}
+
+.pricetext {
+  font-size: 0.7rem;
+  color: rgb(37, 37, 37);
+  padding: 3px 8px;
+  font-weight: 700;
+}
+
+.coursetitle {
+  font-family: 'Nunito-Semibold';
+  font-size: 1.1rem;
+}
+
+.author {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.description {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.people {
+  font-size: 0.8rem;
+}
+
+.rating {
+  margin-top: 0.5rem;
+  margin-bottom: 0.2rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}

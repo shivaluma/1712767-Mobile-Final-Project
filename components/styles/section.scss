@@ -1,0 +1,26 @@
+.root {
+  margin-top: 30px;
+}
+
+.topbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+
+.seeall {
+  font-size: 13px;
+}
+
+.horizontal {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1rem;
+}
