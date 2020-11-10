@@ -41,28 +41,11 @@ function RootNavigator() {
   return (
     <Stack.Navigator
       initialRouteName="Login"
-      screenOptions={{ headerShown: true }}
+      screenOptions={{ headerShown: false }}
     >
-      <Stack.Screen
-        name="Login"
-        options={{
-          headerLeft: () => <HeaderBackButton />,
-          headerRight: () => (
-            <Button
-              onPress={() => alert('This is a button!')}
-              title="Info"
-              color="#000"
-            />
-          ),
-        }}
-        component={LoginScreen}
-      />
+      <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Root" component={BottomTabNavigator} />
-      <Stack.Screen
-        name="NotFound"
-        component={NotFoundScreen}
-        options={{ title: 'Oops!' }}
-      />
+      <Stack.Screen name="NotFound" component={NotFoundScreen} />
     </Stack.Navigator>
   );
 }

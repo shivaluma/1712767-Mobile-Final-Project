@@ -1,38 +1,43 @@
+import {
+  Layout,
+  Text,
+  Button,
+  Icon,
+  Avatar,
+  Input,
+} from '@ui-kitten/components';
 import * as React from 'react';
-import { StyleSheet } from 'react-native';
+import { TextInput } from 'react-native';
 
-import EditScreenInfo from '../components/EditScreenInfo';
-import { Text, View } from '../components/Themed';
 import useColorScheme from '../hooks/useColorScheme';
-
+import styles from './styles/browser.scss';
 export default function TabOneScreen() {
-  const colorScheme = useColorScheme();
+  const scheme = useColorScheme();
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab One {colorScheme}</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
-      <EditScreenInfo path="/screens/TabOneScreen.js" />
-    </View>
+    <Layout style={styles.root}>
+      <Layout style={styles.topbar}>
+        <Icon
+          fill={scheme === 'light' ? '#fff' : '#000'}
+          name="menu"
+          style={styles.icon}
+        />
+
+        <Avatar size="large" source={require('../assets/images/avatar.jpg')} />
+      </Layout>
+      <Layout>
+        <Text style={styles.hello}>Hey, Anonymous</Text>
+        <Text style={styles.description}>Find a course you want to learn.</Text>
+      </Layout>
+
+      <Layout style={styles.searchbar}>
+        {/* <Input
+          style={styles.search}
+          size="large"
+          placeholder="Place your Text"
+        /> */}
+        <Icon style={styles.searchicon} name="search" size={20} fill="#000" />
+        <TextInput style={styles.search} placeholder="Search for course..." />
+      </Layout>
+    </Layout>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});
