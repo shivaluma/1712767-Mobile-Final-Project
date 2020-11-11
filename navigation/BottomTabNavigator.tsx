@@ -2,8 +2,16 @@ import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Avatar, Icon, Input, useTheme } from '@ui-kitten/components';
+import {
+  Avatar,
+  Button,
+  Icon,
+  Input,
+  Layout,
+  useTheme,
+} from '@ui-kitten/components';
 import * as React from 'react';
+import { Platform, SafeAreaView, StatusBar, StyleSheet } from 'react-native';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
@@ -16,6 +24,7 @@ import {
   TabOneParamList,
   TabTwoParamList,
 } from '../types';
+import styles from './styles/main.scss';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -125,15 +134,38 @@ function TabTwoNavigator() {
 const SearchScreenStack = createStackNavigator<SearchScreenParamList>();
 function SearchScreenNavigator() {
   const theme = useTheme();
+
+  const CartIcon = ({ ...props }) => (
+    <Icon name="shopping-cart-outline" {...props} />
+  );
+
+  const sstyles = StyleSheet.create({
+    AndroidSafeArea: {
+      flex: 1,
+      paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+      paddingHorizontal: 10,
+    },
+  });
+
   return (
     <SearchScreenStack.Navigator>
       <SearchScreenStack.Screen
         options={{
           headerShown: true,
-          headerLeft: () => <Input />,
-          headerRight: () => (
-            <Icon size={20} fill="#fff" name="shopping-cart-outline" />
+          header: (props) => (
+            <Layout
+              style={[sstyles.AndroidSafeArea, styles.searchbar]}
+              {...props}
+            >
+              <Input style={styles.searchinput} value="hehe" editable />
+              <Button
+                appearance="ghost"
+                status="danger"
+                accessoryLeft={CartIcon}
+              />
+            </Layout>
           ),
+
           headerTitle: '',
           headerStyle: {
             backgroundColor: theme['background-basic-color-1'],
