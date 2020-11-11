@@ -1,19 +1,27 @@
 import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { Avatar, Icon, Input, useTheme } from '@ui-kitten/components';
 import * as React from 'react';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
+import SearchScreen from '../screens/SearchScreen';
 import TabOneScreen from '../screens/TabOneScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
-import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
+import {
+  BottomTabParamList,
+  SearchScreenParamList,
+  TabOneParamList,
+  TabTwoParamList,
+} from '../types';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
 export default function BottomTabNavigator() {
   const colorScheme = useColorScheme();
-
+  const theme = useTheme();
   return (
     <BottomTab.Navigator
       initialRouteName="TabOne"
@@ -37,6 +45,15 @@ export default function BottomTabNavigator() {
           ),
         }}
       />
+      <BottomTab.Screen
+        name="SearchScreen"
+        component={SearchScreenNavigator}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="ios-code" color={color} />
+          ),
+        }}
+      />
     </BottomTab.Navigator>
   );
 }
@@ -52,12 +69,26 @@ function TabBarIcon(props: { name: string; color: string }) {
 const TabOneStack = createStackNavigator<TabOneParamList>();
 
 function TabOneNavigator() {
+  const theme = useTheme();
   return (
     <TabOneStack.Navigator>
       <TabOneStack.Screen
         name="TabOneScreen"
         component={TabOneScreen}
-        options={{ headerShown: false }}
+        options={{
+          headerShown: true,
+          headerLeft: () => null,
+          headerRight: () => (
+            <Avatar
+              style={{ marginRight: 10 }}
+              size="medium"
+              source={require('../assets/images/avatar.jpg')}
+            />
+          ),
+          headerStyle: {
+            backgroundColor: theme['background-basic-color-1'],
+          },
+        }}
       />
     </TabOneStack.Navigator>
   );
@@ -66,13 +97,51 @@ function TabOneNavigator() {
 const TabTwoStack = createStackNavigator<TabTwoParamList>();
 
 function TabTwoNavigator() {
+  const theme = useTheme();
   return (
     <TabTwoStack.Navigator>
       <TabTwoStack.Screen
         name="TabTwoScreen"
         component={TabTwoScreen}
-        options={{ headerTitle: 'Tab Two Title' }}
+        options={{
+          headerShown: true,
+          headerLeft: () => null,
+          headerRight: () => (
+            <Avatar
+              style={{ marginRight: 10 }}
+              size="medium"
+              source={require('../assets/images/avatar.jpg')}
+            />
+          ),
+          headerStyle: {
+            backgroundColor: theme['background-basic-color-1'],
+          },
+        }}
       />
     </TabTwoStack.Navigator>
+  );
+}
+
+const SearchScreenStack = createStackNavigator<SearchScreenParamList>();
+function SearchScreenNavigator() {
+  const theme = useTheme();
+  return (
+    <SearchScreenStack.Navigator>
+      <SearchScreenStack.Screen
+        options={{
+          headerShown: true,
+          headerLeft: () => <Input />,
+          headerRight: () => (
+            <Icon size={20} fill="#fff" name="shopping-cart-outline" />
+          ),
+          headerTitle: '',
+          headerStyle: {
+            backgroundColor: theme['background-basic-color-1'],
+          },
+        }}
+        name="SearchScreen"
+        component={SearchScreen}
+      />
+    </SearchScreenStack.Navigator>
   );
 }

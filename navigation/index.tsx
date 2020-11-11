@@ -7,6 +7,7 @@ import {
   createStackNavigator,
   HeaderBackButton,
 } from '@react-navigation/stack';
+import { Avatar, useTheme } from '@ui-kitten/components';
 import * as React from 'react';
 import { Button, ColorSchemeName } from 'react-native';
 
@@ -38,10 +39,13 @@ export default function Navigation({
 const Stack = createStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
+  const theme = useTheme();
   return (
     <Stack.Navigator
       initialRouteName="Login"
-      screenOptions={{ headerShown: false }}
+      screenOptions={{
+        headerShown: false,
+      }}
     >
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Root" component={BottomTabNavigator} />
