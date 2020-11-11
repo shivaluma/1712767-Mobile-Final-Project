@@ -5,12 +5,19 @@ import { Image, Platform, StyleSheet, Text as RText } from 'react-native';
 import Stars from '../Rating/Star';
 import styles from '../styles/coursecard.scss';
 
-interface Props {}
-const CourseCard = (props: Props) => {
+interface Props {
+  isHorizontal?: boolean;
+}
+const CourseCard = ({ isHorizontal = false }: Props) => {
   return (
-    <Layout style={[styles.card, sstyles.shadow]}>
+    <Layout
+      style={[
+        isHorizontal ? styles.cardhorizontal : styles.card,
+        !isHorizontal && sstyles.shadow,
+      ]}
+    >
       <Image
-        style={styles.thumbnail}
+        style={isHorizontal ? styles.thumbnailhorizontal : styles.thumbnail}
         source={require('../../assets/images/course.jpg')}
       />
 
@@ -18,7 +25,7 @@ const CourseCard = (props: Props) => {
         <Text style={styles.pricetext}>129.99$</Text>
       </Layout>
 
-      <Layout style={[styles.info]}>
+      <Layout style={isHorizontal ? styles.infohorizontal : styles.info}>
         <Text style={styles.coursetitle} numberOfLines={1}>
           React - The Complete Guide (incl Hooks, React Router, Redux)
         </Text>
@@ -51,7 +58,7 @@ const sstyles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-
+    zIndex: 999,
     elevation: 6,
   },
 });

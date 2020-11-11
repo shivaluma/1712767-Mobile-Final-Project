@@ -11,6 +11,7 @@ import * as React from 'react';
 import { Button, ColorSchemeName } from 'react-native';
 
 import LoginScreen from '../screens/Authentication/Authentication';
+import CourseListScreen from '../screens/CourseListScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import { RootStackParamList } from '../types';
 import BottomTabNavigator from './BottomTabNavigator';
@@ -45,6 +46,11 @@ function RootNavigator() {
     >
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Root" component={BottomTabNavigator} />
+      <Stack.Screen
+        name="CourseList"
+        component={CourseListScreen}
+        options={{ headerShown: true }}
+      />
       <Stack.Screen name="NotFound" component={NotFoundScreen} />
     </Stack.Navigator>
   );

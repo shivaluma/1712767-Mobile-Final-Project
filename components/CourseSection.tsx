@@ -1,4 +1,5 @@
-import { Layout, Text } from '@ui-kitten/components';
+import { useNavigation } from '@react-navigation/native';
+import { Layout, Text, Button } from '@ui-kitten/components';
 import React, { ReactElement } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -10,13 +11,18 @@ interface Props {
 }
 
 const CourseSection = ({ name, children }: Props) => {
+  const navigation = useNavigation();
   return (
     <Layout style={styles.root}>
       <Layout style={styles.topbar}>
         <Text style={styles.title}>{name}</Text>
-        <Text style={styles.seeall} appearance="hint">
+        <Button
+          appearance="ghost"
+          style={styles.seeall}
+          onPress={() => navigation.navigate('CourseList')}
+        >
           See all
-        </Text>
+        </Button>
       </Layout>
       <Layout>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
