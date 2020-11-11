@@ -1,0 +1,21 @@
+.authorhorizontal {
+  max-width: 100%;
+  width: 100%;
+  padding: 1rem 0.2rem;
+  flex-direction: row;
+  position: relative;
+  border-top-width: 0.03rem;
+
+  border-color: rgb(113, 113, 113);
+}
+
+.infohorizontal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 0.5rem;
+}
+
+.name {
+  margin-bottom: 0.2rem;
+}

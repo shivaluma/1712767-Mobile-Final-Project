@@ -31,9 +31,9 @@
 .search {
   margin-top: 18px;
 
-  border-radius: 25px;
-  padding: 16px;
-  padding-left: 48px;
+  z-index: 99;
+
+  border-radius: 15px;
 }
 
 .searchbar {

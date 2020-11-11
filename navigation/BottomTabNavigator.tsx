@@ -15,7 +15,14 @@ import {
   useTheme,
 } from '@ui-kitten/components';
 import * as React from 'react';
-import { Platform, SafeAreaView, StatusBar, StyleSheet } from 'react-native';
+import { useState } from 'react';
+import {
+  Dimensions,
+  Platform,
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+} from 'react-native';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
@@ -144,33 +151,43 @@ function SearchScreenNavigator() {
   );
 
   const sstyles = StyleSheet.create({
-    AndroidSafeArea: {
+    layout: {
+      display: 'flex',
+      flexDirection: 'row',
+      paddingTop: 20,
+      width: Dimensions.get('window').width,
+    },
+
+    headerWidth: {
       flex: 1,
-      paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+      borderRadius: 5,
       paddingHorizontal: 10,
+      paddingVertical: 15,
     },
   });
+
+  const [isSearchFocus, setSearchFocus] = useState<boolean>(false);
 
   return (
     <SearchScreenStack.Navigator>
       <SearchScreenStack.Screen
         options={{
           headerShown: true,
-          header: (props) => (
-            <Layout
-              style={[sstyles.AndroidSafeArea, styles.searchbar]}
-              {...props}
-            >
-              <Input style={styles.searchinput} value="hehe" editable />
-              <Button
-                appearance="ghost"
-                status="danger"
-                accessoryLeft={CartIcon}
+          headerTitle: null,
+          headerLeft: () => (
+            <Layout style={sstyles.layout}>
+              <Input
+                size="large"
+                placeholder="Type something to search..."
+                style={sstyles.headerWidth}
+                autoFocus={false}
+                accessoryRight={(props) => (
+                  <Icon {...props} name="search-outline" />
+                )}
               />
             </Layout>
           ),
 
-          headerTitle: '',
           headerStyle: {
             backgroundColor: theme['background-basic-color-1'],
           },

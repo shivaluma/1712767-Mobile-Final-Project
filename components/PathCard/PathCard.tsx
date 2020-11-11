@@ -10,46 +10,31 @@ interface Props {
   hasMenu?: boolean;
   renderMenu?: () => ReactElement | null;
 }
-const CourseCard = ({
-  isHorizontal = false,
+const PathCard = ({
+  isHorizontal = true,
   hasMenu = false,
   renderMenu = () => <></>,
 }: Props) => {
   return (
     <Layout
       style={[
-        isHorizontal ? styles.cardhorizontal : styles.card,
+        isHorizontal ? styles.pathcardhorizontal : styles.pathcard,
         !isHorizontal && sstyles.shadow,
       ]}
     >
       <Image
-        style={isHorizontal ? styles.thumbnailhorizontal : styles.thumbnail}
+        style={isHorizontal ? styles.thumbnailhorizontalpath : styles.thumbnail}
         source={require('../../assets/images/course.jpg')}
       />
 
-      <Layout style={styles.price}>
-        <Text style={styles.pricetext}>129.99$</Text>
-      </Layout>
-
-      <Layout style={isHorizontal ? styles.infohorizontal : styles.info}>
-        <Text style={styles.coursetitle} numberOfLines={1}>
-          React - The Complete Guide (incl Hooks, React Router, Redux)
+      <Layout style={isHorizontal ? styles.pathcontenthorizontal : styles.info}>
+        <Text style={styles.coursetitle} category="s1" numberOfLines={1}>
+          AWS Operation
         </Text>
 
         <Text style={styles.author} appearance="hint">
-          Maximilian Schwarzmuller
+          17 Sections
         </Text>
-
-        <Text style={styles.description} appearance="hint">
-          54 total hours - 162 lectures - All Levels
-        </Text>
-
-        <Layout style={styles.rating}>
-          <Stars value={3} maxValue={5} />
-          <Text style={styles.people} appearance="hint">
-            (94,478 ratings)
-          </Text>
-        </Layout>
       </Layout>
       {hasMenu && (
         <Layout style={styles.menucontainer}>
@@ -81,4 +66,4 @@ const sstyles = StyleSheet.create({
   },
 });
 
-export default CourseCard;
+export default PathCard;
