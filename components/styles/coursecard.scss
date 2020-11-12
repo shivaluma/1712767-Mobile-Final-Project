@@ -4,7 +4,7 @@
   margin-left: 0.4rem;
 
   margin-right: 1rem;
-  border-radius: 1.4rem;
+  border-radius: 1rem;
   position: relative;
 }
 
@@ -22,7 +22,7 @@
 }
 
 .thumbnail {
-  border-radius: 1.4rem 1.4rem 0 0;
+  border-radius: 1rem 1rem 0 0;
   height: 11rem;
   width: 100%;
 }
@@ -116,4 +116,20 @@
 .thumbnailhorizontalpath {
   height: 4rem;
   width: 5rem;
+}
+
+.pathcard {
+  width: 14rem;
+  margin-bottom: 0.5rem;
+  margin-left: 0.4rem;
+
+  margin-right: 1rem;
+  border-radius: 0.4rem;
+  position: relative;
+}
+
+.thumbnailpath {
+  border-radius: 0.4rem 0.4rem 0 0;
+  height: 8rem;
+  width: 100%;
 }

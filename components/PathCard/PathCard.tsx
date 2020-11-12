@@ -23,7 +23,9 @@ const PathCard = ({
       ]}
     >
       <Image
-        style={isHorizontal ? styles.thumbnailhorizontalpath : styles.thumbnail}
+        style={
+          isHorizontal ? styles.thumbnailhorizontalpath : styles.thumbnailpath
+        }
         source={require('../../assets/images/course.jpg')}
       />
 

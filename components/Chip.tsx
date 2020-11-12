@@ -12,7 +12,7 @@ const Chip = ({ image = null, title }: Props) => {
   const theme = useTheme();
   const sstyles = StyleSheet.create({
     chip: {
-      backgroundColor: theme['background-basic-color-3'],
+      backgroundColor: theme['background-basic-color-2'],
     },
   });
 

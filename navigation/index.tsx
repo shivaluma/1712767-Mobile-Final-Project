@@ -10,6 +10,7 @@ import {
 import { Avatar, useTheme } from '@ui-kitten/components';
 import * as React from 'react';
 import { Button, ColorSchemeName } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 
 import LoginScreen from '../screens/Authentication/Authentication';
 import CourseListScreen from '../screens/CourseListScreen';

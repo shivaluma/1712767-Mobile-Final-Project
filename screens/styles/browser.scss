@@ -48,3 +48,14 @@
   top: 24;
   left: 16;
 }
+
+.bannershorizontal {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 0.5rem;
+}
+
+.subbannercontainer {
+  display: flex;
+  flex-direction: column;
+}

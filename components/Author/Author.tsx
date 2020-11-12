@@ -17,7 +17,6 @@ const Author = ({
   return (
     <Layout style={[isHorizontal ? styles.authorhorizontal : styles.author]}>
       <Avatar
-        size="giant"
         style={isHorizontal ? styles.avatarhorizontalpath : styles.avatar}
         source={require('../../assets/images/course.jpg')}
       />
@@ -27,9 +26,11 @@ const Author = ({
           AWS Operation
         </Text>
 
-        <Text style={styles.author} category="c2" appearance="hint">
-          17 Sections
-        </Text>
+        {isHorizontal && (
+          <Text style={styles.author} category="c2" appearance="hint">
+            17 Sections
+          </Text>
+        )}
       </Layout>
     </Layout>
   );

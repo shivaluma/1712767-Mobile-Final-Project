@@ -20,7 +20,7 @@ import {
   Dimensions,
   Platform,
   SafeAreaView,
-  StatusBar,
+  ScrollView,
   StyleSheet,
 } from 'react-native';
 
@@ -173,7 +173,7 @@ function SearchScreenNavigator() {
       <SearchScreenStack.Screen
         options={{
           headerShown: true,
-          headerTitle: null,
+          headerTitle: () => null,
           headerLeft: () => (
             <Layout style={sstyles.layout}>
               <Input

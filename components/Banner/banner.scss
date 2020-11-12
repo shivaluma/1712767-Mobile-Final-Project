@@ -1,0 +1,23 @@
+.banner {
+  height: 6rem;
+  width: 100%;
+  background-color: rgb(72, 58, 58);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.smallbanner {
+  height: 4rem;
+  width: 10rem;
+  background-color: rgb(72, 58, 58);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 0.4rem;
+}
+
+.bannerhorizontal {
+  flex: 1;
+}
