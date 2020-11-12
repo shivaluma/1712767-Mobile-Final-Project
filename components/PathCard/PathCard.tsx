@@ -1,10 +1,17 @@
+import { useNavigation } from '@react-navigation/native';
 import { Button, Icon, Layout, Text } from '@ui-kitten/components';
 import React, { ReactElement } from 'react';
-import { Image, Platform, StyleSheet, Text as RText } from 'react-native';
+import {
+  Image,
+  Platform,
+  StyleSheet,
+  Text as RText,
+  TouchableHighlight,
+} from 'react-native';
+import { TouchableNativeFeedback } from 'react-native-gesture-handler';
 
 import Stars from '../Rating/Star';
 import styles from '../styles/coursecard.scss';
-
 interface Props {
   isHorizontal?: boolean;
   hasMenu?: boolean;
@@ -15,42 +22,47 @@ const PathCard = ({
   hasMenu = false,
   renderMenu = () => <></>,
 }: Props) => {
+  const navigation = useNavigation();
   return (
-    <Layout
-      style={[
-        isHorizontal ? styles.pathcardhorizontal : styles.pathcard,
-        !isHorizontal && sstyles.shadow,
-      ]}
-    >
-      <Image
-        style={
-          isHorizontal ? styles.thumbnailhorizontalpath : styles.thumbnailpath
-        }
-        source={require('../../assets/images/course.jpg')}
-      />
+    <TouchableNativeFeedback onPress={() => navigation.navigate('Path')}>
+      <Layout
+        style={[
+          isHorizontal ? styles.pathcardhorizontal : styles.pathcard,
+          !isHorizontal && sstyles.shadow,
+        ]}
+      >
+        <Image
+          style={
+            isHorizontal ? styles.thumbnailhorizontalpath : styles.thumbnailpath
+          }
+          source={require('../../assets/images/course.jpg')}
+        />
 
-      <Layout style={isHorizontal ? styles.pathcontenthorizontal : styles.info}>
-        <Text style={styles.coursetitle} category="s1" numberOfLines={1}>
-          AWS Operation
-        </Text>
+        <Layout
+          style={isHorizontal ? styles.pathcontenthorizontal : styles.info}
+        >
+          <Text style={styles.coursetitle} category="s1" numberOfLines={1}>
+            AWS Operation
+          </Text>
 
-        <Text style={styles.author} appearance="hint">
-          17 Sections
-        </Text>
-      </Layout>
-      {hasMenu && (
-        <Layout style={styles.menucontainer}>
-          <Button
-            style={styles.button}
-            appearance="ghost"
-            status="basic"
-            accessoryLeft={(props) => (
-              <Icon {...props} name="more-vertical-outline" />
-            )}
-          />
+          <Text style={styles.author} appearance="hint">
+            17 Sections
+          </Text>
         </Layout>
-      )}
-    </Layout>
+        {hasMenu && (
+          <Layout style={styles.menucontainer}>
+            <Button
+              style={styles.button}
+              appearance="ghost"
+              status="basic"
+              accessoryLeft={(props) => (
+                <Icon {...props} name="more-vertical-outline" />
+              )}
+            />
+          </Layout>
+        )}
+      </Layout>
+    </TouchableNativeFeedback>
   );
 };
 

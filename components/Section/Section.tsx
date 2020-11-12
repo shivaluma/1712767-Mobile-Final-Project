@@ -14,14 +14,20 @@ const Section = ({ name, children, childHorizontal = true }: Props) => {
   return (
     <Layout style={styles.root}>
       <Layout style={styles.topbar}>
-        <Text style={styles.title}>{name}</Text>
+        <Text style={styles.title} category="s1">
+          {name}
+        </Text>
       </Layout>
       <Layout>
         <ScrollView
           horizontal={childHorizontal}
           showsHorizontalScrollIndicator={false}
         >
-          <Layout style={styles.flexone}>{children}</Layout>
+          <Layout
+            style={childHorizontal ? styles.flexone : styles.childvertical}
+          >
+            {children}
+          </Layout>
         </ScrollView>
       </Layout>
     </Layout>

@@ -1,7 +1,13 @@
 .chip {
-  padding: 0.4rem 1rem;
+  padding: 0.4rem 0.8rem;
   border-radius: 1rem;
   overflow: hidden;
-
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   margin: 0.2rem;
+}
+
+.chiptext {
+  margin: 0 0.2rem;
 }

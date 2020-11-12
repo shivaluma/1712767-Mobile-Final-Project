@@ -1,0 +1,88 @@
+.root {
+  flex: 1;
+  padding: 1rem 0.6rem;
+}
+
+.videocontainer {
+  width: 100%;
+  height: 14rem;
+}
+
+.title {
+  font-size: 1.5rem;
+  line-height: 2.2rem;
+}
+
+.desccontainer {
+  margin-top: 0.8rem;
+}
+
+.description {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.chipslayout {
+  margin-top: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.buttons {
+  display: flex;
+  flex: 1;
+
+  margin-top: 2.5rem;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.btn {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+}
+
+.btnicon {
+  height: 1.3rem;
+  width: 1.3rem;
+}
+
+.iconcontainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 2.5rem;
+  width: 2.5rem;
+  border-radius: 99rem;
+  margin-bottom: 0.7rem;
+}
+
+.section {
+  margin-top: 1rem;
+
+  border-radius: 0.4rem;
+  padding: 0.8rem 1rem;
+  min-height: 4rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nobg {
+  background: transparent;
+}
+
+.subtext {
+  margin-top: 0.3rem;
+}

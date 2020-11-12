@@ -14,7 +14,9 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 import LoginScreen from '../screens/Authentication/Authentication';
 import CourseListScreen from '../screens/CourseListScreen';
+import CourseDetailScreen from '../screens/DetailCourseScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
+import PathScreen from '../screens/PathScreen';
 import { RootStackParamList } from '../types';
 import BottomTabNavigator from './BottomTabNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
@@ -51,6 +53,12 @@ function RootNavigator() {
     >
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Root" component={BottomTabNavigator} />
+      <Stack.Screen
+        name="Path"
+        component={PathScreen}
+        options={{ headerShown: true }}
+      />
+      <Stack.Screen name="CourseDetail" component={CourseDetailScreen} />
       <Stack.Screen
         name="CourseList"
         component={CourseListScreen}

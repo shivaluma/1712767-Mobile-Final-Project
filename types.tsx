@@ -3,6 +3,8 @@ export type RootStackParamList = {
   Login: undefined;
   NotFound: undefined;
   CourseList: undefined;
+  Path: undefined;
+  CourseDetail: undefined;
 };
 
 export type BottomTabParamList = {

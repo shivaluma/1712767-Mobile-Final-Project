@@ -1,4 +1,5 @@
 import { Layout, Text, Icon, Avatar } from '@ui-kitten/components';
+import { Video } from 'expo-av';
 import * as React from 'react';
 import { ScrollView } from 'react-native';
 
