@@ -5,6 +5,8 @@ export type RootStackParamList = {
   CourseList: undefined;
   Path: undefined;
   CourseDetail: undefined;
+  Profile: undefined;
+  Setting: undefined;
 };
 
 export type BottomTabParamList = {

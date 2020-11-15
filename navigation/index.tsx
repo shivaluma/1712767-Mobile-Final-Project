@@ -17,6 +17,8 @@ import CourseListScreen from '../screens/CourseListScreen';
 import CourseDetailScreen from '../screens/DetailCourseScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import PathScreen from '../screens/PathScreen';
+import ProfileScreen from '../screens/ProfileScreen';
+import SettingScreen from '../screens/SettingScreen';
 import { RootStackParamList } from '../types';
 import BottomTabNavigator from './BottomTabNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
@@ -59,6 +61,16 @@ function RootNavigator() {
         options={{ headerShown: true }}
       />
       <Stack.Screen name="CourseDetail" component={CourseDetailScreen} />
+      <Stack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{ headerShown: true }}
+      />
+      <Stack.Screen
+        name="Setting"
+        component={SettingScreen}
+        options={{ headerShown: true }}
+      />
       <Stack.Screen
         name="CourseList"
         component={CourseListScreen}

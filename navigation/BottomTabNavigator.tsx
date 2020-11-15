@@ -22,6 +22,7 @@ import {
   SafeAreaView,
   ScrollView,
   StyleSheet,
+  TouchableWithoutFeedback,
 } from 'react-native';
 
 import Colors from '../constants/Colors';
@@ -90,6 +91,7 @@ const TabOneStack = createStackNavigator<TabOneParamList>();
 
 function TabOneNavigator() {
   const theme = useTheme();
+  const navigation = useNavigation();
   return (
     <TabOneStack.Navigator>
       <TabOneStack.Screen
@@ -97,13 +99,24 @@ function TabOneNavigator() {
         component={TabOneScreen}
         options={{
           headerShown: true,
-          headerLeft: () => null,
-          headerRight: () => (
-            <Avatar
-              style={{ marginRight: 10 }}
-              size="medium"
-              source={require('../assets/images/avatar.jpg')}
+          headerLeft: () => (
+            <Button
+              status="danger"
+              onPress={() => navigation.navigate('Setting')}
+              accessoryLeft={(props) => <Icon {...props} name="menu-outline" />}
+              appearance="ghost"
             />
+          ),
+          headerRight: () => (
+            <TouchableWithoutFeedback
+              onPress={() => navigation.navigate('Profile')}
+            >
+              <Avatar
+                style={{ marginRight: 10 }}
+                size="medium"
+                source={require('../assets/images/avatar.jpg')}
+              />
+            </TouchableWithoutFeedback>
           ),
           headerStyle: {
             backgroundColor: theme['background-basic-color-1'],
@@ -118,6 +131,7 @@ const TabTwoStack = createStackNavigator<TabTwoParamList>();
 
 function TabTwoNavigator() {
   const theme = useTheme();
+  const navigation = useNavigation();
   return (
     <TabTwoStack.Navigator>
       <TabTwoStack.Screen
@@ -125,13 +139,24 @@ function TabTwoNavigator() {
         component={TabTwoScreen}
         options={{
           headerShown: true,
-          headerLeft: () => null,
-          headerRight: () => (
-            <Avatar
-              style={{ marginRight: 10 }}
-              size="medium"
-              source={require('../assets/images/avatar.jpg')}
+          headerLeft: () => (
+            <Button
+              status="danger"
+              onPress={() => navigation.navigate('Setting')}
+              accessoryLeft={(props) => <Icon {...props} name="menu-outline" />}
+              appearance="ghost"
             />
+          ),
+          headerRight: () => (
+            <TouchableWithoutFeedback
+              onPress={() => navigation.navigate('Profile')}
+            >
+              <Avatar
+                style={{ marginRight: 10 }}
+                size="medium"
+                source={require('../assets/images/avatar.jpg')}
+              />
+            </TouchableWithoutFeedback>
           ),
           headerStyle: {
             backgroundColor: theme['background-basic-color-1'],
