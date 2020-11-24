@@ -1,21 +1,10 @@
-import {
-  Layout,
-  Text,
-  Icon,
-  Avatar,
-  useTheme,
-  Input,
-} from '@ui-kitten/components';
+import { Layout } from '@ui-kitten/components';
 import * as React from 'react';
-import { Platform, ScrollView, TextInput, StyleSheet } from 'react-native';
+import { ScrollView } from 'react-native';
 
 import CourseSection from '../components/CourseSection';
-import useColorScheme from '../hooks/useColorScheme';
 import styles from './styles/browser.scss';
 export default function TabOneScreen() {
-  const scheme = useColorScheme();
-  const theme = useTheme();
-
   return (
     <ScrollView>
       <Layout style={styles.root}>

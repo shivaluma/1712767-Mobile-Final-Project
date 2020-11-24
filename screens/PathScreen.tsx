@@ -1,13 +1,10 @@
 import { Button, Icon, Layout, Text } from '@ui-kitten/components';
 import * as React from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { ScrollView } from 'react-native';
 import ViewMoreText from 'react-native-view-more-text';
 
-import Author from '../components/Author/Author';
-import Chip from '../components/Chip';
 import { CourseCard } from '../components/CourseCard';
 import Header from '../components/Path/Header/Header';
-import PathCard from '../components/PathCard/PathCard';
 import Section from '../components/Section/Section';
 import styles from './styles/path.scss';
 export default function PathScreen() {
