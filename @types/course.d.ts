@@ -1,0 +1,25 @@
+type Course = {
+  id: string;
+  title: string;
+  subtitle: string;
+  price: number;
+  description: string;
+  requirement: string[];
+  learnWhat: string[];
+  soldNumber: number;
+  ratedNumber: number;
+  videoNumber: number;
+  totalHours: number;
+  formalityPoint: number;
+  contentPoint: number;
+  presentationPoint: number;
+  imageUrl: string;
+  promoVidUrl: string;
+  status: 'PENDING' | 'COMPLETED';
+  isDeleted: boolean;
+  isHidden: boolean;
+  createdAt: string;
+  updatedAt: string;
+  instructorId: string;
+  typeUploadVideoLesson: 1 | 2;
+};
