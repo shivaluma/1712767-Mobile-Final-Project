@@ -7,6 +7,8 @@ export type RootStackParamList = {
   CourseDetail: undefined;
   Profile: undefined;
   Setting: undefined;
+  ForgetPassword: undefined;
+  VerifyPassword: undefined;
 };
 
 export type BottomTabParamList = {

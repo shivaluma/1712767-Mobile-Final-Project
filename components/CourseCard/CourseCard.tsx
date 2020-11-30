@@ -16,11 +16,13 @@ interface Props {
   isHorizontal?: boolean;
   hasMenu?: boolean;
   renderMenu?: () => ReactElement | null;
+  course: Course;
 }
 const CourseCard = ({
   isHorizontal = false,
   hasMenu = false,
   renderMenu = () => <></>,
+  course,
 }: Props) => {
   const navigation = useNavigation();
   return (
@@ -39,26 +41,27 @@ const CourseCard = ({
         />
 
         <Layout style={styles.price}>
-          <Text style={styles.pricetext}>129.99$</Text>
+          <Text style={styles.pricetext}>{course.price}$</Text>
         </Layout>
 
         <Layout style={isHorizontal ? styles.infohorizontal : styles.info}>
           <Text style={styles.coursetitle} numberOfLines={1}>
-            React - The Complete Guide (incl Hooks, React Router, Redux)
+            {course.title}
           </Text>
 
           <Text style={styles.author} appearance="hint">
-            Maximilian Schwarzmuller
+            {course.instructorName}
           </Text>
 
           <Text style={styles.description} appearance="hint">
-            54 total hours - 162 lectures - All Levels
+            {course.totalHours} total hours - {course.videoNumber} lectures -
+            All Levels
           </Text>
 
           <Layout style={styles.rating}>
-            <Stars value={3} maxValue={5} />
+            <Stars value={course.ratedNumber} maxValue={5} />
             <Text style={styles.people} appearance="hint">
-              (94,478 ratings)
+              ({course.soldNumber} ratings)
             </Text>
           </Layout>
         </Layout>

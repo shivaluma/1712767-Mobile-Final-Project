@@ -8,9 +8,10 @@ import styles from './styles/section.scss';
 interface Props {
   name: string;
   children?: ReactElement;
+  courses: Course[];
 }
 
-const CourseSection = ({ name, children }: Props) => {
+const CourseSection = ({ name, children, courses }: Props) => {
   const navigation = useNavigation();
   return (
     <Layout style={styles.root}>
@@ -26,9 +27,9 @@ const CourseSection = ({ name, children }: Props) => {
       </Layout>
       <Layout>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <CourseCard />
-          <CourseCard />
-          <CourseCard />
+          {courses.map((course) => (
+            <CourseCard key={course.id} course={course} />
+          ))}
         </ScrollView>
       </Layout>
     </Layout>

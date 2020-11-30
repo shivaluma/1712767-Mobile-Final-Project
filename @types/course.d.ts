@@ -21,5 +21,6 @@ type Course = {
   createdAt: string;
   updatedAt: string;
   instructorId: string;
+  instructorName?: string;
   typeUploadVideoLesson: 1 | 2;
 };

@@ -2,6 +2,7 @@ import { Button, Layout } from '@ui-kitten/components';
 import React, { ReactElement } from 'react';
 
 import Field from './LoginForm/Field';
+import ProtectedField from './LoginForm/ProtectedField';
 
 interface Props {
   value: AuthenticationForm;
@@ -20,19 +21,17 @@ export default function RegisterForm({ value, onChange }: Props): ReactElement {
         value={value.username}
         onChangeText={(text) => onChange('username', text)}
       />
-      <Field
+      <ProtectedField
         label="Password"
         placeholder="Input your password"
         value={value.password}
-        secureTextEntry
         onChangeText={(text) => onChange('password', text)}
       />
 
-      <Field
+      <ProtectedField
         label="Confirm Password"
         placeholder="Reinput your password"
         value={value.confirmPassword}
-        secureTextEntry
         onChangeText={(text) => onChange('confirmPassword', text)}
       />
 

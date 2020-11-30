@@ -7,7 +7,7 @@ import LoginForm from '../../components/Authentication/LoginForm';
 import RegisterForm from '../../components/Authentication/RegisterForm';
 
 interface Props {
-  navigation: Navigator;
+  navigation: NavigationProp;
 }
 
 const LoginScreen = ({ navigation }) => {
@@ -32,6 +32,10 @@ const LoginScreen = ({ navigation }) => {
     navigation.navigate('Root');
   };
 
+  const onForgotPasswordHandler = () => {
+    navigation.navigate('ForgetPassword');
+  };
+
   return (
     <Layout style={styles.container}>
       <KeyboardAwareScrollView>
@@ -45,7 +49,9 @@ const LoginScreen = ({ navigation }) => {
           ) : (
             <RegisterForm value={authData} onChange={handleChangeValue} />
           )}
-          <Button appearance="ghost">FORGOT PASSWORD?</Button>
+          <Button appearance="ghost" onPress={onForgotPasswordHandler}>
+            FORGOT PASSWORD?
+          </Button>
           {isLogin ? (
             <Button onPress={handleToggleMode} appearance="ghost">
               SIGN UP FREE

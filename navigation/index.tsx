@@ -13,6 +13,8 @@ import { Button, ColorSchemeName } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
 import LoginScreen from '../screens/Authentication/Authentication';
+import ForgetPassword from '../screens/Authentication/ForgetPassword';
+import VerifyPassword from '../screens/Authentication/VerifyPassword';
 import CourseListScreen from '../screens/CourseListScreen';
 import CourseDetailScreen from '../screens/DetailCourseScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
@@ -54,6 +56,8 @@ function RootNavigator() {
       }}
     >
       <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
+      <Stack.Screen name="VerifyPassword" component={VerifyPassword} />
       <Stack.Screen name="Root" component={BottomTabNavigator} />
       <Stack.Screen
         name="Path"

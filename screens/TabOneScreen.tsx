@@ -1,10 +1,13 @@
 import { Layout } from '@ui-kitten/components';
 import * as React from 'react';
+import { useRef } from 'react';
 import { ScrollView } from 'react-native';
 
 import CourseSection from '../components/CourseSection';
+import { courses } from '../data/courses';
 import styles from './styles/browser.scss';
 export default function TabOneScreen() {
+  const coursesRef = useRef(courses);
   return (
     <ScrollView>
       <Layout style={styles.root}>
@@ -15,19 +18,25 @@ export default function TabOneScreen() {
         /> */}
 
         <Layout>
-          <CourseSection name="Featured" />
+          <CourseSection courses={coursesRef.current} name="Featured" />
         </Layout>
 
         <Layout>
-          <CourseSection name="Software Engineering" />
+          <CourseSection
+            courses={coursesRef.current}
+            name="Software Engineering"
+          />
         </Layout>
 
         <Layout>
-          <CourseSection name="Developer Operations" />
+          <CourseSection
+            courses={coursesRef.current}
+            name="Developer Operations"
+          />
         </Layout>
 
         <Layout>
-          <CourseSection name="IT Operations" />
+          <CourseSection courses={coursesRef.current} name="IT Operations" />
         </Layout>
       </Layout>
     </ScrollView>

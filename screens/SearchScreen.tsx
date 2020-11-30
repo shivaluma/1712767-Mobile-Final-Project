@@ -1,13 +1,15 @@
 import { Button, Icon, Layout, Text } from '@ui-kitten/components';
-import * as React from 'react';
+import React, { useRef } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 
 import Author from '../components/Author/Author';
 import Chip from '../components/Chip';
 import { CourseCard } from '../components/CourseCard';
 import PathCard from '../components/PathCard/PathCard';
+import { courses } from '../data/courses';
 import styles from './styles/search.scss';
 export default function SearchScreen() {
+  const coursesRef = useRef(courses);
   return (
     <ScrollView>
       <Layout style={styles.root}>
@@ -26,10 +28,9 @@ export default function SearchScreen() {
           <Text category="s1" style={styles.sectionheader}>
             Courses
           </Text>
-          <CourseCard isHorizontal hasMenu />
-          <CourseCard isHorizontal hasMenu />
-          <CourseCard isHorizontal hasMenu />
-          <CourseCard isHorizontal hasMenu />
+          {coursesRef.current.map((course) => (
+            <CourseCard course={course} isHorizontal hasMenu />
+          ))}
         </Layout>
 
         <Layout style={styles.section}>
