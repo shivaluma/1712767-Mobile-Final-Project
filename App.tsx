@@ -5,11 +5,11 @@ import React from 'react';
 import { DarkTheme, Provider as PaperProvider } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { AuthProvider } from './context/configureContext';
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 import { default as themekitten } from './theme.json';
-
 export default function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
@@ -25,7 +25,9 @@ export default function App() {
           {...eva}
           theme={{ ...eva[colorScheme], ...mappingTheme }}
         >
-          <Navigation colorScheme={colorScheme} />
+          <AuthProvider>
+            <Navigation colorScheme={colorScheme} />
+          </AuthProvider>
         </ApplicationProvider>
       </SafeAreaProvider>
     );

@@ -1,0 +1,1 @@
+const instructors: Instructor[] = {};

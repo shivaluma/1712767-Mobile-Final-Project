@@ -15,6 +15,7 @@ export type BottomTabParamList = {
   Feature: undefined;
   TabTwo: undefined;
   Search: undefined;
+  Profile: undefined;
   'My courses': undefined;
   'Wish List': undefined;
 };
@@ -29,4 +30,12 @@ export type TabTwoParamList = {
 
 export type SearchScreenParamList = {
   SearchScreen: undefined;
+};
+
+export type WishListParamList = {
+  WishList: undefined;
+};
+
+export type ProfileParamList = {
+  Profile: undefined;
 };

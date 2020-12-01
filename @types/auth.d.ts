@@ -20,13 +20,21 @@ interface User {
 
 type AuthState = {
   user: User | null;
+  wishlish: Course[];
 };
 
-type ActionType = 'UPDATE_USER' | 'REMOVE_USER';
+type ActionType =
+  | 'UPDATE_USER'
+  | 'REMOVE_USER'
+  | 'WISHLIST_ADD'
+  | 'WISHLIST_REMOVE';
 
 type UserContextAction = {
   type: ActionType;
-  user: User | null;
+  payload: {
+    user: User | null;
+    course?: Course;
+  };
 };
 
 type UserContextType = {

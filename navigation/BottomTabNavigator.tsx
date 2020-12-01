@@ -28,16 +28,20 @@ import {
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import FeatureScreen from '../screens/FeatureScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 import SearchScreen from '../screens/SearchScreen';
+import SettingScreen from '../screens/SettingScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
+import WishListScreen from '../screens/WishListScreen';
 import {
   BottomTabParamList,
   SearchScreenParamList,
   FeatureParamList,
   TabTwoParamList,
+  ProfileParamList,
+  WishListParamList,
 } from '../types';
 import styles from './styles/main.scss';
-
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
 export default function BottomTabNavigator() {
@@ -67,17 +71,17 @@ export default function BottomTabNavigator() {
         }}
       />
       <BottomTab.Screen
-        name="My courses"
-        component={TabTwoNavigator}
+        name="Profile"
+        component={ProfileNavigator}
         options={{
           tabBarIcon: ({ color }) => (
-            <Icon style={styles.icon} fill={color} name="play-circle-outline" />
+            <Icon style={styles.icon} fill={color} name="person-outline" />
           ),
         }}
       />
       <BottomTab.Screen
         name="Wish List"
-        component={TabTwoNavigator}
+        component={WishListNavigator}
         options={{
           tabBarIcon: ({ color }) => (
             <Icon style={styles.icon} fill={color} name="heart-outline" />
@@ -172,6 +176,70 @@ function TabTwoNavigator() {
   );
 }
 
+const ProfileStack = createStackNavigator<ProfileParamList>();
+
+function ProfileNavigator() {
+  const theme = useTheme();
+  const navigation = useNavigation();
+  return (
+    <ProfileStack.Navigator>
+      <ProfileStack.Screen
+        name="Profile"
+        component={SettingScreen}
+        options={{
+          headerShown: true,
+          headerRight: () => (
+            <TouchableWithoutFeedback
+              onPress={() => navigation.navigate('Profile')}
+            >
+              <Avatar
+                style={{ marginRight: 10 }}
+                size="medium"
+                source={require('../assets/images/avatar.jpg')}
+              />
+            </TouchableWithoutFeedback>
+          ),
+          headerStyle: {
+            backgroundColor: theme['background-basic-color-1'],
+          },
+        }}
+      />
+    </ProfileStack.Navigator>
+  );
+}
+
+const WishListStack = createStackNavigator<WishListParamList>();
+
+function WishListNavigator() {
+  const theme = useTheme();
+  const navigation = useNavigation();
+  return (
+    <WishListStack.Navigator>
+      <WishListStack.Screen
+        name="WishList"
+        component={WishListScreen}
+        options={{
+          headerShown: true,
+          headerRight: () => (
+            <TouchableWithoutFeedback
+              onPress={() => navigation.navigate('Profile')}
+            >
+              <Avatar
+                style={{ marginRight: 10 }}
+                size="medium"
+                source={require('../assets/images/avatar.jpg')}
+              />
+            </TouchableWithoutFeedback>
+          ),
+          headerStyle: {
+            backgroundColor: theme['background-basic-color-1'],
+          },
+        }}
+      />
+    </WishListStack.Navigator>
+  );
+}
+
 const SearchScreenStack = createStackNavigator<SearchScreenParamList>();
 function SearchScreenNavigator() {
   const theme = useTheme();
@@ -196,7 +264,7 @@ function SearchScreenNavigator() {
     },
   });
 
-  const [isSearchFocus, setSearchFocus] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   return (
     <SearchScreenStack.Navigator>
@@ -208,6 +276,8 @@ function SearchScreenNavigator() {
             <Layout style={sstyles.layout}>
               <Input
                 size="large"
+                value={searchQuery}
+                onChangeText={(value) => setSearchQuery(value)}
                 placeholder="Type something to search..."
                 style={sstyles.headerWidth}
                 autoFocus={false}
@@ -223,8 +293,14 @@ function SearchScreenNavigator() {
           },
         }}
         name="SearchScreen"
-        component={SearchScreen}
-      />
+      >
+        {(props) => (
+          <SearchScreen
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+          />
+        )}
+      </SearchScreenStack.Screen>
     </SearchScreenStack.Navigator>
   );
 }

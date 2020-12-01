@@ -11,10 +11,11 @@ import { reducer } from './reducers/authReducer';
 
 const initialState = {
   user: null,
+  wishlish: [],
 };
 export const AuthContext = createContext<UserContextType | null>(null);
 
-const AuthProvider: FC = ({ children }) => {
+export const AuthProvider: FC = ({ children }) => {
   const [state, dispatch] = useReducer<Reducer<AuthState, UserContextAction>>(
     reducer,
     initialState
@@ -23,6 +24,6 @@ const AuthProvider: FC = ({ children }) => {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-export const useHeader = (): UserContextType | null => useContext(AuthContext);
+export const useUser = (): UserContextType | null => useContext(AuthContext);
 
 export default AuthProvider;

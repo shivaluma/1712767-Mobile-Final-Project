@@ -50,7 +50,9 @@ const LoginScreen = ({ navigation }) => {
   };
 
   const onLoginHandler = () => {
-    navigation.navigate('Root');
+    navigation.reset({
+      routes: [{ name: 'Root' }],
+    });
     // console.log('On login');
     // console.log(users);
     // const index = users.findIndex(

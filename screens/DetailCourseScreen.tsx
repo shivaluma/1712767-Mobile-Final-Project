@@ -6,8 +6,8 @@ import ViewMoreText from 'react-native-view-more-text';
 
 import Chip from '../components/Chip';
 import { LessonSection } from '../components/LessonSection';
+import { useUser } from '../context/configureContext';
 import styles from './styles/coursedetail.scss';
-
 export default function CourseDetailScreen({ route }) {
   const theme = useTheme();
   const sstyles = StyleSheet.create({
@@ -16,6 +16,9 @@ export default function CourseDetailScreen({ route }) {
     },
   });
   const course = route.params.course as Course;
+  const authState = useUser();
+  const isInWishList =
+    authState?.state.wishlish?.findIndex((c) => c?.id === course.id) >= 0;
   return (
     <>
       <ScrollView>
@@ -101,32 +104,41 @@ export default function CourseDetailScreen({ route }) {
               </Button>
             </Layout>
             <Layout style={styles.buttons}>
-              <TouchableWithoutFeedback>
-                <Layout style={styles.btn}>
-                  <Layout style={[styles.iconcontainer, sstyles.btn]}>
-                    <Icon
-                      style={styles.btnicon}
-                      fill={theme['text-basic-color']}
-                      name="heart-outline"
-                    />
-                  </Layout>
-
-                  <Text category="s2">Add To Wishlish</Text>
-                </Layout>
-              </TouchableWithoutFeedback>
-
-              <TouchableWithoutFeedback>
-                <Layout style={styles.btn}>
-                  <Layout style={[styles.iconcontainer, sstyles.btn]}>
-                    <Icon
-                      style={styles.btnicon}
-                      fill={theme['text-basic-color']}
-                      name="shopping-cart-outline"
-                    />
-                  </Layout>
-                  <Text category="s2">Add To Cart</Text>
-                </Layout>
-              </TouchableWithoutFeedback>
+              <Button
+                style={styles.flex1}
+                appearance="outline"
+                status="danger"
+                onPress={() =>
+                  authState?.dispatch({
+                    type: isInWishList ? 'WISHLIST_REMOVE' : 'WISHLIST_ADD',
+                    payload: { course },
+                  })
+                }
+                accessoryLeft={() => (
+                  <Icon
+                    style={styles.btnicon}
+                    fill={theme['text-danger-color']}
+                    name="heart-outline"
+                  />
+                )}
+              >
+                {isInWishList ? 'Wishlisted' : 'Add To WishList'}
+              </Button>
+              <Layout style={styles.gap}></Layout>
+              <Button
+                style={styles.flex1}
+                appearance="outline"
+                status="danger"
+                accessoryLeft={() => (
+                  <Icon
+                    style={styles.btnicon}
+                    fill={theme['text-danger-color']}
+                    name="shopping-cart-outline"
+                  />
+                )}
+              >
+                Add To Cart
+              </Button>
             </Layout>
             <Layout>
               <Layout style={[styles.section, sstyles.btn]}>

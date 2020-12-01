@@ -6,12 +6,16 @@ import { ScrollView } from 'react-native';
 import { CourseCard } from '../components/CourseCard';
 import { courses } from '../data/courses';
 import styles from './styles/courselist.scss';
-export default function CourseListScreen() {
+export default function CourseListScreen(props) {
+  console.log(props);
   const coursesRef = React.useRef(courses);
+  const listCourses = props?.route?.params?.category
+    ? courses.filter((c) => c.category === props.route.params.category)
+    : courses;
   return (
     <Layout style={styles.root}>
       <ScrollView>
-        {courses.map((course, index) => (
+        {listCourses.map((course, index) => (
           <CourseCard key={course.id} course={course} isHorizontal />
         ))}
       </ScrollView>

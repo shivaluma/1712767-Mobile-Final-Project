@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import { Avatar, Button, Divider, Layout, Text } from '@ui-kitten/components';
 import React, { useState } from 'react';
 import { StyleSheet, Switch, View } from 'react-native';
@@ -6,7 +7,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 const SettingScreen = () => {
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled(!isEnabled);
-
+  const navigation = useNavigation();
   const SwitchButton = () => (
     <View>
       <Switch
@@ -113,7 +114,16 @@ const SettingScreen = () => {
           App version: 1.0
         </Text>
         <Divider />
-        <Button style={styles.buttonLogout} appearance="primary" size="large">
+        <Button
+          onPress={() => {
+            navigation.reset({
+              routes: [{ name: 'Login' }],
+            });
+          }}
+          style={styles.buttonLogout}
+          appearance="primary"
+          size="large"
+        >
           Log out
         </Button>
       </ScrollView>

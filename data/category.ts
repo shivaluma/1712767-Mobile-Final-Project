@@ -1,1 +1,1 @@
-const Category = ['Software Development', 'IT & Software'];
+export const categories = ['Software Development', 'IT & Software'];

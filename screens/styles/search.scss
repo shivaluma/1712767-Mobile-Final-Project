@@ -18,6 +18,37 @@
   margin-bottom: 0.8rem;
 }
 
+.btnicon {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-right: 0.4rem;
+}
+
 .category {
   text-align: left;
+}
+
+.notfound {
+  height: 10rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.margintop {
+  margin-top: 2rem;
+}
+
+.categoryshow {
+  margin-bottom: 0.5rem;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.margintopsmall {
+  margin-top: 1.3rem;
 }

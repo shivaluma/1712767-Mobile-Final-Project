@@ -2,3 +2,22 @@
   flex: 1;
   padding-top: 0.4rem;
 }
+
+.empty {
+  height: 10rem;
+  width: 100%;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+
+  align-items: center;
+}
+
+.textcenter {
+  text-align: center;
+}
+
+.textcentermargin {
+  margin-top: 0.5rem;
+  text-align: center;
+}
