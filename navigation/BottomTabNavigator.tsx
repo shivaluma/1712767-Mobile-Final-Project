@@ -27,13 +27,13 @@ import {
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
+import FeatureScreen from '../screens/FeatureScreen';
 import SearchScreen from '../screens/SearchScreen';
-import TabOneScreen from '../screens/TabOneScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
 import {
   BottomTabParamList,
   SearchScreenParamList,
-  TabOneParamList,
+  FeatureParamList,
   TabTwoParamList,
 } from '../types';
 import styles from './styles/main.scss';
@@ -45,15 +45,15 @@ export default function BottomTabNavigator() {
   const theme = useTheme();
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
+      initialRouteName="Feature"
       tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}
     >
       <BottomTab.Screen
-        name="TabOne"
-        component={TabOneNavigator}
+        name="Feature"
+        component={FeatureNavigator}
         options={{
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="ios-code" color={color} />
+            <Icon style={styles.icon} fill={color} name="star" />
           ),
         }}
       />
@@ -67,11 +67,11 @@ export default function BottomTabNavigator() {
         }}
       />
       <BottomTab.Screen
-        name="SearchScreen"
+        name="Search"
         component={SearchScreenNavigator}
         options={{
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="ios-code" color={color} />
+            <Icon style={styles.icon} fill={color} name="search" />
           ),
         }}
       />
@@ -87,26 +87,19 @@ function TabBarIcon(props: { name: string; color: string }) {
 
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
-const TabOneStack = createStackNavigator<TabOneParamList>();
+const FeatureStack = createStackNavigator<FeatureParamList>();
 
-function TabOneNavigator() {
+function FeatureNavigator() {
   const theme = useTheme();
   const navigation = useNavigation();
   return (
-    <TabOneStack.Navigator>
-      <TabOneStack.Screen
-        name="TabOneScreen"
-        component={TabOneScreen}
+    <FeatureStack.Navigator mode="modal">
+      <FeatureStack.Screen
+        name="FeatureScreen"
+        component={FeatureScreen}
         options={{
           headerShown: true,
-          headerLeft: () => (
-            <Button
-              status="danger"
-              onPress={() => navigation.navigate('Setting')}
-              accessoryLeft={(props) => <Icon {...props} name="menu-outline" />}
-              appearance="ghost"
-            />
-          ),
+
           headerRight: () => (
             <TouchableWithoutFeedback
               onPress={() => navigation.navigate('Profile')}
@@ -123,7 +116,7 @@ function TabOneNavigator() {
           },
         }}
       />
-    </TabOneStack.Navigator>
+    </FeatureStack.Navigator>
   );
 }
 
@@ -139,14 +132,7 @@ function TabTwoNavigator() {
         component={TabTwoScreen}
         options={{
           headerShown: true,
-          headerLeft: () => (
-            <Button
-              status="danger"
-              onPress={() => navigation.navigate('Setting')}
-              accessoryLeft={(props) => <Icon {...props} name="menu-outline" />}
-              appearance="ghost"
-            />
-          ),
+
           headerRight: () => (
             <TouchableWithoutFeedback
               onPress={() => navigation.navigate('Profile')}

@@ -5,33 +5,23 @@ import { ScrollView, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import ViewMoreText from 'react-native-view-more-text';
 
 import Chip from '../components/Chip';
+import { LessonSection } from '../components/LessonSection';
 import styles from './styles/coursedetail.scss';
-export default function CourseDetailScreen() {
+
+export default function CourseDetailScreen({ route }) {
   const theme = useTheme();
   const sstyles = StyleSheet.create({
     btn: {
       backgroundColor: theme['color-basic-transparent-300'],
     },
   });
+  const course = route.params.course as Course;
   return (
     <>
-      <Video
-        source={{
-          uri: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
-        }}
-        rate={1.0}
-        volume={1.0}
-        isMuted={false}
-        shouldPlay
-        resizeMode="stretch"
-        isLooping
-        style={styles.videocontainer}
-      />
       <ScrollView>
         <Layout style={styles.root}>
-          <Text style={styles.title}>
-            React - The Complete Guide (Hooks, Context, NextJS, Router)
-          </Text>
+          <Text style={styles.title}>{course.title}</Text>
+
           <Layout style={styles.desccontainer}>
             <ViewMoreText
               numberOfLines={3}
@@ -48,14 +38,13 @@ export default function CourseDetailScreen() {
               textStyle={{ textAlign: 'left' }}
             >
               <Text style={styles.description} category="p2">
-                Just publish! Following the same curriculum i teach my student
-                in SF. 10+ projects including one HUGE application.
+                {course.description}
               </Text>
             </ViewMoreText>
 
             <Layout style={styles.chipslayout}>
               <Chip
-                title="4.7"
+                title={`${course.ratedNumber}`}
                 accessoryLeft={() => (
                   <Icon
                     style={styles.icon}
@@ -66,7 +55,7 @@ export default function CourseDetailScreen() {
               />
 
               <Chip
-                title="21.890"
+                title={`${course.soldNumber}`}
                 accessoryLeft={() => (
                   <Icon
                     style={styles.icon}
@@ -77,7 +66,7 @@ export default function CourseDetailScreen() {
               />
 
               <Chip
-                title="38 total hours"
+                title={`${course.totalHours} total hours`}
                 accessoryLeft={() => (
                   <Icon
                     style={styles.icon}
@@ -87,10 +76,30 @@ export default function CourseDetailScreen() {
                 )}
               />
 
-              <Chip title="Created By Shiro" />
+              <Chip title={`Created By ${course.instructorName}`} />
               <Chip title="Immediate" />
             </Layout>
-
+            <Video
+              source={{
+                uri: `${course.promoVidUrl}`,
+              }}
+              rate={1.0}
+              volume={1.0}
+              isMuted={false}
+              shouldPlay
+              useNativeControls
+              resizeMode="stretch"
+              isLooping
+              style={styles.videocontainer}
+            />
+            <Layout style={styles.price}>
+              <Text category="h5">{course.price}$</Text>
+            </Layout>
+            <Layout>
+              <Button size="large" status="danger">
+                Buy Now
+              </Button>
+            </Layout>
             <Layout style={styles.buttons}>
               <TouchableWithoutFeedback>
                 <Layout style={styles.btn}>
@@ -98,11 +107,11 @@ export default function CourseDetailScreen() {
                     <Icon
                       style={styles.btnicon}
                       fill={theme['text-basic-color']}
-                      name="bookmark-outline"
+                      name="heart-outline"
                     />
                   </Layout>
 
-                  <Text category="s2">Bookmark</Text>
+                  <Text category="s2">Add To Wishlish</Text>
                 </Layout>
               </TouchableWithoutFeedback>
 
@@ -112,80 +121,48 @@ export default function CourseDetailScreen() {
                     <Icon
                       style={styles.btnicon}
                       fill={theme['text-basic-color']}
-                      name="radio-outline"
+                      name="shopping-cart-outline"
                     />
                   </Layout>
-
-                  <Text category="s2">Add to channel</Text>
-                </Layout>
-              </TouchableWithoutFeedback>
-
-              <TouchableWithoutFeedback>
-                <Layout style={styles.btn}>
-                  <Layout style={[styles.iconcontainer, sstyles.btn]}>
-                    <Icon
-                      style={styles.btnicon}
-                      fill={theme['text-basic-color']}
-                      name="download-outline"
-                    />
-                  </Layout>
-                  <Text category="s2">Download</Text>
+                  <Text category="s2">Add To Cart</Text>
                 </Layout>
               </TouchableWithoutFeedback>
             </Layout>
             <Layout>
               <Layout style={[styles.section, sstyles.btn]}>
                 <Layout style={styles.nobg}>
-                  <Text category="s1">Curriculums</Text>
-                  <Text style={[styles.subtext]} category="s2">
-                    Lecture (312) Total (38h 48m)
-                  </Text>
+                  <Text category="s1">What Will I Learn</Text>
+                  {course.learnWhat.map((text) => (
+                    <Text style={[styles.subtext]} category="c2">
+                      ✓ {text}
+                    </Text>
+                  ))}
                 </Layout>
               </Layout>
 
               <Layout style={[styles.section, sstyles.btn]}>
-                <Text category="s1">A Taste of React</Text>
-                <Button
-                  appearance="ghost"
-                  status="danger"
-                  accessoryLeft={(props) => (
-                    <Icon {...props} name="plus-outline" />
-                  )}
-                />
+                <Layout style={styles.nobg}>
+                  <Text category="s1">Requirements</Text>
+                  {course.requirement.map((text) => (
+                    <Text style={[styles.subtext]} category="c2">
+                      ✓ {text}
+                    </Text>
+                  ))}
+                </Layout>
               </Layout>
 
               <Layout style={[styles.section, sstyles.btn]}>
-                <Text category="s1">Introduction To JSX</Text>
-                <Button
-                  appearance="ghost"
-                  status="danger"
-                  accessoryLeft={(props) => (
-                    <Icon {...props} name="plus-outline" />
-                  )}
-                />
+                <Layout style={styles.nobg}>
+                  <Text category="s1">Curriculums</Text>
+                  <Text style={[styles.subtext]} category="s2">
+                    Lecture ({course.videoNumber}) Total ({course.totalHours})
+                  </Text>
+                </Layout>
               </Layout>
 
-              <Layout style={[styles.section, sstyles.btn]}>
-                <Text category="s1">React Fundamentals</Text>
-                <Button
-                  appearance="ghost"
-                  status="danger"
-                  accessoryLeft={(props) => (
-                    <Icon {...props} name="plus-outline" />
-                  )}
-                />
-              </Layout>
-
-              <Layout style={[styles.section, sstyles.btn]}>
-                <Text category="s1">State Management</Text>
-                <Button
-                  appearance="ghost"
-                  status="danger"
-                  accessoryLeft={(props) => (
-                    <Icon {...props} name="plus-outline" />
-                  )}
-                />
-              </Layout>
+              {course.section.map((section) => (
+                <LessonSection section={section} />
+              ))}
             </Layout>
           </Layout>
         </Layout>

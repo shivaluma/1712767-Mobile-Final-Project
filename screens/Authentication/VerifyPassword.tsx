@@ -2,8 +2,15 @@ import { Button, Icon, Input, Layout, Text } from '@ui-kitten/components';
 import React, { useState } from 'react';
 import { StyleSheet, TouchableWithoutFeedback } from 'react-native';
 
-const AlertIcon = (props) => <Icon {...props} name="alert-circle-outline" />;
-export default function VerifyPassword(props) {
+const AlertIcon = (props: unknown) => (
+  <Icon {...props} name="alert-circle-outline" />
+);
+
+type Props = {
+  navigation: unknown;
+};
+
+export default function VerifyPassword(props: Props) {
   const [value, setValue] = useState({ token: '', password: '' });
   const size = 'large';
   const [secureTextEntry, setSecureTextEntry] = React.useState(true);
@@ -12,16 +19,13 @@ export default function VerifyPassword(props) {
     setSecureTextEntry(!secureTextEntry);
   };
 
-  const renderIcon = (props) => (
+  const renderIcon = (props: unknown) => (
     <TouchableWithoutFeedback onPress={toggleSecureEntry}>
       <Icon {...props} name={secureTextEntry ? 'eye-off' : 'eye'} />
     </TouchableWithoutFeedback>
   );
   return (
     <Layout style={styles.container}>
-      <Text status="info" category="h4" style={styles.header}>
-        VERIFY PASSWORD
-      </Text>
       <Text status="basic" category="h6" style={styles.header}>
         Change password
       </Text>
@@ -33,7 +37,7 @@ export default function VerifyPassword(props) {
         caption="Token received on email"
         captionIcon={AlertIcon}
         size={size}
-        onChangeText={(nextValue) => setValue(nextValue)}
+        onChangeText={(nextValue) => setValue({ ...value, token: nextValue })}
       />
       <Input
         style={styles.input}
@@ -45,7 +49,7 @@ export default function VerifyPassword(props) {
         captionIcon={AlertIcon}
         size={size}
         secureTextEntry={secureTextEntry}
-        onChangeText={(nextValue) => setValue(nextValue)}
+        onChangeText={(nextValue) => setValue({ ...value, token: nextValue })}
       />
       <Input
         style={styles.input}
@@ -55,7 +59,7 @@ export default function VerifyPassword(props) {
         accessoryRight={renderIcon}
         size={size}
         secureTextEntry={secureTextEntry}
-        onChangeText={(nextValue) => setValue(nextValue)}
+        onChangeText={(nextValue) => setValue({ ...value, token: nextValue })}
       />
 
       <Button style={styles.loginButton} onPress={() => navigation.popToTop()}>

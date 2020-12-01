@@ -1,0 +1,29 @@
+.section {
+  margin-top: 1rem;
+
+  border-radius: 0.4rem;
+  padding: 0.8rem 1rem;
+  min-height: 4rem;
+  display: flex;
+}
+
+.row {
+  background-color: transparent;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.textwrap {
+  text-overflow: ellipsis;
+  flex-wrap: nowrap;
+}
+
+.button {
+  flex: 0 0 1.5rem;
+}
+
+.nobg {
+  background-color: transparent;
+}

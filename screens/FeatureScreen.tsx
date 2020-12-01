@@ -6,7 +6,7 @@ import { ScrollView } from 'react-native';
 import CourseSection from '../components/CourseSection';
 import { courses } from '../data/courses';
 import styles from './styles/browser.scss';
-export default function TabOneScreen() {
+export default function FeatureScreen() {
   const coursesRef = useRef(courses);
   return (
     <ScrollView>

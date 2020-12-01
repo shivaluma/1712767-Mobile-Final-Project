@@ -64,7 +64,11 @@ function RootNavigator() {
         component={PathScreen}
         options={{ headerShown: true }}
       />
-      <Stack.Screen name="CourseDetail" component={CourseDetailScreen} />
+      <Stack.Screen
+        name="CourseDetail"
+        component={CourseDetailScreen}
+        options={{ headerShown: true }}
+      />
       <Stack.Screen
         name="Profile"
         component={ProfileScreen}

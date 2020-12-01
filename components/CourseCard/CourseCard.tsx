@@ -27,7 +27,7 @@ const CourseCard = ({
   const navigation = useNavigation();
   return (
     <TouchableNativeFeedback
-      onPress={() => navigation.navigate('CourseDetail')}
+      onPress={() => navigation.navigate('CourseDetail', { course })}
     >
       <Layout
         style={[

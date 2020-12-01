@@ -10,9 +10,6 @@ export default function ForgetPassword(props) {
 
   return (
     <Layout style={styles.container}>
-      <Text status="info" category="h4" style={styles.header}>
-        FORGOT PASSWORD
-      </Text>
       <Text status="basic" category="h6" style={styles.header}>
         Enter your email address and we will send you a link to reset your
         password

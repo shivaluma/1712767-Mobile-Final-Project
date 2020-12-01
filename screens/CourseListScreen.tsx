@@ -4,20 +4,16 @@ import * as React from 'react';
 import { ScrollView } from 'react-native';
 
 import { CourseCard } from '../components/CourseCard';
+import { courses } from '../data/courses';
 import styles from './styles/courselist.scss';
-
 export default function CourseListScreen() {
+  const coursesRef = React.useRef(courses);
   return (
     <Layout style={styles.root}>
       <ScrollView>
-        <CourseCard isHorizontal />
-        <CourseCard isHorizontal />
-        <CourseCard isHorizontal />
-        <CourseCard isHorizontal />
-        <CourseCard isHorizontal />
-        <CourseCard isHorizontal />
-        <CourseCard isHorizontal />
-        <CourseCard isHorizontal />
+        {courses.map((course, index) => (
+          <CourseCard course={course} isHorizontal />
+        ))}
       </ScrollView>
     </Layout>
   );
