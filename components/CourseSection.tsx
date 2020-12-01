@@ -20,7 +20,11 @@ const CourseSection = ({ name, children, courses }: Props) => {
         <Button
           appearance="ghost"
           style={styles.seeall}
-          onPress={() => navigation.navigate('CourseList')}
+          onPress={() =>
+            navigation.navigate('CourseList', {
+              category: name === 'Featured' ? null : name,
+            })
+          }
         >
           See all
         </Button>
