@@ -4,19 +4,13 @@ import { StyleSheet } from 'react-native';
 interface Props {
   label: string;
   placeholder: string;
-  value: string;
+
   onChangeText: (text: string) => void;
   secureTextEntry?: boolean;
 }
 
 const Field = (props: Props) => {
-  const {
-    label,
-    placeholder,
-    value,
-    onChangeText,
-    secureTextEntry = false,
-  } = props;
+  const { label, placeholder, onChangeText, secureTextEntry = false } = props;
   return (
     <Layout>
       <Text style={styles.text} category="s2">
@@ -25,9 +19,8 @@ const Field = (props: Props) => {
       <Input
         style={styles.inputField}
         placeholder={placeholder}
-        value={value}
+        onChangeText={(value) => onChangeText(value)}
         secureTextEntry={secureTextEntry}
-        onChangeText={onChangeText}
       />
     </Layout>
   );

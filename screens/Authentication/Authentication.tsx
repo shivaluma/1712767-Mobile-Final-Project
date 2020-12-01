@@ -1,11 +1,12 @@
 import { Button, Layout } from '@ui-kitten/components';
-import React, { useState } from 'react';
-import { StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Alert, StyleSheet } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import LoginForm from '../../components/Authentication/LoginForm';
 import RegisterForm from '../../components/Authentication/RegisterForm';
-
+import { users } from '../../data/users';
 interface Props {
   navigation: NavigationProp;
 }
@@ -17,19 +18,55 @@ const LoginScreen = ({ navigation }) => {
     confirmPassword: '',
   });
 
+  const {
+    handleSubmit,
+    setValue,
+    getValues,
+    register,
+    setError,
+    errors,
+    clearErrors,
+  } = useForm();
+
+  useEffect(() => {
+    register('username');
+    register('password');
+    register('confirmPassword');
+  }, [register]);
+
   const [isLogin, setIsLogin] = useState<boolean>(true);
 
   const handleChangeValue = (
     field: 'username' | 'password' | 'confirmPassword',
     value: string
   ) => {
-    setAuthData({ ...authData, [field]: value });
+    setValue(field, value);
   };
 
-  const handleToggleMode = () => setIsLogin((prev) => !prev);
+  const values = getValues();
+  const handleToggleMode = () => {
+    clearErrors();
+    setIsLogin((prev) => !prev);
+  };
 
   const onLoginHandler = () => {
     navigation.navigate('Root');
+    // console.log('On login');
+    // console.log(users);
+    // const index = users.findIndex(
+    //   (el) =>
+    //     el?.username?.toLowerCase() === values?.username?.toLowerCase() &&
+    //     el.password === values.password
+    // );
+
+    // if (index >= 0) {
+    //   navigation.navigate('Root');
+    // } else {
+    //   setError('auth', {
+    //     type: 'manual',
+    //     message: 'Wrong Username or Password!',
+    //   });
+    // }
   };
 
   const onForgotPasswordHandler = () => {
@@ -42,12 +79,12 @@ const LoginScreen = ({ navigation }) => {
         <Layout style={styles.form}>
           {isLogin ? (
             <LoginForm
-              value={authData}
               onChange={handleChangeValue}
               onLogin={onLoginHandler}
+              errors={errors}
             />
           ) : (
-            <RegisterForm value={authData} onChange={handleChangeValue} />
+            <RegisterForm errors={errors} onChange={handleChangeValue} />
           )}
           <Button appearance="ghost" onPress={onForgotPasswordHandler}>
             FORGOT PASSWORD?

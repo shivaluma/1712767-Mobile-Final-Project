@@ -12,7 +12,7 @@ export default function CourseListScreen() {
     <Layout style={styles.root}>
       <ScrollView>
         {courses.map((course, index) => (
-          <CourseCard course={course} isHorizontal />
+          <CourseCard key={course.id} course={course} isHorizontal />
         ))}
       </ScrollView>
     </Layout>

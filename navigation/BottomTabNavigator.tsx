@@ -62,10 +62,29 @@ export default function BottomTabNavigator() {
         component={TabTwoNavigator}
         options={{
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="ios-code" color={color} />
+            <Icon style={styles.icon} fill={color} name="grid-outline" />
           ),
         }}
       />
+      <BottomTab.Screen
+        name="My courses"
+        component={TabTwoNavigator}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <Icon style={styles.icon} fill={color} name="play-circle-outline" />
+          ),
+        }}
+      />
+      <BottomTab.Screen
+        name="Wish List"
+        component={TabTwoNavigator}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <Icon style={styles.icon} fill={color} name="heart-outline" />
+          ),
+        }}
+      />
+
       <BottomTab.Screen
         name="Search"
         component={SearchScreenNavigator}

@@ -4,13 +4,13 @@ import { StyleSheet, TouchableWithoutFeedback } from 'react-native';
 
 interface Props {
   label: string;
+
   placeholder: string;
-  value: string;
   onChangeText: (text: string) => void;
 }
 
 const ProtectedField = (props: Props) => {
-  const { label, placeholder, value, onChangeText } = props;
+  const { label, placeholder, onChangeText } = props;
 
   const [show, setShow] = useState(true);
 
@@ -30,7 +30,7 @@ const ProtectedField = (props: Props) => {
       <Input
         style={styles.inputField}
         placeholder={placeholder}
-        value={value}
+        textContentType="oneTimeCode"
         accessoryRight={renderIcon}
         secureTextEntry={show}
         onChangeText={onChangeText}

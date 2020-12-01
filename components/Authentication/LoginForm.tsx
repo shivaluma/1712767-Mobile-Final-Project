@@ -1,38 +1,40 @@
-import { Button, Layout } from '@ui-kitten/components';
+import { Button, Layout, Text } from '@ui-kitten/components';
 import React, { ReactElement } from 'react';
 
 import Field from './LoginForm/Field';
 import ProtectedField from './LoginForm/ProtectedField';
-
+import styles from './styles.scss';
 interface Props {
-  value: AuthenticationForm;
   onChange: (
     field: 'username' | 'password' | 'confirmPassword',
     value: string
   ) => void;
+  errors: any;
   onLogin: () => void;
 }
 
 export default function LoginForm({
-  value,
   onChange,
   onLogin,
+  errors,
 }: Props): ReactElement {
   return (
     <Layout>
       <Field
+        onChangeText={(value) => onChange('username', value)}
         label="Username"
         placeholder="Input your username"
-        value={value.username}
-        onChangeText={(text) => onChange('username', text)}
       />
       <ProtectedField
+        onChangeText={(value) => onChange('password', value)}
         label="Password"
         placeholder="Input your password"
-        value={value.password}
-        onChangeText={(text) => onChange('password', text)}
       />
-
+      {errors.auth && (
+        <Text style={styles.gap} category="c2" status="danger">
+          {errors.auth.message}
+        </Text>
+      )}
       <Button onPress={onLogin}>Login</Button>
     </Layout>
   );

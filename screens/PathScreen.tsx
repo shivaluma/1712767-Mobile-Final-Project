@@ -6,6 +6,7 @@ import ViewMoreText from 'react-native-view-more-text';
 import { CourseCard } from '../components/CourseCard';
 import Header from '../components/Path/Header/Header';
 import Section from '../components/Section/Section';
+import { courses } from '../data/courses';
 import styles from './styles/path.scss';
 export default function PathScreen() {
   return (
@@ -40,27 +41,39 @@ export default function PathScreen() {
         <Layout>
           <Section childHorizontal={false} name="Beginner">
             <>
-              <CourseCard isHorizontal hasMenu />
-              <CourseCard isHorizontal hasMenu />
-              <CourseCard isHorizontal hasMenu />
-              <CourseCard isHorizontal hasMenu />
+              {courses.map((course) => (
+                <CourseCard
+                  key={course.id}
+                  course={course}
+                  isHorizontal
+                  hasMenu
+                />
+              ))}
             </>
           </Section>
           <Section childHorizontal={false} name="Immediate">
             <>
-              <CourseCard isHorizontal hasMenu />
-              <CourseCard isHorizontal hasMenu />
-              <CourseCard isHorizontal hasMenu />
-              <CourseCard isHorizontal hasMenu />
+              {courses.map((course) => (
+                <CourseCard
+                  key={course.id}
+                  course={course}
+                  isHorizontal
+                  hasMenu
+                />
+              ))}
             </>
           </Section>
 
           <Section childHorizontal={false} name="Advance">
             <>
-              <CourseCard isHorizontal hasMenu />
-              <CourseCard isHorizontal hasMenu />
-              <CourseCard isHorizontal hasMenu />
-              <CourseCard isHorizontal hasMenu />
+              {courses.map((course) => (
+                <CourseCard
+                  key={course.id}
+                  course={course}
+                  isHorizontal
+                  hasMenu
+                />
+              ))}
             </>
           </Section>
         </Layout>

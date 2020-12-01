@@ -29,7 +29,7 @@ export default function SearchScreen() {
             Courses
           </Text>
           {coursesRef.current.map((course) => (
-            <CourseCard course={course} isHorizontal hasMenu />
+            <CourseCard key={course.id} course={course} isHorizontal hasMenu />
           ))}
         </Layout>
 
