@@ -1,27 +1,52 @@
 import { Layout, Input, Text } from '@ui-kitten/components';
 import React from 'react';
+import { Controller } from 'react-hook-form';
 import { StyleSheet } from 'react-native';
 interface Props {
   label: string;
   placeholder: string;
-
-  onChangeText: (text: string) => void;
+  control: any;
+  name: string;
   secureTextEntry?: boolean;
+  rules?: any;
+  error: any;
 }
 
 const Field = (props: Props) => {
-  const { label, placeholder, onChangeText, secureTextEntry = false } = props;
+  const {
+    label,
+    name,
+    control,
+    secureTextEntry = false,
+    rules = { required: true },
+    error,
+  } = props;
+
   return (
     <Layout>
       <Text style={styles.text} category="s2">
         {label}
       </Text>
-      <Input
-        style={styles.inputField}
-        placeholder={placeholder}
-        onChangeText={(value) => onChangeText(value)}
-        secureTextEntry={secureTextEntry}
+
+      <Controller
+        control={control}
+        render={({ onChange, onBlur, value }) => (
+          <Input
+            onBlur={onBlur}
+            secureTextEntry={secureTextEntry}
+            onChangeText={(value) => onChange(value)}
+            value={value}
+          />
+        )}
+        name={name}
+        rules={{ required: true }}
       />
+
+      {error && (
+        <Text style={styles.gap} category="c2" status="danger">
+          This is required!
+        </Text>
+      )}
     </Layout>
   );
 };
@@ -33,6 +58,9 @@ const styles = StyleSheet.create({
     paddingTop: 30,
   },
 
+  gap: {
+    marginBottom: 8,
+  },
   form: {
     flex: 1,
     marginHorizontal: 20,

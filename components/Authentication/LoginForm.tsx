@@ -1,41 +1,45 @@
 import { Button, Layout, Text } from '@ui-kitten/components';
 import React, { ReactElement } from 'react';
+import { useForm, Controller } from 'react-hook-form';
 
 import Field from './LoginForm/Field';
-import ProtectedField from './LoginForm/ProtectedField';
 import styles from './styles.scss';
 interface Props {
-  onChange: (
-    field: 'username' | 'password' | 'confirmPassword',
-    value: string
-  ) => void;
-  errors: any;
-  onLogin: () => void;
+  onLogin: (values: Authentication, setError: any) => void;
 }
 
-export default function LoginForm({
-  onChange,
-  onLogin,
-  errors,
-}: Props): ReactElement {
+export default function LoginForm({ onLogin }: Props): ReactElement {
+  const { control, handleSubmit, errors, setError } = useForm();
+
   return (
     <Layout>
       <Field
-        onChangeText={(value) => onChange('username', value)}
-        label="Username"
-        placeholder="Input your username"
+        label="Email"
+        control={control}
+        name="email"
+        placeholder="Input your email"
+        error={errors.email}
       />
-      <ProtectedField
-        onChangeText={(value) => onChange('password', value)}
+      <Field
         label="Password"
-        placeholder="Input your password"
+        control={control}
+        name="password"
+        placeholder="Input your username"
+        secureTextEntry
+        error={errors.password}
       />
       {errors.auth && (
         <Text style={styles.gap} category="c2" status="danger">
           {errors.auth.message}
         </Text>
       )}
-      <Button onPress={onLogin}>Login</Button>
+      <Button
+        onPress={handleSubmit((value) =>
+          onLogin(value as Authentication, setError)
+        )}
+      >
+        Login
+      </Button>
     </Layout>
   );
 }

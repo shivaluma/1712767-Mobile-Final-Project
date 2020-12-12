@@ -1,36 +1,46 @@
 import { Button, Layout } from '@ui-kitten/components';
 import React, { ReactElement } from 'react';
+import { useForm, Controller } from 'react-hook-form';
 
 import Field from './LoginForm/Field';
-import ProtectedField from './LoginForm/ProtectedField';
 
 interface Props {
   onChange: (
     field: 'username' | 'password' | 'confirmPassword',
     value: string
   ) => void;
+  errors: any;
 }
 
 export default function RegisterForm({ onChange }: Props): ReactElement {
+  const { control, handleSubmit, errors } = useForm();
   return (
     <Layout>
       <Field
         label="Username"
+        control={control}
+        name="username"
         placeholder="Input your username"
-        onChangeText={(text) => onChange('username', text)}
       />
-      <ProtectedField
+      <Field
         label="Password"
+        control={control}
+        name="password"
         placeholder="Input your password"
-        onChangeText={(text) => onChange('password', text)}
       />
 
-      <ProtectedField
+      <Field
         label="Confirm Password"
-        placeholder="Reinput your password"
-        onChangeText={(text) => onChange('confirmPassword', text)}
+        control={control}
+        name="username"
+        placeholder="Input your confirm password"
       />
-
+      <Field
+        label="Email"
+        control={control}
+        name="email"
+        placeholder="Input your email"
+      />
       <Button>Register</Button>
     </Layout>
   );

@@ -1,7 +1,13 @@
+interface Authentication {
+  email: string;
+  password: string;
+}
+
 interface AuthenticationForm {
   username: string;
   password: string;
   confirmPassword?: string;
+  email?: string;
 }
 
 interface User {
