@@ -8,10 +8,13 @@ type Props = {
   presentationPoint: number;
   contentPoint: number;
   formalityPoint: number;
+  stars: number[];
 };
 const RatingChart = (props: Props) => {
   const avg =
     (props.presentationPoint + props.contentPoint + props.formalityPoint) / 3;
+
+  const stars = props.stars;
   return (
     <Layout style={styles.layout}>
       <Layout style={styles.leftcol}>
@@ -21,26 +24,19 @@ const RatingChart = (props: Props) => {
         </Text>
       </Layout>
       <Layout style={styles.rightcol}>
-        <View style={styles.row}>
-          <Text style={styles.text}>1⭑</Text>
-          <Layout style={[styles.bar]}></Layout>
-        </View>
-        <View style={[styles.row, styles.margintop]}>
-          <Text style={styles.text}>2⭑</Text>
-          <Layout style={[styles.bar, styles.margintop]}></Layout>
-        </View>
-        <View style={[styles.row, styles.margintop]}>
-          <Text style={styles.text}>3⭑</Text>
-          <Layout style={[styles.bar, styles.margintop]}></Layout>
-        </View>
-        <View style={[styles.row, styles.margintop]}>
-          <Text style={styles.text}>4⭑</Text>
-          <Layout style={[styles.bar, styles.margintop]}></Layout>
-        </View>
-        <View style={[styles.row, styles.margintop]}>
-          <Text style={styles.text}>5⭑</Text>
-          <Layout style={[styles.bar]}></Layout>
-        </View>
+        {stars.map((percent, index) => (
+          <View style={styles.row}>
+            <Text style={styles.text}>{index + 1}⭑</Text>
+            <Layout style={[styles.bar]}>
+              <View
+                style={[
+                  styles.absolute,
+                  { backgroundColor: '#8BED4F', width: `${percent}%` },
+                ]}
+              ></View>
+            </Layout>
+          </View>
+        ))}
       </Layout>
     </Layout>
   );

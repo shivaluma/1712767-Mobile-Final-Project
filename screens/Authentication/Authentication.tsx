@@ -1,4 +1,5 @@
 import { Button, Layout } from '@ui-kitten/components';
+import * as Google from 'expo-google-app-auth';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Alert, StyleSheet } from 'react-native';
@@ -63,6 +64,36 @@ const LoginScreen = ({ navigation }) => {
     navigation.navigate('ForgetPassword');
   };
 
+  const handleGoogleLogin = async () => {
+    const { type, accessToken, user } = await Google.logInAsync({
+      iosClientId: `796130238984-3g35877cuo3cgottjmq3df3mmnkr35hf.apps.googleusercontent.com`,
+      androidClientId: `796130238984-u4emps1oln76qcd7mnlunld9a6joa70h.apps.googleusercontent.com`,
+    });
+
+    if (type === 'success') {
+      console.log(user);
+      const data = await authService.logingoogle(user.email, user.id);
+      if (data.userInfo) {
+        Storage.storeData('accessToken', data.token);
+        context?.dispatch({
+          type: 'UPDATE_USER',
+          payload: { user: data.userInfo },
+        });
+        navigation.navigate('Root');
+      } else {
+        await Storage.storeData('accessToken', data.token);
+        const userData = await authService.me();
+        context?.dispatch({
+          type: 'UPDATE_USER',
+          payload: { user: userData.payload },
+        });
+        navigation.navigate('Root');
+      }
+    }
+    if (type === 'cancel') {
+    }
+  };
+
   return (
     <Layout style={styles.container}>
       <KeyboardAwareScrollView>
@@ -73,6 +104,8 @@ const LoginScreen = ({ navigation }) => {
             <RegisterForm onRegister={onRegisterHandler} />
             // <RegisterForm  />
           )}
+
+          <Button onPress={handleGoogleLogin}>Sign in with Google</Button>
           <Button appearance="ghost" onPress={onForgotPasswordHandler}>
             FORGOT PASSWORD?
           </Button>

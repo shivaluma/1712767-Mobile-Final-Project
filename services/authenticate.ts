@@ -5,6 +5,8 @@ export const SIGNUPENDPOINT = 'user/register';
 export const RESENDEMAILENDPOINT = 'user/send-activate-email';
 export const LIKECOURSEENDPOINT = 'user/like-course';
 export const GETCOURSESTATUSENDPOINT = 'user/get-course-like-status';
+export const GOOGLELOGINENDPOINT = 'user/login-google-mobile';
+export const GETMEENDPOINT = 'user/me';
 export const signin = async (
   value: Authentication
 ): Promise<{ message: string; token: string; userInfo: User }> => {
@@ -29,5 +31,15 @@ export const togglelikecourse = async (courseId: string) => {
 
 export const getcourselikestatus = async (courseId: string) => {
   const { data } = await API.get(GETCOURSESTATUSENDPOINT + '/' + courseId);
+  return data;
+};
+
+export const logingoogle = async (email: string, id: string) => {
+  const { data } = await API.post(GOOGLELOGINENDPOINT, { user: { email, id } });
+  return data;
+};
+
+export const me = async () => {
+  const { data } = await API.get(GETMEENDPOINT);
   return data;
 };

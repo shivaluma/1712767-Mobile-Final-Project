@@ -229,6 +229,7 @@ export default function CourseDetailScreen({ route }) {
                     presentationPoint={course.presentationPoint}
                     formalityPoint={course.formalityPoint}
                     contentPoint={course.contentPoint}
+                    stars={course.ratings.stars}
                   />
                   <RatingList ratingList={course?.ratings?.ratingList} />
                 </Layout>
