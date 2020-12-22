@@ -10,8 +10,7 @@ export const getData = async (key: string): Promise<any> => {
 
 export const storeData = async (key: string, value: any) => {
   try {
-    const jsonValue = JSON.stringify(value);
-    await AsyncStorage.setItem(key, jsonValue);
+    await AsyncStorage.setItem(key, value);
   } catch (e) {
     // saving error
   }

@@ -6,12 +6,13 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 import LoginForm from '../../components/Authentication/LoginForm';
 import RegisterForm from '../../components/Authentication/RegisterForm';
+import { useUser } from '../../context/auth/configureContext';
 import * as authService from '../../services/authenticate';
 import * as Storage from '../../utils/asyncStorage';
 
 const LoginScreen = ({ navigation }) => {
   const [isLogin, setIsLogin] = useState<boolean>(true);
-
+  const context = useUser();
   const handleToggleMode = () => {
     setIsLogin((prev) => !prev);
   };
@@ -22,8 +23,13 @@ const LoginScreen = ({ navigation }) => {
 
     try {
       const data = await authService.signin(values);
+      console.log(data);
 
-      Storage.storeData('token', data.token);
+      Storage.storeData('accessToken', data.token);
+      context?.dispatch({
+        type: 'UPDATE_USER',
+        payload: { user: data.userInfo },
+      });
       navigation.navigate('Root', {
         email: values.email,
       });

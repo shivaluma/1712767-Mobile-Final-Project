@@ -24,7 +24,6 @@ const CourseCard = ({
   renderMenu = () => <></>,
   course,
 }: Props) => {
-  console.log(course);
   const navigation = useNavigation();
   return (
     <TouchableNativeFeedback

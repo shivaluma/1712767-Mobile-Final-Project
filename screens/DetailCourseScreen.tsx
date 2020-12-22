@@ -8,32 +8,36 @@ import Chip from '../components/Chip';
 import { LessonSection } from '../components/LessonSection';
 import Loading from '../components/Loading';
 import RatingChart from '../components/RatingChart/RatingChart';
+import RatingList from '../components/RatingChart/RatingList';
+import { useUser } from '../context/auth/configureContext';
 import { useSnackbar } from '../context/snackbar/configureContext';
 import { useWishList } from '../context/wishlist/configureContext';
+import {
+  togglelikecourse,
+  getcourselikestatus,
+} from '../services/authenticate';
 import { getcoursedetail, getratings } from '../services/course';
 import styles from './styles/coursedetail.scss';
 export default function CourseDetailScreen({ route }) {
   const theme = useTheme();
   const [course, setCourse] = useState<Course | null>(null);
-  const [ratings, setRatings] = useState<any>([]);
+  const [liked, setLiked] = useState<boolean>(false);
+
   const sstyles = StyleSheet.create({
     btn: {
       backgroundColor: theme['color-basic-transparent-300'],
     },
   });
   const courseId = route.params.courseId;
-
-  const wishListContext = useWishList();
+  const userContext = useUser() as UserContextType;
   const snackbarContext = useSnackbar();
-  const isInWishList =
-    wishListContext?.state?.wishlish?.findIndex((c) => c?.id === course.id) >=
-    0;
 
   useEffect(() => {
     (async () => {
       try {
         const response = await getcoursedetail(courseId);
         setCourse(() => response);
+        console.log(response);
       } catch (err) {
         console.log(err.response);
         snackbarContext?.dispatch({
@@ -41,8 +45,33 @@ export default function CourseDetailScreen({ route }) {
           payload: { show: true, content: err.response.data.message },
         });
       }
+
+      if (userContext.state.user) {
+        try {
+          const response = await getcourselikestatus(courseId);
+          console.log(response);
+        } catch (err) {
+          snackbarContext?.dispatch({
+            type: 'SNACKBAR_CHANGE',
+            payload: { show: true, content: err.response.data.message },
+          });
+        }
+      }
     })();
   }, []);
+
+  const toggleLikeCourse = async () => {
+    if (!userContext.state.user) {
+      snackbarContext?.dispatch({
+        type: 'SNACKBAR_CHANGE',
+        payload: { show: true, content: 'You must login to like this course.' },
+      });
+    }
+    try {
+      const response = await togglelikecourse(course?.id as string);
+      setLiked(() => response.likeStatus as boolean);
+    } catch (err) {}
+  };
 
   return course ? (
     <>
@@ -133,12 +162,7 @@ export default function CourseDetailScreen({ route }) {
                 style={styles.flex1}
                 appearance="outline"
                 status="danger"
-                onPress={() =>
-                  context?.dispatch({
-                    type: isInWishList ? 'WISHLIST_REMOVE' : 'WISHLIST_ADD',
-                    payload: { course },
-                  })
-                }
+                onPress={toggleLikeCourse}
                 accessoryLeft={() => (
                   <Icon
                     style={styles.btnicon}
@@ -147,7 +171,7 @@ export default function CourseDetailScreen({ route }) {
                   />
                 )}
               >
-                {isInWishList ? 'Wishlisted' : 'Add To WishList'}
+                {liked ? 'Wishlisted' : 'Add To WishList'}
               </Button>
               <Layout style={styles.gap}></Layout>
               <Button
@@ -199,8 +223,14 @@ export default function CourseDetailScreen({ route }) {
               ))}
               <Layout style={[styles.section, sstyles.btn]}>
                 <Layout style={styles.nobg}>
-                  <Text category="s1">Curriculums</Text>
-                  <RatingChart count={2325} />
+                  <Text category="s1">Student Feedback</Text>
+                  <RatingChart
+                    ratedNumber={course.ratedNumber}
+                    presentationPoint={course.presentationPoint}
+                    formalityPoint={course.formalityPoint}
+                    contentPoint={course.contentPoint}
+                  />
+                  <RatingList ratingList={course?.ratings?.ratingList} />
                 </Layout>
               </Layout>
             </Layout>

@@ -28,6 +28,7 @@
     "@ui-kitten/eva-icons": "^5.0.0",
     "axios": "^0.21.0",
     "bluebird": "^3.7.2",
+    "dayjs": "^1.9.7",
     "expo": "~39.0.2",
     "expo-asset": "~8.2.0",
     "expo-av": "~8.6.0",

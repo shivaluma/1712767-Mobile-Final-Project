@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { Button, Icon, Layout, Text, useTheme } from '@ui-kitten/components';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -15,6 +15,7 @@ import { CourseCard } from '../components/CourseCard';
 import PathCard from '../components/PathCard/PathCard';
 import { categories } from '../data/category';
 import { courses } from '../data/courses';
+import { getallcategories } from '../services/category';
 import styles from './styles/search.scss';
 
 const topSearches = [
@@ -35,9 +36,18 @@ export default function SearchScreen({ searchQuery, setSearchQuery }: Props) {
   const navigate = useNavigation();
   const coursesRef = useRef(courses);
   const theme = useTheme();
+  const [categories, setCategories] = useState([]);
   const listCourse = courses.filter((el) =>
     el.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  useEffect(() => {
+    (async () => {
+      const data = await getallcategories();
+      setCategories(data);
+    })();
+  }, []);
+
   return (
     <ScrollView>
       {searchQuery ? (
@@ -69,7 +79,7 @@ export default function SearchScreen({ searchQuery, setSearchQuery }: Props) {
                         fill={theme['text-basic-color']}
                         name="shopping-cart-outline"
                       />
-                      <Text category="s2">{category}</Text>
+                      <Text category="s2">{category.name}</Text>
                     </Layout>
                   </TouchableOpacity>
                 ))}
@@ -103,7 +113,7 @@ export default function SearchScreen({ searchQuery, setSearchQuery }: Props) {
                     fill={theme['text-basic-color']}
                     name="shopping-cart-outline"
                   />
-                  <Text category="s2">{category}</Text>
+                  <Text category="s2">{category.name}</Text>
                 </Layout>
               </TouchableOpacity>
             ))}

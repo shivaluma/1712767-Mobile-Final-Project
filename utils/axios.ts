@@ -11,8 +11,9 @@ const instance = axios.create({
 // api       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmOTNiOTA0Y2MwYWJmMTlkMDM5MjU4NyIsInVzZXJuYW1lIjoic2hpdmFsdW1hIiwiZGlzcGxheU5hbWUiOiJzaGl2YWx1bWEiLCJpYXQiOjE2MDM1MTY2ODF9.omnezGwWS6drn4wGFBPjjV6__yheMpZ3B4uJLXyAvb8';
 
 instance.interceptors.request.use(
-  (config) => {
-    const token = asyncstorage.getData('accessToken');
+  async (config) => {
+    const token = await asyncstorage.getData('accessToken');
+
     if (token) {
       config.headers.authorization = `Bearer ${token}`;
     }

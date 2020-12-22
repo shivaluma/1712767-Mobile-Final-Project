@@ -1,7 +1,8 @@
 .layout {
   display: flex;
-  flex: 1;
   width: 100%;
+  align-items: center;
+  justify-content: center;
   flex-direction: row;
   background-color: transparent;
 }
@@ -24,12 +25,53 @@
 
 .rightcol {
   flex: 1;
+  margin-left: 1rem;
+  background-color: transparent;
 }
 
 .bar {
-  width: 100%;
-  margin-top: 0.5rem;
-  height: 0.4rem;
-  background-color: #fff;
+  flex: 1;
+  height: 0.5rem;
+  background-color: rgb(78, 78, 78);
   border-radius: 4px;
+}
+
+.margintop {
+  margin-top: 0.2rem;
+}
+
+.text {
+  font-size: 0.7rem;
+  margin-right: 0.3rem;
+  flex-basis: 1.3rem;
+}
+
+.textright {
+  font-size: 0.7rem;
+  margin-left: 0.3rem;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  background-color: transparent;
+  flex: 1;
+  align-items: center;
+}
+
+.list {
+  display: flex;
+  background-color: transparent;
+  margin-top: 1.4rem;
+}
+
+.content {
+  font-size: 0.9rem;
+  margin-top: 0.4rem;
+}
+
+.subcontent {
+  font-size: 0.7rem;
+  margin-top: 0.4rem;
 }
