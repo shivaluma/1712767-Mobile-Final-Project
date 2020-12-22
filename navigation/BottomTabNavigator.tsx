@@ -16,16 +16,10 @@ import {
 } from '@ui-kitten/components';
 import * as React from 'react';
 import { useState } from 'react';
-import {
-  Dimensions,
-  Platform,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import { Dimensions, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 
 import Colors from '../constants/Colors';
+import { useUser } from '../context/auth/configureContext';
 import useColorScheme from '../hooks/useColorScheme';
 import FeatureScreen from '../screens/FeatureScreen';
 import ProfileScreen from '../screens/ProfileScreen';
@@ -43,10 +37,9 @@ import {
 } from '../types';
 import styles from './styles/main.scss';
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
-
 export default function BottomTabNavigator() {
   const colorScheme = useColorScheme();
-  const theme = useTheme();
+
   return (
     <BottomTab.Navigator
       initialRouteName="Feature"
@@ -114,6 +107,8 @@ const FeatureStack = createStackNavigator<FeatureParamList>();
 
 function FeatureNavigator() {
   const theme = useTheme();
+  const context = useUser();
+  console.log(context?.state);
   const navigation = useNavigation();
   return (
     <FeatureStack.Navigator mode="modal">
@@ -125,13 +120,26 @@ function FeatureNavigator() {
 
           headerRight: () => (
             <TouchableWithoutFeedback
-              onPress={() => navigation.navigate('Profile')}
+              onPress={() =>
+                navigation.navigate(
+                  context?.state.user === null ? 'Login' : 'Profile'
+                )
+              }
             >
-              <Avatar
-                style={{ marginRight: 10 }}
-                size="medium"
-                source={require('../assets/images/avatar.jpg')}
-              />
+              {context?.state.user === null ? (
+                <Button
+                  onPress={() => navigation.navigate('Login')}
+                  appearance="ghost"
+                >
+                  Sign In
+                </Button>
+              ) : (
+                <Avatar
+                  style={{ marginRight: 10 }}
+                  size="medium"
+                  source={require('../assets/images/avatar.jpg')}
+                />
+              )}
             </TouchableWithoutFeedback>
           ),
           headerStyle: {
@@ -181,6 +189,7 @@ const ProfileStack = createStackNavigator<ProfileParamList>();
 function ProfileNavigator() {
   const theme = useTheme();
   const navigation = useNavigation();
+  const context = useUser();
   return (
     <ProfileStack.Navigator>
       <ProfileStack.Screen
@@ -190,13 +199,19 @@ function ProfileNavigator() {
           headerShown: true,
           headerRight: () => (
             <TouchableWithoutFeedback
-              onPress={() => navigation.navigate('Profile')}
+              onPress={() =>
+                navigation.navigate(context?.state.user ? 'Profile' : 'Login')
+              }
             >
-              <Avatar
-                style={{ marginRight: 10 }}
-                size="medium"
-                source={require('../assets/images/avatar.jpg')}
-              />
+              {context?.state.user ? (
+                <Button appearance="ghost">Sign In</Button>
+              ) : (
+                <Avatar
+                  style={{ marginRight: 10 }}
+                  size="medium"
+                  source={require('../assets/images/avatar.jpg')}
+                />
+              )}
             </TouchableWithoutFeedback>
           ),
           headerStyle: {

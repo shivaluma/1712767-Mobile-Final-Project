@@ -1,0 +1,35 @@
+.layout {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  flex-direction: row;
+  background-color: transparent;
+}
+
+.leftcol {
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ratingnumber {
+  font-size: 3rem;
+  font-weight: 500;
+}
+
+.ratingnumbercount {
+  font-size: 0.7rem;
+}
+
+.rightcol {
+  flex: 1;
+}
+
+.bar {
+  width: 100%;
+  margin-top: 0.5rem;
+  height: 0.4rem;
+  background-color: #fff;
+  border-radius: 4px;
+}

@@ -6,7 +6,7 @@ interface Authentication {
 interface AuthenticationForm {
   username: string;
   password: string;
-  confirmPassword?: string;
+  phone?: string;
   email?: string;
 }
 
@@ -26,24 +26,18 @@ interface User {
 
 type AuthState = {
   user: User | null;
-  wishlish: Course[];
 };
 
-type ActionType =
-  | 'UPDATE_USER'
-  | 'REMOVE_USER'
-  | 'WISHLIST_ADD'
-  | 'WISHLIST_REMOVE';
+type ActionType = 'UPDATE_USER' | 'REMOVE_USER';
 
 type UserContextAction = {
   type: ActionType;
   payload: {
     user: User | null;
-    course?: Course;
   };
 };
 
 type UserContextType = {
   state: AuthState;
-  dispatch: (action: Actions) => void;
+  dispatch: (action: UserContextAction) => void;
 };

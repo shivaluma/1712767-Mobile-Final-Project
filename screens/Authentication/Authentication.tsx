@@ -7,14 +7,9 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import LoginForm from '../../components/Authentication/LoginForm';
 import RegisterForm from '../../components/Authentication/RegisterForm';
 import * as authService from '../../services/authenticate';
+import * as Storage from '../../utils/asyncStorage';
 
 const LoginScreen = ({ navigation }) => {
-  const [authData, setAuthData] = useState<AuthenticationForm>({
-    username: '',
-    password: '',
-    confirmPassword: '',
-  });
-
   const [isLogin, setIsLogin] = useState<boolean>(true);
 
   const handleToggleMode = () => {
@@ -25,14 +20,35 @@ const LoginScreen = ({ navigation }) => {
     console.log('On login');
     console.log(values);
 
-    Alert.alert(values.email);
     try {
       const data = await authService.signin(values);
-      console.log(data);
+
+      Storage.storeData('token', data.token);
+      navigation.navigate('Root', {
+        email: values.email,
+      });
+    } catch (err) {
+      console.log(err.response.data.message);
+      setError('auth', {
+        type: 'manual',
+        message: err.response.data.message,
+      });
+    }
+  };
+
+  const onRegisterHandler = async (values: Authentication, setError: any) => {
+    console.log('On Register');
+    console.log(values);
+
+    try {
+      const data = await authService.signup(values);
+      navigation.navigate('RegisterSuccess', {
+        email: values.email,
+      });
     } catch (err) {
       setError('auth', {
         type: 'manual',
-        message: 'Wrong Username or Password!',
+        message: err.response.data.message,
       });
     }
   };
@@ -48,21 +64,16 @@ const LoginScreen = ({ navigation }) => {
           {isLogin ? (
             <LoginForm onLogin={onLoginHandler} />
           ) : (
-            <> </>
+            <RegisterForm onRegister={onRegisterHandler} />
             // <RegisterForm  />
           )}
           <Button appearance="ghost" onPress={onForgotPasswordHandler}>
             FORGOT PASSWORD?
           </Button>
-          {isLogin ? (
-            <Button onPress={handleToggleMode} appearance="ghost">
-              SIGN UP FREE
-            </Button>
-          ) : (
-            <Button onPress={handleToggleMode} appearance="ghost">
-              LOGIN EXIST ACCOUNT!
-            </Button>
-          )}
+
+          <Button onPress={handleToggleMode} appearance="ghost">
+            {isLogin ? 'SIGN UP FREE' : 'LOGIN EXIST ACCOUNT!'}
+          </Button>
         </Layout>
       </KeyboardAwareScrollView>
     </Layout>

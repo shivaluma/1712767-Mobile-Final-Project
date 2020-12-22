@@ -24,6 +24,8 @@ type Lesson = {
   resource?: Resource[];
 };
 
+type Instructor = object;
+
 type Section = {
   id: string;
   courseId?: string;
@@ -62,4 +64,6 @@ type Course = {
   typeUploadVideoLesson: 1 | 2;
   section: Section[];
   category?: string;
+  'instructor.user.id'?: string;
+  'instructor.user.name'?: string;
 };

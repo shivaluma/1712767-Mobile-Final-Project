@@ -25,33 +25,17 @@ const SettingScreen = () => {
         </View>
         <Divider />
         <View style={styles.content}>
-          <Button
-            style={styles.button}
-            status="control"
-            appearance="ghost"
-            size="large"
-          >
+          <Button style={styles.button} appearance="ghost" size="large">
             Account
           </Button>
-          <Button
-            style={styles.button}
-            status="control"
-            appearance="ghost"
-            size="large"
-          >
+          <Button style={styles.button} appearance="ghost" size="large">
             Subscription
           </Button>
-          <Button
-            style={styles.button}
-            status="control"
-            appearance="ghost"
-            size="large"
-          >
+          <Button style={styles.button} appearance="ghost" size="large">
             Communication Preferences
           </Button>
           <Button
             style={styles.button}
-            status="control"
             size="large"
             appearance="ghost"
             accessoryRight={SwitchButton}
@@ -60,7 +44,6 @@ const SettingScreen = () => {
           </Button>
           <Button
             style={styles.button}
-            status="control"
             size="large"
             appearance="ghost"
             accessoryRight={SwitchButton}
@@ -69,43 +52,22 @@ const SettingScreen = () => {
           </Button>
           <Button
             style={styles.button}
-            status="control"
             size="large"
             appearance="ghost"
             accessoryRight={SwitchButton}
           >
             Show quiz at the end of video
           </Button>
-          <Button
-            style={styles.button}
-            status="control"
-            appearance="ghost"
-            size="large"
-          >
+          <Button style={styles.button} appearance="ghost" size="large">
             Captions
           </Button>
-          <Button
-            style={styles.button}
-            status="control"
-            appearance="ghost"
-            size="large"
-          >
+          <Button style={styles.button} appearance="ghost" size="large">
             Notifications
           </Button>
-          <Button
-            style={styles.button}
-            status="control"
-            appearance="ghost"
-            size="large"
-          >
+          <Button style={styles.button} appearance="ghost" size="large">
             Advanced Options
           </Button>
-          <Button
-            style={styles.button}
-            status="control"
-            appearance="ghost"
-            size="large"
-          >
+          <Button style={styles.button} appearance="ghost" size="large">
             Download location
           </Button>
         </View>

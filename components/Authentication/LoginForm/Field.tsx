@@ -1,5 +1,5 @@
-import { Layout, Input, Text } from '@ui-kitten/components';
-import React from 'react';
+import { Layout, Input, Text, Icon } from '@ui-kitten/components';
+import React, { useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { StyleSheet } from 'react-native';
 interface Props {
@@ -22,8 +22,10 @@ const Field = (props: Props) => {
     error,
   } = props;
 
+  const [isSecured, setSecured] = useState(false);
+
   return (
-    <Layout>
+    <Layout style={{ marginBottom: 20 }}>
       <Text style={styles.text} category="s2">
         {label}
       </Text>
@@ -33,20 +35,24 @@ const Field = (props: Props) => {
         render={({ onChange, onBlur, value }) => (
           <Input
             onBlur={onBlur}
-            secureTextEntry={secureTextEntry}
+            secureTextEntry={isSecured}
+            status={error ? 'danger' : 'basic'}
             onChangeText={(value) => onChange(value)}
+            onFocus={() => setSecured(secureTextEntry)}
+            caption={
+              error && (
+                <Text style={styles.gap} category="c2" status="danger">
+                  This is required!
+                </Text>
+              )
+            }
             value={value}
           />
         )}
         name={name}
         rules={{ required: true }}
+        defaultValue=""
       />
-
-      {error && (
-        <Text style={styles.gap} category="c2" status="danger">
-          This is required!
-        </Text>
-      )}
     </Layout>
   );
 };

@@ -1,11 +1,17 @@
 import * as eva from '@eva-design/eva';
-import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
+import { ApplicationProvider, IconRegistry, Text } from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import React from 'react';
-import { DarkTheme, Provider as PaperProvider } from 'react-native-paper';
+import { Snackbar } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import Toast from 'react-native-toast-message';
 
-import { AuthProvider } from './context/configureContext';
+import { AuthProvider } from './context/auth/configureContext';
+import {
+  SnackbarProvider,
+  useSnackbar,
+} from './context/snackbar/configureContext';
+import { WishListProvider } from './context/wishlist/configureContext';
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
@@ -13,6 +19,7 @@ import { default as themekitten } from './theme.json';
 export default function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
+
   const mappingTheme = colorScheme === 'dark' ? { ...themekitten } : {};
   if (!isLoadingComplete) {
     return null;
@@ -26,7 +33,12 @@ export default function App() {
           theme={{ ...eva[colorScheme], ...mappingTheme }}
         >
           <AuthProvider>
-            <Navigation colorScheme={colorScheme} />
+            <WishListProvider>
+              <SnackbarProvider>
+                <Navigation colorScheme={colorScheme} />
+                <Toast ref={(ref) => Toast.setRef(ref)} />
+              </SnackbarProvider>
+            </WishListProvider>
           </AuthProvider>
         </ApplicationProvider>
       </SafeAreaProvider>

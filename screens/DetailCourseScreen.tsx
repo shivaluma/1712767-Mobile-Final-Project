@@ -1,25 +1,50 @@
 import { Button, Icon, Layout, Text, useTheme } from '@ui-kitten/components';
 import { Video } from 'expo-av';
-import * as React from 'react';
-import { ScrollView, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ScrollView, StyleSheet } from 'react-native';
 import ViewMoreText from 'react-native-view-more-text';
 
 import Chip from '../components/Chip';
 import { LessonSection } from '../components/LessonSection';
-import { useUser } from '../context/configureContext';
+import Loading from '../components/Loading';
+import RatingChart from '../components/RatingChart/RatingChart';
+import { useSnackbar } from '../context/snackbar/configureContext';
+import { useWishList } from '../context/wishlist/configureContext';
+import { getcoursedetail, getratings } from '../services/course';
 import styles from './styles/coursedetail.scss';
 export default function CourseDetailScreen({ route }) {
   const theme = useTheme();
+  const [course, setCourse] = useState<Course | null>(null);
+  const [ratings, setRatings] = useState<any>([]);
   const sstyles = StyleSheet.create({
     btn: {
       backgroundColor: theme['color-basic-transparent-300'],
     },
   });
-  const course = route.params.course as Course;
-  const authState = useUser();
+  const courseId = route.params.courseId;
+
+  const wishListContext = useWishList();
+  const snackbarContext = useSnackbar();
   const isInWishList =
-    authState?.state.wishlish?.findIndex((c) => c?.id === course.id) >= 0;
-  return (
+    wishListContext?.state?.wishlish?.findIndex((c) => c?.id === course.id) >=
+    0;
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await getcoursedetail(courseId);
+        setCourse(() => response);
+      } catch (err) {
+        console.log(err.response);
+        snackbarContext?.dispatch({
+          type: 'SNACKBAR_CHANGE',
+          payload: { show: true, content: err.response.data.message },
+        });
+      }
+    })();
+  }, []);
+
+  return course ? (
     <>
       <ScrollView>
         <Layout style={styles.root}>
@@ -109,7 +134,7 @@ export default function CourseDetailScreen({ route }) {
                 appearance="outline"
                 status="danger"
                 onPress={() =>
-                  authState?.dispatch({
+                  context?.dispatch({
                     type: isInWishList ? 'WISHLIST_REMOVE' : 'WISHLIST_ADD',
                     payload: { course },
                   })
@@ -144,25 +169,23 @@ export default function CourseDetailScreen({ route }) {
               <Layout style={[styles.section, sstyles.btn]}>
                 <Layout style={styles.nobg}>
                   <Text category="s1">What Will I Learn</Text>
-                  {course.learnWhat.map((text) => (
+                  {course.learnWhat?.map((text) => (
                     <Text style={[styles.subtext]} category="c2">
                       ✓ {text}
                     </Text>
                   ))}
                 </Layout>
               </Layout>
-
               <Layout style={[styles.section, sstyles.btn]}>
                 <Layout style={styles.nobg}>
                   <Text category="s1">Requirements</Text>
-                  {course.requirement.map((text) => (
+                  {course.requirement?.map((text) => (
                     <Text style={[styles.subtext]} category="c2">
                       ✓ {text}
                     </Text>
                   ))}
                 </Layout>
               </Layout>
-
               <Layout style={[styles.section, sstyles.btn]}>
                 <Layout style={styles.nobg}>
                   <Text category="s1">Curriculums</Text>
@@ -171,14 +194,21 @@ export default function CourseDetailScreen({ route }) {
                   </Text>
                 </Layout>
               </Layout>
-
-              {course.section.map((section) => (
+              {course.section?.map((section) => (
                 <LessonSection section={section} />
               ))}
+              <Layout style={[styles.section, sstyles.btn]}>
+                <Layout style={styles.nobg}>
+                  <Text category="s1">Curriculums</Text>
+                  <RatingChart count={2325} />
+                </Layout>
+              </Layout>
             </Layout>
           </Layout>
         </Layout>
       </ScrollView>
     </>
+  ) : (
+    <Loading />
   );
 }

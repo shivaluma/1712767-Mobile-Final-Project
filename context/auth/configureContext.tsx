@@ -7,18 +7,17 @@ import React, {
   useContext,
 } from 'react';
 
-import { reducer } from './reducers/authReducer';
+import { reducer } from './auth.reducer';
 
-const initialState = {
+const wistlistState = {
   user: null,
-  wishlish: [],
 };
 export const AuthContext = createContext<UserContextType | null>(null);
 
 export const AuthProvider: FC = ({ children }) => {
   const [state, dispatch] = useReducer<Reducer<AuthState, UserContextAction>>(
     reducer,
-    initialState
+    wistlistState
   );
   const value = useMemo(() => ({ state, dispatch }), [state, dispatch]);
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

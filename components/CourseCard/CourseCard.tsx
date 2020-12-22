@@ -24,10 +24,13 @@ const CourseCard = ({
   renderMenu = () => <></>,
   course,
 }: Props) => {
+  console.log(course);
   const navigation = useNavigation();
   return (
     <TouchableNativeFeedback
-      onPress={() => navigation.navigate('CourseDetail', { course })}
+      onPress={() =>
+        navigation.navigate('CourseDetail', { courseId: course.id })
+      }
     >
       <Layout
         style={[
@@ -37,11 +40,17 @@ const CourseCard = ({
       >
         <Image
           style={isHorizontal ? styles.thumbnailhorizontal : styles.thumbnail}
-          source={require('../../assets/images/course.jpg')}
+          source={
+            course.imageUrl
+              ? { uri: course.imageUrl }
+              : require('../../assets/images/course.jpg')
+          }
         />
 
         <Layout style={styles.price}>
-          <Text style={styles.pricetext}>{course.price}$</Text>
+          <Text style={styles.pricetext}>
+            {course.price === 0 ? 'FREE' : `${course.price}đ`}
+          </Text>
         </Layout>
 
         <Layout style={isHorizontal ? styles.infohorizontal : styles.info}>
@@ -50,12 +59,12 @@ const CourseCard = ({
           </Text>
 
           <Text style={styles.author} appearance="hint">
-            {course.instructorName}
+            {course.instructorName || course['instructor.user.name']}
           </Text>
 
           <Text style={styles.description} appearance="hint">
-            {course.totalHours} total hours - {course.videoNumber} lectures -
-            All Levels
+            {course.totalHours} total hours - {course.videoNumber} lectures -{' '}
+            {course.status.toLowerCase()}
           </Text>
 
           <Layout style={styles.rating}>

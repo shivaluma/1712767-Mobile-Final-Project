@@ -1,15 +1,8 @@
 export const reducer = (
-  state: AuthState,
-  action: UserContextAction
-): AuthState => {
+  state: WishListState,
+  action: WishListContextActionType
+): WishListState => {
   switch (action.type) {
-    case 'UPDATE_USER': {
-      return { ...state, user: action.payload.user };
-    }
-    case 'REMOVE_USER': {
-      return { ...state, user: null };
-    }
-
     case 'WISHLIST_ADD': {
       return {
         ...state,

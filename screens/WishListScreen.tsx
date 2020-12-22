@@ -3,13 +3,13 @@ import React, { memo } from 'react';
 import { ScrollView } from 'react-native';
 
 import { CourseCard } from '../components/CourseCard';
-import { useUser } from '../context/configureContext';
+import { useWishList } from '../context/wishlist/configureContext';
 import { courses } from '../data/courses';
 import styles from './styles/courselist.scss';
 
 const WishListScreen = () => {
-  const authState = useUser();
-  const wishlist = authState?.state.wishlish;
+  const wishlistState = useWishList();
+  const wishlist = wishlistState?.state.wishlish;
   return (
     <Layout style={styles.root}>
       <ScrollView>

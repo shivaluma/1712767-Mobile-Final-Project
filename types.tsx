@@ -9,6 +9,7 @@ export type RootStackParamList = {
   Setting: undefined;
   ForgetPassword: undefined;
   VerifyPassword: undefined;
+  RegisterSuccess: undefined;
 };
 
 export type BottomTabParamList = {
