@@ -10,6 +10,8 @@ export type RootStackParamList = {
   ForgetPassword: undefined;
   VerifyPassword: undefined;
   RegisterSuccess: undefined;
+  ChangePassword: undefined;
+  ChangeProfile: undefined;
 };
 
 export type BottomTabParamList = {

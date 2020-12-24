@@ -7,7 +7,7 @@ export default function ProfileScreen() {
     <Layout style={styles.container}>
       <View style={styles.header}>
         <Avatar
-          style={{ width: 50, height: 50 }}
+          style={{ width: 400, height: 400 }}
           source={require('../assets/images/avatar.jpg')}
         />
       </View>

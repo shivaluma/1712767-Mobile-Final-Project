@@ -7,6 +7,9 @@ export const LIKECOURSEENDPOINT = 'user/like-course';
 export const GETCOURSESTATUSENDPOINT = 'user/get-course-like-status';
 export const GOOGLELOGINENDPOINT = 'user/login-google-mobile';
 export const GETMEENDPOINT = 'user/me';
+export const CHANGEPASSWORDENDPOINT = 'user/change-password';
+export const CHANGEPROFILEENDPOINT = 'user/update-profile';
+export const UPLOADAVATARENDPOINT = 'user/upload-avatar';
 export const signin = async (
   value: Authentication
 ): Promise<{ message: string; token: string; userInfo: User }> => {
@@ -41,5 +44,33 @@ export const logingoogle = async (email: string, id: string) => {
 
 export const me = async () => {
   const { data } = await API.get(GETMEENDPOINT);
+  return data;
+};
+
+export const changepassword = async (
+  id: string,
+  oldPass: string,
+  newPass: string
+) => {
+  const { data } = await API.post(CHANGEPASSWORDENDPOINT, {
+    id,
+    oldPass,
+    newPass,
+  });
+  return data;
+};
+
+export const changeprofile = async (updateData: ProfileForm) => {
+  const { data } = await API.put(CHANGEPROFILEENDPOINT, updateData);
+  return data;
+};
+
+export const updateavatar = async (formData) => {
+  const { data } = await API.post(UPLOADAVATARENDPOINT, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+
   return data;
 };

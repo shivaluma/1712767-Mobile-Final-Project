@@ -18,6 +18,8 @@ import LoginScreen from '../screens/Authentication/Authentication';
 import ForgetPassword from '../screens/Authentication/ForgetPassword';
 import RegisterSuccess from '../screens/Authentication/RegisterSuccess';
 import VerifyPassword from '../screens/Authentication/VerifyPassword';
+import ChangePasswordScreen from '../screens/ChangePasswordScreen';
+import ChangeProfileScreen from '../screens/ChangeProfileScreen';
 import CourseListScreen from '../screens/CourseListScreen';
 import CourseDetailScreen from '../screens/DetailCourseScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
@@ -109,6 +111,18 @@ function RootNavigator() {
       <Stack.Screen
         name="CourseList"
         component={CourseListScreen}
+        options={{ headerShown: true }}
+      />
+
+      <Stack.Screen
+        name="ChangePassword"
+        component={ChangePasswordScreen}
+        options={{ headerShown: true }}
+      />
+
+      <Stack.Screen
+        name="ChangeProfile"
+        component={ChangeProfileScreen}
         options={{ headerShown: true }}
       />
       <Stack.Screen name="NotFound" component={NotFoundScreen} />

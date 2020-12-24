@@ -10,6 +10,18 @@ interface AuthenticationForm {
   email?: string;
 }
 
+interface PasswordForm {
+  password: string;
+  newpassword: string;
+  newpasswordconfirmation: string;
+}
+
+interface ProfileForm {
+  name: string;
+  avatar?: string;
+  phone: string;
+}
+
 interface User {
   id: string;
   email?: string;

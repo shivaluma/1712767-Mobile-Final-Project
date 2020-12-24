@@ -189,7 +189,7 @@ const ProfileStack = createStackNavigator<ProfileParamList>();
 function ProfileNavigator() {
   const theme = useTheme();
   const navigation = useNavigation();
-  const context = useUser();
+
   return (
     <ProfileStack.Navigator>
       <ProfileStack.Screen
@@ -197,23 +197,7 @@ function ProfileNavigator() {
         component={SettingScreen}
         options={{
           headerShown: true,
-          headerRight: () => (
-            <TouchableWithoutFeedback
-              onPress={() =>
-                navigation.navigate(context?.state.user ? 'Profile' : 'Login')
-              }
-            >
-              {context?.state.user ? (
-                <Button appearance="ghost">Sign In</Button>
-              ) : (
-                <Avatar
-                  style={{ marginRight: 10 }}
-                  size="medium"
-                  source={require('../assets/images/avatar.jpg')}
-                />
-              )}
-            </TouchableWithoutFeedback>
-          ),
+
           headerStyle: {
             backgroundColor: theme['background-basic-color-1'],
           },
@@ -228,6 +212,7 @@ const WishListStack = createStackNavigator<WishListParamList>();
 function WishListNavigator() {
   const theme = useTheme();
   const navigation = useNavigation();
+
   return (
     <WishListStack.Navigator>
       <WishListStack.Screen
@@ -235,17 +220,7 @@ function WishListNavigator() {
         component={WishListScreen}
         options={{
           headerShown: true,
-          headerRight: () => (
-            <TouchableWithoutFeedback
-              onPress={() => navigation.navigate('Profile')}
-            >
-              <Avatar
-                style={{ marginRight: 10 }}
-                size="medium"
-                source={require('../assets/images/avatar.jpg')}
-              />
-            </TouchableWithoutFeedback>
-          ),
+
           headerStyle: {
             backgroundColor: theme['background-basic-color-1'],
           },

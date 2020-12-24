@@ -10,6 +10,7 @@ interface Props {
   secureTextEntry?: boolean;
   rules?: any;
   error: any;
+  defaultValue?: string;
 }
 
 const Field = (props: Props) => {
@@ -20,8 +21,9 @@ const Field = (props: Props) => {
     secureTextEntry = false,
     rules = { required: true },
     error,
+    defaultValue,
   } = props;
-
+  console.log(defaultValue);
   const [isSecured, setSecured] = useState(false);
 
   return (
@@ -37,6 +39,7 @@ const Field = (props: Props) => {
             onBlur={onBlur}
             secureTextEntry={isSecured}
             status={error ? 'danger' : 'basic'}
+            autoCapitalize="none"
             onChangeText={(value) => onChange(value)}
             onFocus={() => setSecured(secureTextEntry)}
             caption={
