@@ -5,20 +5,16 @@ import React from 'react';
 import { ThemeProvider } from 'react-native-elements';
 import { Snackbar } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import Toast from 'react-native-toast-message';
 
 import { AuthProvider } from './context/auth/configureContext';
-import {
-  SnackbarProvider,
-  useSnackbar,
-} from './context/snackbar/configureContext';
+import { SnackbarProvider } from './context/snackbar/configureContext';
 import { WishListProvider } from './context/wishlist/configureContext';
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 import { default as themekittelight } from './styles/theme-light.json';
 import { default as themekittedark } from './theme.json';
-import { default as mapping } from './utils/mapping.json';
+
 export default function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
@@ -31,7 +27,6 @@ export default function App() {
     return (
       <SafeAreaProvider>
         <IconRegistry icons={EvaIconsPack} />
-
         <ApplicationProvider
           {...eva}
           theme={{ ...eva[colorScheme], ...mappingTheme }}
@@ -40,7 +35,6 @@ export default function App() {
             <WishListProvider>
               <SnackbarProvider>
                 <Navigation colorScheme={colorScheme} />
-                <Toast ref={(ref) => Toast.setRef(ref)} />
               </SnackbarProvider>
             </WishListProvider>
           </AuthProvider>

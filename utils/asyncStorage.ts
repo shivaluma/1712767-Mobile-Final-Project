@@ -17,5 +17,5 @@ export const storeData = async (key: string, value: any) => {
 };
 
 export const removeData = async (key: string) => {
-  return await AsyncStorage.removeItem(key);
+  await AsyncStorage.removeItem(key);
 };

@@ -26,7 +26,7 @@ const LoginScreen = ({ navigation }) => {
       const data = await authService.signin(values);
       console.log(data);
 
-      Storage.storeData('accessToken', data.token);
+      await Storage.storeData('accessToken', data.token);
       context?.dispatch({
         type: 'UPDATE_USER',
         payload: { user: data.userInfo },
@@ -74,7 +74,7 @@ const LoginScreen = ({ navigation }) => {
       console.log(user);
       const data = await authService.logingoogle(user.email, user.id);
       if (data.userInfo) {
-        Storage.storeData('accessToken', data.token);
+        await Storage.storeData('accessToken', data.token);
         context?.dispatch({
           type: 'UPDATE_USER',
           payload: { user: data.userInfo },
