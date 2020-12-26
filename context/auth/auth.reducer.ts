@@ -1,3 +1,5 @@
+import { removeData } from '../../utils/asyncStorage';
+
 export const reducer = (
   state: AuthState,
   action: UserContextAction

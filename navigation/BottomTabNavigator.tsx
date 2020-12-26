@@ -7,25 +7,31 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import {
+  Autocomplete,
+  AutocompleteItem,
   Avatar,
   Button,
   Icon,
+  IndexPath,
   Input,
   Layout,
+  Select,
+  SelectItem,
   useTheme,
 } from '@ui-kitten/components';
 import * as React from 'react';
 import { useState } from 'react';
 import { Dimensions, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { SearchBar } from 'react-native-elements';
 
 import Colors from '../constants/Colors';
 import { useUser } from '../context/auth/configureContext';
 import useColorScheme from '../hooks/useColorScheme';
 import FeatureScreen from '../screens/FeatureScreen';
+import MyCourseScreen from '../screens/MyCourseScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import SearchScreen from '../screens/SearchScreen';
 import SettingScreen from '../screens/SettingScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
 import WishListScreen from '../screens/WishListScreen';
 import {
   BottomTabParamList,
@@ -55,23 +61,25 @@ export default function BottomTabNavigator() {
         }}
       />
       <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoNavigator}
+        name="My Courses"
+        component={MyCourseNavigator}
         options={{
           tabBarIcon: ({ color }) => (
             <Icon style={styles.icon} fill={color} name="grid-outline" />
           ),
         }}
       />
+
       <BottomTab.Screen
-        name="Profile"
-        component={ProfileNavigator}
+        name="Search"
+        component={SearchScreenNavigator}
         options={{
           tabBarIcon: ({ color }) => (
-            <Icon style={styles.icon} fill={color} name="person-outline" />
+            <Icon style={styles.icon} fill={color} name="search" />
           ),
         }}
       />
+
       <BottomTab.Screen
         name="Wish List"
         component={WishListNavigator}
@@ -83,11 +91,11 @@ export default function BottomTabNavigator() {
       />
 
       <BottomTab.Screen
-        name="Search"
-        component={SearchScreenNavigator}
+        name="Profile"
+        component={ProfileNavigator}
         options={{
           tabBarIcon: ({ color }) => (
-            <Icon style={styles.icon} fill={color} name="search" />
+            <Icon style={styles.icon} fill={color} name="person-outline" />
           ),
         }}
       />
@@ -151,36 +159,40 @@ function FeatureNavigator() {
   );
 }
 
-const TabTwoStack = createStackNavigator<TabTwoParamList>();
+const MyCourseStack = createStackNavigator<TabTwoParamList>();
 
-function TabTwoNavigator() {
+function MyCourseNavigator() {
   const theme = useTheme();
   const navigation = useNavigation();
+  const [selectedIndex, setSelectedIndex] = useState(new IndexPath(0));
+  const data = ['All courses', 'Downloaded courses'];
   return (
-    <TabTwoStack.Navigator>
-      <TabTwoStack.Screen
-        name="TabTwoScreen"
-        component={TabTwoScreen}
+    <MyCourseStack.Navigator>
+      <MyCourseStack.Screen
+        name="MyCourseScreen"
         options={{
           headerShown: true,
-
-          headerRight: () => (
-            <TouchableWithoutFeedback
-              onPress={() => navigation.navigate('Profile')}
+          title: '',
+          headerLeft: () => (
+            <Select
+              style={{ backgroundColor: 'transparent' }}
+              selectedIndex={selectedIndex}
+              value={data[selectedIndex.row]}
+              onSelect={(index) => setSelectedIndex(index)}
             >
-              <Avatar
-                style={{ marginRight: 10 }}
-                size="medium"
-                source={require('../assets/images/avatar.jpg')}
-              />
-            </TouchableWithoutFeedback>
+              {data.map((item) => (
+                <SelectItem title={item} />
+              ))}
+            </Select>
           ),
           headerStyle: {
             backgroundColor: theme['background-basic-color-1'],
           },
         }}
-      />
-    </TabTwoStack.Navigator>
+      >
+        {(props) => <MyCourseScreen currentSelect={data[selectedIndex.row]} />}
+      </MyCourseStack.Screen>
+    </MyCourseStack.Navigator>
   );
 }
 
@@ -247,7 +259,7 @@ function SearchScreenNavigator() {
     },
 
     headerWidth: {
-      flex: 1,
+      width: Dimensions.get('window').width,
       borderRadius: 5,
       paddingHorizontal: 10,
       paddingVertical: 15,
@@ -255,7 +267,12 @@ function SearchScreenNavigator() {
   });
 
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [isFocus, setFocus] = useState<boolean>(false);
+  const [history, setHistory] = useState([]);
 
+  const onSelect = (index) => {
+    setSearchQuery(history[index].content);
+  };
   return (
     <SearchScreenStack.Navigator>
       <SearchScreenStack.Screen
@@ -264,17 +281,26 @@ function SearchScreenNavigator() {
           headerTitle: () => null,
           headerLeft: () => (
             <Layout style={sstyles.layout}>
-              <Input
+              <Autocomplete
                 size="large"
                 value={searchQuery}
+                onFocus={() => setFocus(true)}
+                onBlur={() => setFocus(false)}
                 onChangeText={(value) => setSearchQuery(value)}
                 placeholder="Type something to search..."
                 style={sstyles.headerWidth}
+                onSelect={onSelect}
                 autoFocus={false}
                 accessoryRight={(props) => (
                   <Icon {...props} name="search-outline" />
                 )}
-              />
+              >
+                {history
+                  .filter((item) => item.content.includes(searchQuery))
+                  .map((item) => (
+                    <AutocompleteItem key={item.id} title={item.content} />
+                  ))}
+              </Autocomplete>
             </Layout>
           ),
 
@@ -286,8 +312,10 @@ function SearchScreenNavigator() {
       >
         {(props) => (
           <SearchScreen
+            isFocus={isFocus}
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
+            setHistory={setHistory}
           />
         )}
       </SearchScreenStack.Screen>

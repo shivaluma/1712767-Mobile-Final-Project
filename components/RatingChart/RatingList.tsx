@@ -12,7 +12,7 @@ const RatingList = (props: Props) => {
   return (
     <Layout style={styles.list}>
       {props.ratingList.map((rating) => (
-        <Layout style={styles.list}>
+        <Layout key={rating.id} style={styles.list}>
           <Stars value={rating.averagePoint} maxValue={5} />
           <Text style={styles.content}>{rating.content}</Text>
           <Text style={styles.subcontent}>

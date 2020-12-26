@@ -10,6 +10,9 @@ export const GETMEENDPOINT = 'user/me';
 export const CHANGEPASSWORDENDPOINT = 'user/change-password';
 export const CHANGEPROFILEENDPOINT = 'user/update-profile';
 export const UPLOADAVATARENDPOINT = 'user/upload-avatar';
+export const GETPROCESSCOURSEENDPOINT = '/user/get-process-courses';
+export const GETCHECKOWNCOURSEENDPOINT = '/user/check-own-course';
+export const GETFAVORITECOURSEENDPOINT = '/user/get-favorite-courses';
 export const signin = async (
   value: Authentication
 ): Promise<{ message: string; token: string; userInfo: User }> => {
@@ -73,4 +76,20 @@ export const updateavatar = async (formData) => {
   });
 
   return data;
+};
+
+export const getprocesscourse = async () => {
+  const { data } = await API.get(GETPROCESSCOURSEENDPOINT);
+  return data.payload;
+};
+
+export const getcheckowncourse = async (courseId: string) => {
+  const { data } = await API.get(GETCHECKOWNCOURSEENDPOINT + '/' + courseId);
+
+  return data;
+};
+
+export const getfavoritecourses = async () => {
+  const { data } = await API.get(GETFAVORITECOURSEENDPOINT);
+  return data.payload;
 };

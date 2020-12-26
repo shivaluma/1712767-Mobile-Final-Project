@@ -31,8 +31,8 @@ const LoginScreen = ({ navigation }) => {
         type: 'UPDATE_USER',
         payload: { user: data.userInfo },
       });
-      navigation.navigate('Root', {
-        email: values.email,
+      navigation.reset({
+        routes: [{ name: 'Root' }],
       });
     } catch (err) {
       console.log(err.response.data.message);
@@ -79,7 +79,9 @@ const LoginScreen = ({ navigation }) => {
           type: 'UPDATE_USER',
           payload: { user: data.userInfo },
         });
-        navigation.navigate('Root');
+        navigation.reset({
+          routes: [{ name: 'Root' }],
+        });
       } else {
         await Storage.storeData('accessToken', data.token);
         const userData = await authService.me();
@@ -87,7 +89,9 @@ const LoginScreen = ({ navigation }) => {
           type: 'UPDATE_USER',
           payload: { user: userData.payload },
         });
-        navigation.navigate('Root');
+        navigation.reset({
+          routes: [{ name: 'Root' }],
+        });
       }
     }
     if (type === 'cancel') {

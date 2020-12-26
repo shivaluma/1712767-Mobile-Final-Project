@@ -12,11 +12,14 @@ export type RootStackParamList = {
   RegisterSuccess: undefined;
   ChangePassword: undefined;
   ChangeProfile: undefined;
+  VideoCourse: undefined;
+  Instructor: undefined;
+  Category: undefined;
 };
 
 export type BottomTabParamList = {
   Feature: undefined;
-  TabTwo: undefined;
+  'My Courses': undefined;
   Search: undefined;
   Profile: undefined;
   'My courses': undefined;
@@ -28,7 +31,7 @@ export type FeatureParamList = {
 };
 
 export type TabTwoParamList = {
-  TabTwoScreen: undefined;
+  MyCourseScreen: undefined;
 };
 
 export type SearchScreenParamList = {

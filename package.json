@@ -47,6 +47,7 @@
     "react-hook-form": "^6.12.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.4.tar.gz",
     "react-native-collapsible": "^1.5.3",
+    "react-native-elements": "^3.0.1",
     "react-native-gesture-handler": "~1.7.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.3",
     "react-native-paper": "^4.3.1",
@@ -56,11 +57,15 @@
     "react-native-snackbar": "^2.2.4",
     "react-native-svg": "^12.1.0",
     "react-native-toast-message": "^1.4.1",
+    "react-native-vector-icons": "^7.1.0",
     "react-native-view-more-text": "^2.1.0",
-    "react-native-web": "~0.13.12"
+    "react-native-web": "~0.13.12",
+    "react-native-webview": "10.7.0",
+    "react-native-youtube-iframe": "^1.4.0"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
+    "@babel/plugin-proposal-decorators": "^7.12.12",
     "@types/bluebird": "^3.5.33",
     "@types/react": "~16.9.35",
     "@types/react-native": "~0.63.2",

@@ -11,11 +11,13 @@ import Constants from 'expo-constants';
 import * as ImagePicker from 'expo-image-picker';
 import React, { memo, useEffect, useRef, useState } from 'react';
 import { SectionList, StyleSheet, Switch, View } from 'react-native';
+import { SearchBar } from 'react-native-elements';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 
 import { useUser } from '../context/auth/configureContext';
 import { useSnackbar } from '../context/snackbar/configureContext';
 import { updateavatar } from '../services/authenticate';
+import { removeData } from '../utils/asyncStorage';
 
 const SettingScreen = () => {
   const [isEnabled, setIsEnabled] = useState(false);
@@ -184,10 +186,12 @@ const SettingScreen = () => {
           <>
             <Divider />
             <Button
-              onPress={() => {
+              onPress={async () => {
+                await removeData('accessToken');
                 navigation.reset({
-                  routes: [{ name: 'Login' }],
+                  routes: [{ name: state.user ? 'Root' : 'Login' }],
                 });
+                dispatch({ type: 'UPDATE_USER', payload: { user: null } });
               }}
               style={styles.buttonLogout}
               appearance="ghost"

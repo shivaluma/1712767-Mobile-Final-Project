@@ -18,14 +18,17 @@ import LoginScreen from '../screens/Authentication/Authentication';
 import ForgetPassword from '../screens/Authentication/ForgetPassword';
 import RegisterSuccess from '../screens/Authentication/RegisterSuccess';
 import VerifyPassword from '../screens/Authentication/VerifyPassword';
+import CategoryScreen from '../screens/CategoryCourse';
 import ChangePasswordScreen from '../screens/ChangePasswordScreen';
 import ChangeProfileScreen from '../screens/ChangeProfileScreen';
 import CourseListScreen from '../screens/CourseListScreen';
 import CourseDetailScreen from '../screens/DetailCourseScreen';
+import Instructor from '../screens/Instructor/Instuctor';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import PathScreen from '../screens/PathScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import SettingScreen from '../screens/SettingScreen';
+import VideoCourseScreen from '../screens/VideoCourseScreen';
 import { RootStackParamList } from '../types';
 import BottomTabNavigator from './BottomTabNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
@@ -125,6 +128,25 @@ function RootNavigator() {
         component={ChangeProfileScreen}
         options={{ headerShown: true }}
       />
+
+      <Stack.Screen
+        name="VideoCourse"
+        component={VideoCourseScreen}
+        options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+        name="Instructor"
+        component={Instructor}
+        options={{ headerShown: true }}
+      />
+
+      <Stack.Screen
+        name="Category"
+        component={CategoryScreen}
+        options={{ headerShown: true }}
+      />
+
       <Stack.Screen name="NotFound" component={NotFoundScreen} />
     </Stack.Navigator>
   );

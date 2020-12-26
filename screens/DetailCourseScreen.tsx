@@ -1,55 +1,72 @@
-import { Button, Icon, Layout, Text, useTheme } from '@ui-kitten/components';
+import {
+  Avatar,
+  Button,
+  Icon,
+  Layout,
+  Text,
+  useTheme,
+} from '@ui-kitten/components';
 import { Video } from 'expo-av';
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, Image } from 'react-native';
 import ViewMoreText from 'react-native-view-more-text';
 
 import Chip from '../components/Chip';
+import { CourseCard } from '../components/CourseCard';
 import { LessonSection } from '../components/LessonSection';
 import Loading from '../components/Loading';
+import Stars from '../components/Rating/Star';
 import RatingChart from '../components/RatingChart/RatingChart';
 import RatingList from '../components/RatingChart/RatingList';
 import { useUser } from '../context/auth/configureContext';
 import { useSnackbar } from '../context/snackbar/configureContext';
-import { useWishList } from '../context/wishlist/configureContext';
+import Authorization from '../hoc/Authorization';
 import {
   togglelikecourse,
   getcourselikestatus,
+  getcheckowncourse,
 } from '../services/authenticate';
-import { getcoursedetail, getratings } from '../services/course';
+import {
+  getcoursedetail,
+  getratings,
+  postenrollcoursefree,
+} from '../services/course';
 import styles from './styles/coursedetail.scss';
-export default function CourseDetailScreen({ route }) {
+export default function CourseDetailScreen({ route, navigation }) {
   const theme = useTheme();
   const [course, setCourse] = useState<Course | null>(null);
   const [liked, setLiked] = useState<boolean>(false);
-
+  const [ownCourse, setOwnCourse] = useState<boolean>(false);
   const sstyles = StyleSheet.create({
     btn: {
       backgroundColor: theme['color-basic-transparent-300'],
+    },
+    button: {
+      marginTop: 10,
+      width: '100%',
+      fontWeight: 'normal',
     },
   });
   const courseId = route.params.courseId;
   const userContext = useUser() as UserContextType;
   const snackbarContext = useSnackbar();
-
+  console.log(course?.instructor);
   useEffect(() => {
     (async () => {
-      try {
-        const response = await getcoursedetail(courseId);
-        setCourse(() => response);
-        console.log(response);
-      } catch (err) {
-        console.log(err.response);
-        snackbarContext?.dispatch({
-          type: 'SNACKBAR_CHANGE',
-          payload: { show: true, content: err.response.data.message },
-        });
-      }
-
       if (userContext.state.user) {
         try {
           const response = await getcourselikestatus(courseId);
-          console.log(response);
+          setLiked(() => response.likeStatus);
+        } catch (err) {
+          snackbarContext?.dispatch({
+            type: 'SNACKBAR_CHANGE',
+            payload: { show: true, content: err.response.data.message },
+          });
+        }
+
+        try {
+          const response = await getcheckowncourse(courseId);
+          setOwnCourse(() => response.payload.isUserOwnCourse);
         } catch (err) {
           snackbarContext?.dispatch({
             type: 'SNACKBAR_CHANGE',
@@ -57,8 +74,18 @@ export default function CourseDetailScreen({ route }) {
           });
         }
       }
+
+      try {
+        const response = await getcoursedetail(courseId);
+        setCourse(() => response);
+      } catch (err) {
+        snackbarContext?.dispatch({
+          type: 'SNACKBAR_CHANGE',
+          payload: { show: true, content: err.response.data.message },
+        });
+      }
     })();
-  }, []);
+  }, [courseId]);
 
   const toggleLikeCourse = async () => {
     if (!userContext.state.user) {
@@ -71,6 +98,27 @@ export default function CourseDetailScreen({ route }) {
       const response = await togglelikecourse(course?.id as string);
       setLiked(() => response.likeStatus as boolean);
     } catch (err) {}
+  };
+
+  const isCourseFree = course?.price === 0;
+  console.log(course?.id);
+
+  const handleEnrollment = async () => {
+    if (ownCourse) {
+      navigation.navigate('VideoCourse', { course });
+      return;
+    }
+    try {
+      if (isCourseFree) {
+        const data = await postenrollcoursefree(course?.id as string);
+        setOwnCourse(true);
+      }
+    } catch (err) {
+      snackbarContext?.dispatch({
+        type: 'SNACKBAR_CHANGE',
+        payload: { show: true, content: err.response.data.messsage },
+      });
+    }
   };
 
   return course ? (
@@ -153,35 +201,54 @@ export default function CourseDetailScreen({ route }) {
               <Text category="h5">{course.price}$</Text>
             </Layout>
             <Layout>
-              <Button size="large" status="danger">
-                Buy Now
-              </Button>
+              <Authorization
+                onPress={handleEnrollment}
+                render={(onClick) => (
+                  <Button size="large" status="danger" onPress={onClick}>
+                    {ownCourse
+                      ? 'Go to course'
+                      : isCourseFree
+                      ? 'Enroll now'
+                      : 'Buy Now'}
+                  </Button>
+                )}
+              ></Authorization>
             </Layout>
             <Layout style={styles.buttons}>
-              <Button
-                style={styles.flex1}
-                appearance="outline"
-                status="danger"
+              <Authorization
                 onPress={toggleLikeCourse}
-                accessoryLeft={() => (
-                  <Icon
-                    style={styles.btnicon}
-                    fill={theme['text-danger-color']}
-                    name="heart-outline"
-                  />
+                render={(onClick) => (
+                  <Button
+                    style={styles.flex1}
+                    appearance="outline"
+                    status="danger"
+                    onPress={onClick}
+                    accessoryLeft={() => (
+                      <Icon
+                        style={styles.btnicon}
+                        fill={theme['text-danger-color']}
+                        name="heart-outline"
+                      />
+                    )}
+                  >
+                    {liked ? 'Wishlisted' : 'Add To WishList'}
+                  </Button>
                 )}
-              >
-                {liked ? 'Wishlisted' : 'Add To WishList'}
-              </Button>
+              ></Authorization>
               <Layout style={styles.gap}></Layout>
               <Button
                 style={styles.flex1}
                 appearance="outline"
                 status="danger"
+                disabled={ownCourse}
                 accessoryLeft={() => (
                   <Icon
                     style={styles.btnicon}
-                    fill={theme['text-danger-color']}
+                    fill={
+                      theme[
+                        ownCourse ? 'color-basic-disabled' : 'text-danger-color'
+                      ]
+                    }
                     name="shopping-cart-outline"
                   />
                 )}
@@ -194,7 +261,7 @@ export default function CourseDetailScreen({ route }) {
                 <Layout style={styles.nobg}>
                   <Text category="s1">What Will I Learn</Text>
                   {course.learnWhat?.map((text) => (
-                    <Text style={[styles.subtext]} category="c2">
+                    <Text style={[styles.subtext]} key={text} category="c2">
                       ✓ {text}
                     </Text>
                   ))}
@@ -204,9 +271,20 @@ export default function CourseDetailScreen({ route }) {
                 <Layout style={styles.nobg}>
                   <Text category="s1">Requirements</Text>
                   {course.requirement?.map((text) => (
-                    <Text style={[styles.subtext]} category="c2">
+                    <Text style={[styles.subtext]} key={text} category="c2">
                       ✓ {text}
                     </Text>
+                  ))}
+                </Layout>
+              </Layout>
+
+              <Layout style={[styles.section, sstyles.btn]}>
+                <Layout style={styles.nobg}>
+                  <Text category="s1" style={{ marginBottom: 20 }}>
+                    Students also Viewed
+                  </Text>
+                  {course.coursesLikeCategory.map((c) => (
+                    <CourseCard key={c.id} course={c} isHorizontal />
                   ))}
                 </Layout>
               </Layout>
@@ -219,8 +297,62 @@ export default function CourseDetailScreen({ route }) {
                 </Layout>
               </Layout>
               {course.section?.map((section) => (
-                <LessonSection section={section} />
+                <LessonSection key={section.id} section={section} />
               ))}
+
+              <Layout style={[styles.section, sstyles.btn]}>
+                <Layout style={styles.nobg}>
+                  <Text category="s1">Created by {course.instructor.name}</Text>
+                  <Layout
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      backgroundColor: 'transparent',
+                      marginTop: 20,
+                    }}
+                  >
+                    <Image
+                      style={{ width: 80, height: 80 }}
+                      source={{ uri: course.instructor.avatar }}
+                    />
+
+                    <Layout
+                      style={{
+                        flex: 1,
+                        marginLeft: 20,
+                        backgroundColor: 'transparent',
+                        justifyContent: 'space-between',
+                      }}
+                    >
+                      <Text category="s2">{course.instructor.major}</Text>
+
+                      <Text category="s2">
+                        {course.instructor.totalCourse} Courses
+                      </Text>
+                      <Text category="s2">
+                        Rating by {course.instructor.countRating} students
+                      </Text>
+
+                      <Stars
+                        value={course.instructor.averagePoint}
+                        maxValue={5}
+                      />
+                    </Layout>
+                  </Layout>
+                  <Button
+                    style={{ marginTop: 10 }}
+                    appearance="ghost"
+                    status="danger"
+                    onPress={() => {
+                      navigation.navigate('Instructor', {
+                        instructorId: course.instructor.id,
+                      });
+                    }}
+                  >
+                    VIEW PROFILE
+                  </Button>
+                </Layout>
+              </Layout>
               <Layout style={[styles.section, sstyles.btn]}>
                 <Layout style={styles.nobg}>
                   <Text category="s1">Student Feedback</Text>
@@ -231,7 +363,19 @@ export default function CourseDetailScreen({ route }) {
                     contentPoint={course.contentPoint}
                     stars={course.ratings.stars}
                   />
-                  <RatingList ratingList={course?.ratings?.ratingList} />
+                  <RatingList
+                    ratingList={[...course?.ratings?.ratingList].splice(0, 5)}
+                  />
+
+                  {course?.ratings?.ratingList.length > 5 && (
+                    <Button
+                      style={sstyles.button}
+                      status="basic"
+                      appearance="ghost"
+                    >
+                      View All
+                    </Button>
+                  )}
                 </Layout>
               </Layout>
             </Layout>

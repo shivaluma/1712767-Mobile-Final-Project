@@ -1,0 +1,27 @@
+{
+  "components": {
+    "Select": {
+      "meta": {
+        "parameters": {
+          "backgroundColor": {
+            "type": "number"
+          }
+        },
+        "variantGroups": {},
+        "states": {},
+        "appearances": {
+          "filled": {
+            "default": false
+          }
+        }
+      },
+      "appearances": {
+        "filled": {
+          "mapping": {
+            "backgroundColor": "transparent"
+          }
+        }
+      }
+    }
+  }
+}

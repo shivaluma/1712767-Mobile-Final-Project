@@ -25,7 +25,7 @@ const RatingChart = (props: Props) => {
       </Layout>
       <Layout style={styles.rightcol}>
         {stars.map((percent, index) => (
-          <View style={styles.row}>
+          <View key={index} style={styles.row}>
             <Text style={styles.text}>{index + 1}⭑</Text>
             <Layout style={[styles.bar]}>
               <View

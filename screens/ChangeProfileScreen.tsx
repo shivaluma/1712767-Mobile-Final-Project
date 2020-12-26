@@ -1,7 +1,6 @@
-import { Button, Icon, Input, Layout, Text } from '@ui-kitten/components';
-import React, { useContext, useEffect, useState } from 'react';
-import { Platform, StyleSheet } from 'react-native';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { Button, Icon, Layout, Text } from '@ui-kitten/components';
+import React, { useState } from 'react';
+import { StyleSheet } from 'react-native';
 
 import ChangeProfileForm from '../components/Authentication/ChangeProfileForm';
 import { useUser } from '../context/auth/configureContext';
@@ -37,14 +36,7 @@ const ChangeProfile = (props) => {
         <Layout style={{ display: 'flex', alignItems: 'center' }}>
           <Icon
             fill="#28a745"
-            style={{
-              marginTop: 20,
-              width: 70,
-              height: 70,
-              color: '#28a745',
-
-              marginBottom: 30,
-            }}
+            style={styles.icon}
             name="checkmark-circle-2-outline"
           />
           <Text>Change password success.</Text>
@@ -83,6 +75,14 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     marginVertical: 10,
+  },
+  icon: {
+    marginTop: 20,
+    width: 70,
+    height: 70,
+    color: '#28a745',
+
+    marginBottom: 30,
   },
 });
 

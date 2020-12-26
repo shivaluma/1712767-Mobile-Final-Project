@@ -27,6 +27,7 @@ const CourseCard = ({
   const navigation = useNavigation();
   return (
     <TouchableNativeFeedback
+      style={{ backgroundColor: 'transparent' }}
       onPress={() =>
         navigation.navigate('CourseDetail', { courseId: course.id })
       }
@@ -46,11 +47,13 @@ const CourseCard = ({
           }
         />
 
-        <Layout style={styles.price}>
-          <Text style={styles.pricetext}>
-            {course.price === 0 ? 'FREE' : `${course.price}đ`}
-          </Text>
-        </Layout>
+        {!isHorizontal && (
+          <Layout style={styles.price}>
+            <Text style={styles.pricetext}>
+              {course.price === 0 ? 'FREE' : `${course.price}đ`}
+            </Text>
+          </Layout>
+        )}
 
         <Layout style={isHorizontal ? styles.infohorizontal : styles.info}>
           <Text style={styles.coursetitle} numberOfLines={1}>

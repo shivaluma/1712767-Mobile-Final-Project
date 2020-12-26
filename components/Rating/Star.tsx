@@ -2,20 +2,20 @@ import { Icon } from '@ui-kitten/components';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-interface Props {
-  value: number;
-  maxValue: number;
-}
-
-const Stars = (props: Props) => {
+const Stars = (props) => {
   const { value, maxValue } = props;
   const noneStar = maxValue - value;
 
   const renderStars = () => {
     const stars = [];
-    for (let i = 0; i < value; i++) {
-      stars.push(<Icon fill="orange" name="star" />);
-    }
+    if (value > maxValue)
+      for (let i = 0; i < maxValue; i++) {
+        stars.push(<Icon fill="orange" name="star" />);
+      }
+    else
+      for (let i = 0; i < value; i++) {
+        stars.push(<Icon fill="orange" name="star" />);
+      }
     return stars.map((item, index) => (
       <View key={index} style={styles.icon}>
         {item}
@@ -43,17 +43,15 @@ const Stars = (props: Props) => {
 };
 const styles = StyleSheet.create({
   container: {
+    height: 30,
+    display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
   },
   icon: {
     width: 20,
     height: 20,
-  },
-  star: {
-    backgroundColor: 'yellow',
-  },
-  noneStar: {
-    backgroundColor: 'gray',
   },
 });
 

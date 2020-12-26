@@ -48,17 +48,6 @@ export default function FeatureScreen() {
         <Layout>
           <CourseSection courses={courseList.sell} name="Top Sell Courses" />
         </Layout>
-
-        {categories.map((category, index) => (
-          <Layout key={index}>
-            <CourseSection
-              courses={coursesRef.current
-                .filter((course) => course.category === category)
-                .slice(0, 5)}
-              name={category}
-            />
-          </Layout>
-        ))}
       </Layout>
     </ScrollView>
   ) : (
