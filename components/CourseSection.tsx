@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { Layout, Text, Button } from '@ui-kitten/components';
 import React, { ReactElement } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ScrollView } from 'react-native-gesture-handler';
 
 import { CourseCard } from './CourseCard';
@@ -13,6 +14,7 @@ interface Props {
 
 const CourseSection = ({ name, children, courses }: Props) => {
   const navigation = useNavigation();
+  const { t } = useTranslation();
   return (
     <Layout style={styles.root}>
       <Layout style={styles.topbar}>
@@ -26,7 +28,7 @@ const CourseSection = ({ name, children, courses }: Props) => {
             })
           }
         >
-          See all
+          {t('see_all')}
         </Button>
       </Layout>
       <Layout>

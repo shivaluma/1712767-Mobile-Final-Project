@@ -8,6 +8,7 @@ import {
 } from '@ui-kitten/components';
 import { Video } from 'expo-av';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ScrollView, StyleSheet, Image } from 'react-native';
 import ViewMoreText from 'react-native-view-more-text';
 
@@ -50,7 +51,7 @@ export default function CourseDetailScreen({ route, navigation }) {
   const courseId = route.params.courseId;
   const userContext = useUser() as UserContextType;
   const snackbarContext = useSnackbar();
-  console.log(course?.instructor);
+  const { t } = useTranslation();
   useEffect(() => {
     (async () => {
       if (userContext.state.user) {
@@ -132,12 +133,12 @@ export default function CourseDetailScreen({ route, navigation }) {
               numberOfLines={3}
               renderViewMore={(onPress) => (
                 <Text status="primary" onPress={onPress} category="s1">
-                  View more...
+                  {t('view_more')}...
                 </Text>
               )}
               renderViewLess={(onPress) => (
                 <Text status="primary" onPress={onPress} category="s1">
-                  View less...
+                  {t('view_less')}...
                 </Text>
               )}
               textStyle={{ textAlign: 'left' }}
@@ -171,7 +172,7 @@ export default function CourseDetailScreen({ route, navigation }) {
               />
 
               <Chip
-                title={`${course.totalHours} total hours`}
+                title={`${course.totalHours} ${t('total_hours')}`}
                 accessoryLeft={() => (
                   <Icon
                     style={styles.icon}
@@ -181,7 +182,7 @@ export default function CourseDetailScreen({ route, navigation }) {
                 )}
               />
 
-              <Chip title={`Created By ${course.instructorName}`} />
+              <Chip title={`${t('created_by')} ${course.instructorName}`} />
               <Chip title="Immediate" />
             </Layout>
             <Video
@@ -206,10 +207,10 @@ export default function CourseDetailScreen({ route, navigation }) {
                 render={(onClick) => (
                   <Button size="large" status="danger" onPress={onClick}>
                     {ownCourse
-                      ? 'Go to course'
+                      ? t('go_to_course')
                       : isCourseFree
-                      ? 'Enroll now'
-                      : 'Buy Now'}
+                      ? t('enroll_now')
+                      : t('buy_now')}
                   </Button>
                 )}
               ></Authorization>
@@ -259,7 +260,7 @@ export default function CourseDetailScreen({ route, navigation }) {
             <Layout>
               <Layout style={[styles.section, sstyles.btn]}>
                 <Layout style={styles.nobg}>
-                  <Text category="s1">What Will I Learn</Text>
+                  <Text category="s1">{t('what_will_i_learn') as string}</Text>
                   {course.learnWhat?.map((text) => (
                     <Text style={[styles.subtext]} key={text} category="c2">
                       ✓ {text}
@@ -269,7 +270,7 @@ export default function CourseDetailScreen({ route, navigation }) {
               </Layout>
               <Layout style={[styles.section, sstyles.btn]}>
                 <Layout style={styles.nobg}>
-                  <Text category="s1">Requirements</Text>
+                  <Text category="s1">{t('requirements') as string}</Text>
                   {course.requirement?.map((text) => (
                     <Text style={[styles.subtext]} key={text} category="c2">
                       ✓ {text}
@@ -281,7 +282,7 @@ export default function CourseDetailScreen({ route, navigation }) {
               <Layout style={[styles.section, sstyles.btn]}>
                 <Layout style={styles.nobg}>
                   <Text category="s1" style={{ marginBottom: 20 }}>
-                    Students also Viewed
+                    {t('students_also_viewed') as string}
                   </Text>
                   {course.coursesLikeCategory.map((c) => (
                     <CourseCard key={c.id} course={c} isHorizontal />
@@ -290,9 +291,10 @@ export default function CourseDetailScreen({ route, navigation }) {
               </Layout>
               <Layout style={[styles.section, sstyles.btn]}>
                 <Layout style={styles.nobg}>
-                  <Text category="s1">Curriculums</Text>
+                  <Text category="s1">{t('curriculums') as string}</Text>
                   <Text style={[styles.subtext]} category="s2">
-                    Lecture ({course.videoNumber}) Total ({course.totalHours})
+                    {t('lecture') as string} ({course.videoNumber}){' '}
+                    {t('total') as string} ({course.totalHours})
                   </Text>
                 </Layout>
               </Layout>
@@ -302,7 +304,9 @@ export default function CourseDetailScreen({ route, navigation }) {
 
               <Layout style={[styles.section, sstyles.btn]}>
                 <Layout style={styles.nobg}>
-                  <Text category="s1">Created by {course.instructor.name}</Text>
+                  <Text category="s1">
+                    {t('created_by') as string} {course.instructor.name}
+                  </Text>
                   <Layout
                     style={{
                       display: 'flex',
@@ -349,13 +353,13 @@ export default function CourseDetailScreen({ route, navigation }) {
                       });
                     }}
                   >
-                    VIEW PROFILE
+                    {t('view_profile') as string}
                   </Button>
                 </Layout>
               </Layout>
               <Layout style={[styles.section, sstyles.btn]}>
                 <Layout style={styles.nobg}>
-                  <Text category="s1">Student Feedback</Text>
+                  <Text category="s1">{t('student_feedback') as string}</Text>
                   <RatingChart
                     ratedNumber={course.ratedNumber}
                     presentationPoint={course.presentationPoint}
@@ -373,7 +377,7 @@ export default function CourseDetailScreen({ route, navigation }) {
                       status="basic"
                       appearance="ghost"
                     >
-                      View All
+                      {t('view_all') as string}
                     </Button>
                   )}
                 </Layout>

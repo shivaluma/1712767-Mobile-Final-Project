@@ -310,7 +310,7 @@ function SearchScreenNavigator() {
         }}
         name="SearchScreen"
       >
-        {(props) => (
+        {() => (
           <SearchScreen
             isFocus={isFocus}
             searchQuery={searchQuery}

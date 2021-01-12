@@ -2,8 +2,6 @@ import * as eva from '@eva-design/eva';
 import { ApplicationProvider, IconRegistry, Text } from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import React from 'react';
-import { ThemeProvider } from 'react-native-elements';
-import { Snackbar } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { AuthProvider } from './context/auth/configureContext';
@@ -14,7 +12,7 @@ import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 import { default as themekittelight } from './styles/theme-light.json';
 import { default as themekittedark } from './theme.json';
-
+import './i18n';
 export default function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
