@@ -33,7 +33,7 @@ import {
   postenrollcoursefree,
 } from '../services/course';
 import styles from './styles/coursedetail.scss';
-export default function CourseDetailScreen({ route, navigation }) {
+export default function CourseDetailScreen({ route, navigation, setCourseId }) {
   const theme = useTheme();
   const [course, setCourse] = useState<Course | null>(null);
   const [liked, setLiked] = useState<boolean>(false);
@@ -53,6 +53,7 @@ export default function CourseDetailScreen({ route, navigation }) {
   const snackbarContext = useSnackbar();
   const { t } = useTranslation();
   useEffect(() => {
+    setCourseId(courseId);
     (async () => {
       if (userContext.state.user) {
         try {

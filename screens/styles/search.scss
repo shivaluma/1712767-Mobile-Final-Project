@@ -15,7 +15,7 @@
 }
 
 .sectionheader {
-  margin-bottom: 0.8rem;
+  margin-bottom: 1.2rem;
 }
 
 .btnicon {
@@ -58,9 +58,14 @@
   justify-content: flex-start;
   margin: 0;
   padding: 0;
-  fontweight: 'normal';
 }
 
 .header {
+  font-size: 1.2rem;
+  text-transform: capitalize;
   margin-bottom: 0.8rem;
+}
+
+.tabContainer {
+  padding: 1rem;
 }

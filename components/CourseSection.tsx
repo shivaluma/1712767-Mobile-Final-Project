@@ -10,9 +10,10 @@ interface Props {
   name: string;
   children?: ReactElement;
   courses: Course[];
+  apiKey: string;
 }
 
-const CourseSection = ({ name, children, courses }: Props) => {
+const CourseSection = ({ name, children, courses, apiKey }: Props) => {
   const navigation = useNavigation();
   const { t } = useTranslation();
   return (
@@ -24,7 +25,7 @@ const CourseSection = ({ name, children, courses }: Props) => {
           style={styles.seeall}
           onPress={() =>
             navigation.navigate('CourseList', {
-              category: name === 'Featured' ? null : name,
+              apiKey,
             })
           }
         >

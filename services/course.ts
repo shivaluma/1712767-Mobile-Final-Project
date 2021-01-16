@@ -5,7 +5,8 @@ export const TOPNEWENDPOINT = 'course/top-new';
 export const TOPRATEENDPOINT = 'course/top-rate';
 export const COURSEINFOENDPOINT = 'course/get-course-detail';
 export const COURSERATINGENDPOINT = 'course/get-rating';
-export const ENROLLCOURSEFREEENDPOINT = '/payment/get-free-courses';
+export const ENROLLCOURSEFREEENDPOINT = 'payment/get-free-courses';
+export const RECOMMENDINGCOURSEENDPOINT = '​user​/recommend-course​';
 export const gettopsell = async (): Promise<Course[]> => {
   const { data } = await API.post(TOPSELLENDPOINT, {
     limit: 10,
@@ -27,6 +28,18 @@ export const gettoprate = async (): Promise<Course[]> => {
     limit: 10,
     page: 1,
   });
+  return data;
+};
+
+export const getrecommendedcourse = async (
+  uId: string,
+  limit: number,
+  offset: number
+): Promise<Course[]> => {
+  const { data } = await API.get(
+    `user/recommend-course/${uId}/${limit}/${offset}`
+  );
+
   return data;
 };
 
@@ -55,5 +68,31 @@ export const getvideourloflesson = async (
   lessonId: string
 ): Promise<any> => {
   const { data } = await API.get(`/lesson/video/${courseId}/${lessonId}`);
+  return data.payload;
+};
+
+export const getexercisebylesson = async (lessonId: string): Promise<any> => {
+  const { data } = await API.post(`/exercise/student/list-exercise-lesson`, {
+    lessonId,
+  });
+  return data.payload;
+};
+
+export const updatetimelearningvideo = async (
+  lessonId: string,
+  time: number
+): Promise<any> => {
+  console.log(lessonId);
+  const { data } = await API.put('lesson/update-current-time-learn-video', {
+    lessonId,
+    currentTime: time,
+  });
+  return data.payload;
+};
+
+export const finishlesson = async (lessonId: string): Promise<any> => {
+  const { data } = await API.post('lesson/update-status', {
+    lessonId,
+  });
   return data.payload;
 };

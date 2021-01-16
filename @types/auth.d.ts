@@ -38,6 +38,7 @@ interface User {
 
 type AuthState = {
   user: User | null;
+  hasInit: boolean;
 };
 
 type ActionType = 'UPDATE_USER' | 'REMOVE_USER';
@@ -46,6 +47,7 @@ type UserContextAction = {
   type: ActionType;
   payload: {
     user: User | null;
+    hasInit: boolean;
   };
 };
 

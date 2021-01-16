@@ -6,6 +6,7 @@ import { ScrollView } from 'react-native';
 
 import CourseSection from '../components/CourseSection';
 import Loading from '../components/Loading';
+import { useUser } from '../context/auth/configureContext';
 import { categories } from '../data/category';
 import { courses } from '../data/courses';
 import * as CourseService from '../services/course';
@@ -15,6 +16,7 @@ export default function FeatureScreen() {
   const coursesRef = useRef(courses);
   const [courseList, setCourseList] = useState<any>(null);
   const { t } = useTranslation();
+  const userContext = useUser();
   useEffect(() => {
     (async () => {
       const [topRate, topSell, topNew] = await BPromise.allSettled([
@@ -31,6 +33,26 @@ export default function FeatureScreen() {
     })();
   }, []);
 
+  useEffect(() => {
+    if (!userContext?.state.user) return;
+
+    (async () => {
+      try {
+        const recommendedCourse = await CourseService.getrecommendedcourse(
+          userContext?.state?.user?.id as string,
+          10,
+          1
+        );
+        setCourseList((prev: any) => ({
+          ...prev,
+          recommended: recommendedCourse?.payload,
+        }));
+      } catch (err) {
+        console.log(err);
+      }
+    })();
+  }, [userContext?.state.user]);
+
   return courseList ? (
     <ScrollView>
       <Layout style={styles.root}>
@@ -43,6 +65,7 @@ export default function FeatureScreen() {
         <Layout>
           <CourseSection
             courses={courseList.rate}
+            apiKey="course/top-rate"
             name={t('top_rated_courses')}
           />
         </Layout>
@@ -50,6 +73,7 @@ export default function FeatureScreen() {
         <Layout>
           <CourseSection
             courses={courseList.new}
+            apiKey="course/top-new"
             name={t('top_newest_courses')}
           />
         </Layout>
@@ -57,9 +81,19 @@ export default function FeatureScreen() {
         <Layout>
           <CourseSection
             courses={courseList.sell}
+            apiKey="course/top-sell"
             name={t('top_sell_courses')}
           />
         </Layout>
+
+        {courseList.recommended && (
+          <Layout>
+            <CourseSection
+              courses={courseList.recommended}
+              name={t('recommended_course')}
+            />
+          </Layout>
+        )}
       </Layout>
     </ScrollView>
   ) : (

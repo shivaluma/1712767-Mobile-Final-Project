@@ -1,4 +1,3 @@
-
 export const reducer = (
   state: AuthState,
   action: UserContextAction
@@ -8,6 +7,7 @@ export const reducer = (
       return {
         ...state,
         user: action.payload.user,
+        hasInit: true,
       };
     }
 

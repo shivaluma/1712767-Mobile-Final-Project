@@ -9,13 +9,17 @@ export const getsearchhistory = async () => {
   return data.payload;
 };
 
-export const postsearchv2 = async (keyword: string) => {
+export const postsearchv2 = async (
+  keyword: string,
+  limit: number,
+  offset: number
+) => {
   const token = await getData('accessToken');
   const { data } = await API.post(SEARCHENDPOINTV2, {
     token,
     keyword,
-    limit: 10,
-    offset: 1,
+    limit,
+    offset,
   });
 
   return data.payload;

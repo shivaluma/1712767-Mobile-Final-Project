@@ -14,6 +14,7 @@ instance.interceptors.request.use(
   async (config) => {
     const token = await asyncstorage.getData('accessToken');
     console.log(token);
+    console.log(config.baseURL + config.url);
     if (token) {
       config.headers.authorization = `Bearer ${token}`;
     }

@@ -1,24 +1,44 @@
 import { Layout, Text, Icon, Avatar } from '@ui-kitten/components';
-import { Video } from 'expo-av';
-import * as React from 'react';
-import { ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { ScrollView, FlatList } from 'react-native';
 
 import { CourseCard } from '../components/CourseCard';
 import { courses } from '../data/courses';
+import API from '../utils/axios';
 import styles from './styles/courselist.scss';
-export default function CourseListScreen(props) {
-  console.log(props);
-  const coursesRef = React.useRef(courses);
-  const listCourses = props?.route?.params?.category
-    ? courses.filter((c) => c.category === props.route.params.category)
-    : courses;
+
+export default function CourseListScreen(props: any) {
+  const [courses, setCourses] = useState([]);
+  const [paging, setPaging] = useState({ limit: 10, page: 1 });
+
+  useEffect(() => {
+    (async () => {
+      const courses = await API.post(props.route.params.apiKey, paging);
+      setCourses((prev) => prev.concat(courses.data.payload));
+    })();
+  }, [props.endpoint, paging]);
+
+  useEffect(() => {
+    props.navigation.setOptions({ title: props.route.params.title });
+  }, [props.navigation, props.route]);
+
+  const renderItem = ({ item }: { item: Course }) => (
+    <CourseCard key={item.id} course={item} isHorizontal />
+  );
+
+  const loadMoreData = () => {
+    setPaging((prev) => ({ ...prev, page: prev.page + 1 }));
+  };
+
   return (
     <Layout style={styles.root}>
-      <ScrollView>
-        {listCourses.map((course, index) => (
-          <CourseCard key={course.id} course={course} isHorizontal />
-        ))}
-      </ScrollView>
+      <FlatList
+        data={courses}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        onEndReached={loadMoreData}
+        onEndReachedThreshold={0.2}
+      />
     </Layout>
   );
 }

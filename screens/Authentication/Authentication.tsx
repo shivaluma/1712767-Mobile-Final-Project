@@ -64,10 +64,12 @@ const LoginScreen = ({ navigation }) => {
     navigation.navigate('ForgetPassword');
   };
 
+  // prod : 796130238984-e42447a5pj2tn09vm76bprhb8aeq6giv.apps.googleusercontent.com
+  // dev: 796130238984-u4emps1oln76qcd7mnlunld9a6joa70h.apps.googleusercontent.com
   const handleGoogleLogin = async () => {
     const { type, accessToken, user } = await Google.logInAsync({
       iosClientId: `796130238984-3g35877cuo3cgottjmq3df3mmnkr35hf.apps.googleusercontent.com`,
-      androidClientId: `796130238984-u4emps1oln76qcd7mnlunld9a6joa70h.apps.googleusercontent.com`,
+      androidClientId: `796130238984-e42447a5pj2tn09vm76bprhb8aeq6giv.apps.googleusercontent.com`,
     });
 
     if (type === 'success') {

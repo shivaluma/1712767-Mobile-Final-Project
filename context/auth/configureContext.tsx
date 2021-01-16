@@ -11,6 +11,7 @@ import { reducer } from './auth.reducer';
 
 const wistlistState = {
   user: null,
+  hasInit: false,
 };
 export const AuthContext = createContext<UserContextType | null>(null);
 

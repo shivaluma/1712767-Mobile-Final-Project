@@ -32,12 +32,7 @@ const CourseCard = ({
         navigation.navigate('CourseDetail', { courseId: course.id })
       }
     >
-      <Layout
-        style={[
-          isHorizontal ? styles.cardhorizontal : styles.card,
-          !isHorizontal && sstyles.shadow,
-        ]}
-      >
+      <Layout style={[isHorizontal ? styles.cardhorizontal : styles.card]}>
         <Image
           style={isHorizontal ? styles.thumbnailhorizontal : styles.thumbnail}
           source={

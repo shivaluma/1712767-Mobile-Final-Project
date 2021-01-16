@@ -48,6 +48,7 @@ export default function MyCourseScreen({ currentSelect }: Props) {
         <>
           <FlatList
             data={allCourses}
+            keyExtractor={(item) => item.id}
             renderItem={({ item, index }) => (
               <TouchableHighlight
                 key={index}

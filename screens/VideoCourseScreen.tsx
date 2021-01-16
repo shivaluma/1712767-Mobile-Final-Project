@@ -1,6 +1,7 @@
 import { Layout, Text, TabView, Tab, Icon } from '@ui-kitten/components';
 import { Video } from 'expo-av';
-import React, { useCallback, useEffect, useState } from 'react';
+import _ from 'lodash';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import {
   Alert,
   Dimensions,
@@ -15,7 +16,12 @@ import CourseLesson from '../components/CourseLesson/CourseLesson';
 import { LessonSection } from '../components/LessonSection';
 import { useSnackbar } from '../context/snackbar/configureContext';
 import { courses } from '../data/courses';
-import { getcoursedetail, getvideourloflesson } from '../services/course';
+import {
+  getcoursedetail,
+  getvideourloflesson,
+  updatetimelearningvideo,
+  finishlesson,
+} from '../services/course';
 
 const VideoCourseScreen = (props) => {
   const course = props?.route?.params?.course;
@@ -87,7 +93,30 @@ const VideoCourseScreen = (props) => {
     []
   );
 
-  const isYoutubeVideo = currentVideoUrl && currentVideoUrl.includes('youtu');
+  const handlePlaybackStatusUpdate = useCallback(
+    _.throttle(async (data: any) => {
+      await updatetimelearningvideo(
+        getLessonId(currentProgress),
+        data.positionMillis
+      );
+
+      if (data.didJustFinish) {
+        await finishlesson(getLessonId(currentProgress));
+      }
+    }, 3000),
+    []
+  );
+
+  const isYoutubeVideo = currentVideoUrl && currentVideoUrl?.includes('youtu');
+  const handleVideoRef = useRef(null);
+  const timeOutRef = useRef(null);
+  useEffect(() => {
+    if (!isYoutubeVideo && handleVideoRef.current !== null) {
+      handleVideoRef?.current?.setProgressUpdateIntervalAsync(4000);
+      handleVideoRef?.current?.setPositionAsync(0);
+    }
+  }, [handleVideoRef.current, currentProgress.lesson, isYoutubeVideo]);
+
   return (
     <Layout style={styles.root}>
       {!isYoutubeVideo && (
@@ -95,9 +124,11 @@ const VideoCourseScreen = (props) => {
           source={{
             uri: currentVideoUrl,
           }}
+          ref={handleVideoRef}
           rate={1.0}
           volume={1.0}
           isMuted={false}
+          onPlaybackStatusUpdate={handlePlaybackStatusUpdate}
           shouldPlay
           useNativeControls
           resizeMode="stretch"

@@ -7,12 +7,15 @@ import {
   createStackNavigator,
   HeaderBackButton,
 } from '@react-navigation/stack';
-import { Avatar, useTheme, Text } from '@ui-kitten/components';
+import { Avatar, useTheme, Text, Button, Icon } from '@ui-kitten/components';
+import * as Sharing from 'expo-sharing';
 import * as React from 'react';
-import { Button, ColorSchemeName } from 'react-native';
+import { useEffect } from 'react';
+import { ColorSchemeName, Share } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Snackbar } from 'react-native-paper';
 
+import { useUser } from '../context/auth/configureContext';
 import { useSnackbar } from '../context/snackbar/configureContext';
 import LoginScreen from '../screens/Authentication/Authentication';
 import ForgetPassword from '../screens/Authentication/ForgetPassword';
@@ -28,8 +31,12 @@ import NotFoundScreen from '../screens/NotFoundScreen';
 import PathScreen from '../screens/PathScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import SettingScreen from '../screens/SettingScreen';
+import SplashScreen from '../screens/SplashScreen';
 import VideoCourseScreen from '../screens/VideoCourseScreen';
+import { me } from '../services/authenticate';
 import { RootStackParamList } from '../types';
+import { getData } from '../utils/asyncStorage';
+import API from '../utils/axios';
 import BottomTabNavigator from './BottomTabNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
 // If you are not familiar with React Navigation, we recommend going through the
@@ -76,6 +83,29 @@ export default function Navigation({
 const Stack = createStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
+  const userContext = useUser();
+  const [courseId, setCourseId] = React.useState('');
+  useEffect(() => {
+    (async () => {
+      try {
+        const user = await me();
+
+        userContext?.dispatch({
+          type: 'UPDATE_USER',
+          payload: { user: user.payload, hasInit: true },
+        });
+      } catch (err) {
+        userContext?.dispatch({
+          type: 'UPDATE_USER',
+          payload: { user: null, hasInit: true },
+        });
+      }
+    })();
+  }, []);
+  if (!userContext?.state.hasInit) return <SplashScreen />;
+
+  console.log(courseId);
+
   return (
     <Stack.Navigator
       initialRouteName="Root"
@@ -95,12 +125,41 @@ function RootNavigator() {
       />
       <Stack.Screen
         name="CourseDetail"
-        component={CourseDetailScreen}
         options={{
           headerShown: true,
           title: '',
+          headerRight: () => (
+            <Button
+              onPress={async () => {
+                try {
+                  const result = await Share.share({
+                    title: 'Share courses',
+                    message: `Share courses : http://dev.letstudy.org/course-detail/${courseId}`,
+                    url: `http://dev.letstudy.org/course-detail/${courseId}`,
+                  });
+                  if (result.action === Share.sharedAction) {
+                    if (result.activityType) {
+                      // shared with activity type of result.activityType
+                    } else {
+                      // shared
+                    }
+                  } else if (result.action === Share.dismissedAction) {
+                    // dismissed
+                  }
+                } catch (error) {
+                  alert(error.message);
+                }
+              }}
+              appearance="ghost"
+              accessoryLeft={(props) => (
+                <Icon {...props} name="share-outline" />
+              )}
+            />
+          ),
         }}
-      />
+      >
+        {(props) => <CourseDetailScreen {...props} setCourseId={setCourseId} />}
+      </Stack.Screen>
       <Stack.Screen
         name="Profile"
         component={ProfileScreen}
