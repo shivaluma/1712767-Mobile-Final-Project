@@ -152,6 +152,7 @@ const SettingScreen = () => {
 
       <SectionList
         sections={DATA}
+        stickySectionHeadersEnabled={false}
         keyExtractor={(item, index) => item.title + index}
         renderItem={(props) => {
           return (

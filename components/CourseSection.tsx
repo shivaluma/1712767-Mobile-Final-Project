@@ -34,9 +34,10 @@ const CourseSection = ({ name, children, courses, apiKey }: Props) => {
       </Layout>
       <Layout>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {courses.map((course) => (
-            <CourseCard key={course.id} course={course} />
-          ))}
+          {courses &&
+            courses?.map((course) => (
+              <CourseCard key={course.id} course={course} />
+            ))}
         </ScrollView>
       </Layout>
     </Layout>

@@ -35,7 +35,7 @@ export default function FeatureScreen() {
 
   useEffect(() => {
     if (!userContext?.state.user) return;
-
+    console.log(userContext?.state.user);
     (async () => {
       try {
         const recommendedCourse = await CourseService.getrecommendedcourse(
@@ -89,6 +89,7 @@ export default function FeatureScreen() {
         {courseList.recommended && (
           <Layout>
             <CourseSection
+              apiKey=""
               courses={courseList.recommended}
               name={t('recommended_course')}
             />

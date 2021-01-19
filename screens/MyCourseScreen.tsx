@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { Icon, Layout, Text } from '@ui-kitten/components';
 import * as React from 'react';
 import {
@@ -15,6 +15,7 @@ import CourseInProgress, {
 import Loading from '../components/Loading';
 import { getprocesscourse } from '../services/authenticate';
 import { getallcategories } from '../services/category';
+import { getData } from '../utils/asyncStorage';
 type Props = {
   currentSelect: string;
   navigation: any;
@@ -24,30 +25,62 @@ export default function MyCourseScreen({ currentSelect }: Props) {
   const [categories, setCategories] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [allCourses, setAllCourses] = React.useState([]);
+  const [filteredCourses, setFilteredCourses] = React.useState([]);
   const navigation = useNavigation();
-  React.useEffect(() => {
-    try {
-      (async () => {
-        const data = await getallcategories();
-        setCategories(() => data);
-      })();
+  const canRun = React.useRef(false);
 
-      (async () => {
-        const data = await getprocesscourse();
-        console.log(data);
-        setAllCourses(() => data);
-      })();
-    } catch (error) {
-    } finally {
-      setLoading(() => false);
+  useFocusEffect(
+    React.useCallback(() => {
+      try {
+        (async () => {
+          const data = await getallcategories();
+          setCategories(() => data);
+        })();
+
+        (async () => {
+          const data = await getprocesscourse();
+
+          for (let i = 0; i < data.length; i++) {
+            const course = data[i];
+            const downloaded = await getData(course.id);
+
+            course.downloaded = downloaded;
+          }
+          setAllCourses(() => data);
+          setFilteredCourses(() => {
+            if (currentSelect === 'Downloaded courses') {
+              return data.filter((course: any) => course.downloaded !== null);
+            }
+            return data;
+          });
+          canRun.current = true;
+        })();
+      } catch (error) {
+      } finally {
+        setLoading(() => false);
+      }
+      return undefined;
+    }, [])
+  );
+
+  React.useEffect(() => {
+    if (canRun.current) {
+      if (currentSelect === 'Downloaded courses') {
+        setFilteredCourses((prev) =>
+          prev.filter((course: any) => course.downloaded !== null)
+        );
+      } else {
+        setFilteredCourses((prev) => allCourses);
+      }
     }
-  }, []);
+  }, [currentSelect]);
+
   return !loading ? (
     <Layout style={styles.root}>
       {allCourses.length > 0 ? (
         <>
           <FlatList
-            data={allCourses}
+            data={filteredCourses}
             keyExtractor={(item) => item.id}
             renderItem={({ item, index }) => (
               <TouchableHighlight
@@ -104,7 +137,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   subtext: {
-    marginTop: 25,
+    marginTop: 30,
   },
   icon: {
     width: 70,

@@ -67,12 +67,12 @@ export const getvideourloflesson = async (
   courseId: string,
   lessonId: string
 ): Promise<any> => {
-  const { data } = await API.get(`/lesson/video/${courseId}/${lessonId}`);
+  const { data } = await API.get(`lesson/video/${courseId}/${lessonId}`);
   return data.payload;
 };
 
 export const getexercisebylesson = async (lessonId: string): Promise<any> => {
-  const { data } = await API.post(`/exercise/student/list-exercise-lesson`, {
+  const { data } = await API.post(`exercise/student/list-exercise-lesson`, {
     lessonId,
   });
   return data.payload;

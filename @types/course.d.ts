@@ -56,6 +56,8 @@ type Course = {
   promoVidUrl: string;
   status: 'PENDING' | 'COMPLETED';
   isDeleted: boolean;
+  instructor: any;
+  ratings: any;
   isHidden: boolean;
   createdAt: string;
   updatedAt: string;
