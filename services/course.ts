@@ -125,3 +125,23 @@ export const postratingcourse = async (result: any, courseId: string) => {
   });
   return data.payload;
 };
+
+export const deletesearchhistory = async (id: string) => {
+  const { data } = await API.delete(`course/delete-search-history/${id}`);
+  return data.payload;
+};
+
+export const getcoursepaymentinfo = async (id: string) => {
+  const { data } = await API.get(`payment/get-course-info/${id}`);
+  return data.payload;
+};
+
+export const checkoutmomo = async (id: string) => {
+  const { data } = await API.post(`payment/checkout-momo`, { courseId: id });
+  return data?.checkoutUrl;
+};
+
+export const checkoutvnpay = async (id: string) => {
+  const { data } = await API.post(`payment/checkout-vnpay`, { courseId: id });
+  return data.payload;
+};

@@ -35,6 +35,7 @@ import RatingListScreen from '../screens/RatingListScreen';
 import SettingScreen from '../screens/SettingScreen';
 import SplashScreen from '../screens/SplashScreen';
 import VideoCourseScreen from '../screens/VideoCourseScreen';
+import WebViewScreen from '../screens/WebViewScreen';
 import { me } from '../services/authenticate';
 import { RootStackParamList } from '../types';
 import { getData } from '../utils/asyncStorage';
@@ -210,6 +211,12 @@ function RootNavigator() {
       <Stack.Screen
         name="RatingList"
         component={RatingListScreen}
+        options={{ headerShown: true }}
+      />
+
+      <Stack.Screen
+        name="WebView"
+        component={WebViewScreen}
         options={{ headerShown: true }}
       />
 

@@ -36,6 +36,7 @@ import {
   getratings,
   postratingcourse,
   postenrollcoursefree,
+  checkoutmomo,
 } from '../services/course';
 import styles from './styles/coursedetail.scss';
 export default function CourseDetailScreen({ route, navigation, setCourseId }) {
@@ -50,6 +51,7 @@ export default function CourseDetailScreen({ route, navigation, setCourseId }) {
     presentationPoint: 3,
     content: '',
   });
+
   const [forceRender, setForceRender] = useState(false);
   const sstyles = StyleSheet.create({
     btn: {
@@ -134,6 +136,9 @@ export default function CourseDetailScreen({ route, navigation, setCourseId }) {
       if (isCourseFree) {
         const data = await postenrollcoursefree(course?.id as string);
         setOwnCourse(true);
+      } else {
+        const data = await checkoutmomo(course?.id as string);
+        navigation.navigate('WebView', { url: data });
       }
     } catch (err) {
       snackbarContext?.dispatch({
@@ -408,17 +413,19 @@ export default function CourseDetailScreen({ route, navigation, setCourseId }) {
 
                   {userContext?.state?.user && (
                     <>
-                      <Button
-                        style={[styles.button, sstyles.buttonGap]}
-                        status="danger"
-                        appearance="ghost"
-                        onPress={() => setRatingVisible(true)}
-                        accessoryLeft={(props) => (
-                          <Icon {...props} name="star" />
-                        )}
-                      >
-                        {t('rate_this_courses')}
-                      </Button>
+                      {ownCourse && (
+                        <Button
+                          style={[styles.button, sstyles.buttonGap]}
+                          status="danger"
+                          appearance="ghost"
+                          onPress={() => setRatingVisible(true)}
+                          accessoryLeft={(props) => (
+                            <Icon {...props} name="star" />
+                          )}
+                        >
+                          {t('rate_this_courses')}
+                        </Button>
+                      )}
 
                       <Modal
                         visible={ratingVisible}

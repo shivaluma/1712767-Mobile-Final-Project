@@ -38,6 +38,18 @@
     "packagerOpts": {
       "config": "metro.config.js",
       "sourceExts": ["js", "jsx", "scss", "sass"]
+    },
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "ho-chi-minh-university-of-s-ea",
+            "project": "ho-chi-minh-university-of-s-ea",
+            "authToken": "9717d19454ae4f1e883dec302a2bc794f37c6dca52554f64a0e8dfd84edf3dcf"
+          }
+        }
+      ]
     }
   }
 }

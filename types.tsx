@@ -16,6 +16,7 @@ export type RootStackParamList = {
   Instructor: undefined;
   Category: undefined;
   RatingList: undefined;
+  WebView: undefined;
 };
 
 export type BottomTabParamList = {

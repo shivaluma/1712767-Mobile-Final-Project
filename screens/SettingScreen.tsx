@@ -12,6 +12,7 @@ import {
 import Constants from 'expo-constants';
 import * as ImagePicker from 'expo-image-picker';
 import React, { memo, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { SectionList, StyleSheet, Switch, View } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
@@ -34,6 +35,7 @@ const SettingScreen = () => {
   const changeLanguage = (lng: boolean) => {
     i18n.changeLanguage(lng ? 'vi' : 'en');
   };
+  const { t } = useTranslation();
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -106,10 +108,10 @@ const SettingScreen = () => {
       requireAuth: true,
     },
     {
-      title: 'Settings',
+      title: t('settings'),
       data: [
         {
-          title: 'Change theme',
+          title: t('change_theme'),
           screen: '',
           right: () => (
             <Toggle
@@ -131,7 +133,7 @@ const SettingScreen = () => {
           ),
         },
         {
-          title: 'Change language',
+          title: t('change_lang'),
           screen: '',
           right: () => (
             <Toggle
@@ -249,7 +251,7 @@ const SettingScreen = () => {
               status="danger"
               size="large"
             >
-              {state.user ? 'Log out' : 'Sign In'}
+              {state.user ? t('log_out') : t('sign_in')}
             </Button>
           </>
         )}

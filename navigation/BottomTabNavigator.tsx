@@ -19,9 +19,15 @@ import {
   SelectItem,
   useTheme,
 } from '@ui-kitten/components';
+import { props } from 'bluebird';
 import * as React from 'react';
 import { useState } from 'react';
-import { Dimensions, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import {
+  Dimensions,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+} from 'react-native';
 import { SearchBar } from 'react-native-elements';
 
 import Colors from '../constants/Colors';
@@ -33,6 +39,7 @@ import ProfileScreen from '../screens/ProfileScreen';
 import SearchScreen from '../screens/SearchScreen';
 import SettingScreen from '../screens/SettingScreen';
 import WishListScreen from '../screens/WishListScreen';
+import { deletesearchhistory } from '../services/course';
 import {
   BottomTabParamList,
   SearchScreenParamList,
@@ -273,6 +280,13 @@ function SearchScreenNavigator() {
   const onSelect = (index) => {
     setSearchQuery(history[index].content);
   };
+
+  const handleDeleteSearchItem = async (id) => {
+    try {
+      await deletesearchhistory(id);
+      setHistory((prev) => prev.filter((item) => item.id !== id));
+    } catch (err) {}
+  };
   return (
     <SearchScreenStack.Navigator>
       <SearchScreenStack.Screen
@@ -298,7 +312,17 @@ function SearchScreenNavigator() {
                 {history
                   .filter((item) => item.content.includes(searchQuery))
                   .map((item) => (
-                    <AutocompleteItem key={item.id} title={item.content} />
+                    <AutocompleteItem
+                      key={item.id}
+                      title={item.content}
+                      accessoryRight={(props) => (
+                        <TouchableOpacity
+                          onPress={() => handleDeleteSearchItem(item.id)}
+                        >
+                          <Icon {...props} name="trash-2-outline" />
+                        </TouchableOpacity>
+                      )}
+                    />
                   ))}
               </Autocomplete>
             </Layout>

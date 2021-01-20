@@ -47,5 +47,9 @@
   "sign_up_free": "Sign Up Free",
   "reset_password_description": "Enter your email address and we will send you a link to reset your password.",
   "buy_now": "Buy Now",
-  "recommended_course": "Recommended Course"
+  "recommended_course": "Recommended Course",
+  "rate_this_courses": "Rate this Course",
+  "change_theme": "Change Theme",
+  "change_lang": "Change Language",
+  "settings": "Settings"
 }
