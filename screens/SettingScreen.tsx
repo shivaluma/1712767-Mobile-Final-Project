@@ -99,10 +99,10 @@ const SettingScreen = () => {
       requireAuth: true,
     },
     {
-      title: 'Account Settings',
+      title: t('account_settings'),
       data: [
-        { title: 'Change profile', screen: 'ChangeProfile' },
-        { title: 'Change password', screen: 'ChangePassword' },
+        { title: t('change_profile'), screen: 'ChangeProfile' },
+        { title: t('password'), screen: 'ChangePassword' },
         { title: 'Manage favorite categories', screen: '' },
       ],
       requireAuth: true,

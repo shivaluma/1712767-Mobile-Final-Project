@@ -51,5 +51,8 @@
   "rate_this_courses": "Rate this Course",
   "change_theme": "Change Theme",
   "change_lang": "Change Language",
-  "settings": "Settings"
+  "settings": "Settings",
+  "account_settings": "Account Settings",
+  "change_profile": "Change Profile",
+  "change_password": "Change Password"
 }
