@@ -24,7 +24,13 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.shirox.learning"
+      "package": "com.shirox.learning",
+      "config": {
+        "googleSignIn": {
+          "apiKey": "AIzaSyC8-_JEK_ExM0Exnw9Fk9Zh25SfwJrhgb8",
+          "certificateHash": "85352D2A9EC65A04DF3E9BD9ACFA438675D09B24"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/images/favicon.png"

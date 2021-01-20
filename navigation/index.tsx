@@ -17,6 +17,7 @@ import { Snackbar } from 'react-native-paper';
 
 import { useUser } from '../context/auth/configureContext';
 import { useSnackbar } from '../context/snackbar/configureContext';
+import { useThemeValue } from '../context/theme/configureContext';
 import LoginScreen from '../screens/Authentication/Authentication';
 import ForgetPassword from '../screens/Authentication/ForgetPassword';
 import RegisterSuccess from '../screens/Authentication/RegisterSuccess';
@@ -30,6 +31,7 @@ import Instructor from '../screens/Instructor/Instuctor';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import PathScreen from '../screens/PathScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import RatingListScreen from '../screens/RatingListScreen';
 import SettingScreen from '../screens/SettingScreen';
 import SplashScreen from '../screens/SplashScreen';
 import VideoCourseScreen from '../screens/VideoCourseScreen';
@@ -41,12 +43,11 @@ import BottomTabNavigator from './BottomTabNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
-export default function Navigation({
-  colorScheme,
-}: {
-  colorScheme: ColorSchemeName;
-}) {
+export default function Navigation() {
   const { state, dispatch } = useSnackbar() as SnackBarContextType;
+  const theme = useThemeValue();
+  const colorScheme = theme?.state?.isLight ? 'light' : 'dark';
+
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
@@ -72,7 +73,7 @@ export default function Navigation({
           },
         }}
       >
-        <Text>{state.content}</Text>
+        <Text status="danger">{state.content}</Text>
       </Snackbar>
     </NavigationContainer>
   );
@@ -203,6 +204,12 @@ function RootNavigator() {
       <Stack.Screen
         name="Category"
         component={CategoryScreen}
+        options={{ headerShown: true }}
+      />
+
+      <Stack.Screen
+        name="RatingList"
+        component={RatingListScreen}
         options={{ headerShown: true }}
       />
 

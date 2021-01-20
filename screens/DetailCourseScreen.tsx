@@ -5,11 +5,15 @@ import {
   Layout,
   Text,
   useTheme,
+  Modal,
+  Input,
+  Card,
 } from '@ui-kitten/components';
 import { Video } from 'expo-av';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ScrollView, StyleSheet, Image } from 'react-native';
+import { Rating, AirbnbRating } from 'react-native-ratings'; //5.3.0
 import ViewMoreText from 'react-native-view-more-text';
 
 import Chip from '../components/Chip';
@@ -30,6 +34,7 @@ import {
 import {
   getcoursedetail,
   getratings,
+  postratingcourse,
   postenrollcoursefree,
 } from '../services/course';
 import styles from './styles/coursedetail.scss';
@@ -38,6 +43,14 @@ export default function CourseDetailScreen({ route, navigation, setCourseId }) {
   const [course, setCourse] = useState<Course | null>(null);
   const [liked, setLiked] = useState<boolean>(false);
   const [ownCourse, setOwnCourse] = useState<boolean>(false);
+  const [ratingVisible, setRatingVisible] = useState(false);
+  const [ratingStar, setRatingStar] = useState({
+    formalityPoint: 3,
+    contentPoint: 3,
+    presentationPoint: 3,
+    content: '',
+  });
+  const [forceRender, setForceRender] = useState(false);
   const sstyles = StyleSheet.create({
     btn: {
       backgroundColor: theme['color-basic-transparent-300'],
@@ -47,6 +60,10 @@ export default function CourseDetailScreen({ route, navigation, setCourseId }) {
       width: '100%',
       fontWeight: 'normal',
     },
+    backdrop: {
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    buttonGap: { marginTop: 14 },
   });
   const courseId = route.params.courseId;
   const userContext = useUser() as UserContextType;
@@ -78,7 +95,10 @@ export default function CourseDetailScreen({ route, navigation, setCourseId }) {
       }
 
       try {
-        const response = await getcoursedetail(courseId);
+        const response = await getcoursedetail(
+          courseId,
+          userContext?.state?.user?.id
+        );
         setCourse(() => response);
       } catch (err) {
         snackbarContext?.dispatch({
@@ -87,7 +107,7 @@ export default function CourseDetailScreen({ route, navigation, setCourseId }) {
         });
       }
     })();
-  }, [courseId]);
+  }, [courseId, userContext?.state?.user?.id, forceRender]);
 
   const toggleLikeCourse = async () => {
     if (!userContext.state.user) {
@@ -107,7 +127,7 @@ export default function CourseDetailScreen({ route, navigation, setCourseId }) {
 
   const handleEnrollment = async () => {
     if (ownCourse) {
-      navigation.navigate('VideoCourse', { course });
+      navigation.navigate('VideoCourse', { course, courseId: course.id });
       return;
     }
     try {
@@ -119,6 +139,23 @@ export default function CourseDetailScreen({ route, navigation, setCourseId }) {
       snackbarContext?.dispatch({
         type: 'SNACKBAR_CHANGE',
         payload: { show: true, content: err.response.data.messsage },
+      });
+    }
+  };
+
+  const handleSendCourseRating = async () => {
+    try {
+      const data = await postratingcourse(ratingStar, course?.id);
+      snackbarContext?.dispatch({
+        type: 'SNACKBAR_CHANGE',
+        payload: { show: true, content: t('rating_success') },
+      });
+      setRatingVisible(false);
+      setForceRender((prev) => !prev);
+    } catch (err) {
+      snackbarContext?.dispatch({
+        type: 'SNACKBAR_CHANGE',
+        payload: { show: true, content: t('rating_failed') },
       });
     }
   };
@@ -283,7 +320,7 @@ export default function CourseDetailScreen({ route, navigation, setCourseId }) {
               <Layout style={[styles.section, sstyles.btn]}>
                 <Layout style={styles.nobg}>
                   <Text category="s1" style={{ marginBottom: 20 }}>
-                    {t('students_also_viewed') as string}
+                    {t('courses_same_category') as string}
                   </Text>
                   {course.coursesLikeCategory.map((c) => (
                     <CourseCard key={c.id} course={c} isHorizontal />
@@ -368,6 +405,108 @@ export default function CourseDetailScreen({ route, navigation, setCourseId }) {
                     contentPoint={course.contentPoint}
                     stars={course.ratings.stars}
                   />
+
+                  {userContext?.state?.user && (
+                    <>
+                      <Button
+                        style={[styles.button, sstyles.buttonGap]}
+                        status="danger"
+                        appearance="ghost"
+                        onPress={() => setRatingVisible(true)}
+                        accessoryLeft={(props) => (
+                          <Icon {...props} name="star" />
+                        )}
+                      >
+                        {t('rate_this_courses')}
+                      </Button>
+
+                      <Modal
+                        visible={ratingVisible}
+                        style={{ flexBasis: '70%', width: '70%' }}
+                        backdropStyle={sstyles.backdrop}
+                        onBackdropPress={() => setRatingVisible(false)}
+                      >
+                        <Card disabled>
+                          <Text>{t('rating_this_course')}</Text>
+
+                          <Text style={sstyles.buttonGap} category="s1">
+                            {t('formality_point')}
+                          </Text>
+                          <Rating
+                            onFinishRating={(value) =>
+                              setRatingStar((prev) => ({
+                                ...prev,
+                                formalityPoint: value,
+                              }))
+                            }
+                            imageSize={30}
+                          />
+
+                          <Text style={sstyles.buttonGap} category="s1">
+                            {t('content_point')}
+                          </Text>
+                          <Rating
+                            imageSize={30}
+                            onFinishRating={(value) =>
+                              setRatingStar((prev) => ({
+                                ...prev,
+
+                                contentPoint: value,
+                              }))
+                            }
+                          />
+                          <Text style={sstyles.buttonGap} category="s1">
+                            {t('presentation_point')}
+                          </Text>
+                          <Rating
+                            onFinishRating={(value) =>
+                              setRatingStar((prev) => ({
+                                ...prev,
+                                presentationPoint: value,
+                              }))
+                            }
+                            imageSize={30}
+                          />
+
+                          <Input
+                            style={{ marginTop: 20 }}
+                            placeholder="Place your Text"
+                            value={ratingStar.content}
+                            onChangeText={(nextValue: string) =>
+                              setRatingStar((prev) => ({
+                                ...prev,
+                                content: nextValue,
+                              }))
+                            }
+                          />
+
+                          <Layout
+                            style={{
+                              display: 'flex',
+                              marginTop: 20,
+                              flexDirection: 'row',
+                            }}
+                          >
+                            <Button
+                              style={{ flex: 1, marginRight: 5 }}
+                              status="basic"
+                              onPress={() => setRatingVisible(false)}
+                            >
+                              Cancel
+                            </Button>
+                            <Button
+                              style={{ flex: 1 }}
+                              appearance="outline"
+                              onPress={handleSendCourseRating}
+                            >
+                              Send
+                            </Button>
+                          </Layout>
+                        </Card>
+                      </Modal>
+                    </>
+                  )}
+
                   <RatingList
                     ratingList={[...course?.ratings?.ratingList].splice(0, 5)}
                   />
@@ -377,6 +516,11 @@ export default function CourseDetailScreen({ route, navigation, setCourseId }) {
                       style={sstyles.button}
                       status="basic"
                       appearance="ghost"
+                      onPress={() =>
+                        navigation.navigate('RatingList', {
+                          ratings: course?.ratings?.ratingList,
+                        })
+                      }
                     >
                       {t('view_all') as string}
                     </Button>

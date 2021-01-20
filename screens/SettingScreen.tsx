@@ -1,3 +1,4 @@
+import { light } from '@eva-design/eva';
 import { useNavigation } from '@react-navigation/native';
 import {
   Avatar,
@@ -6,6 +7,7 @@ import {
   Icon,
   Layout,
   Text,
+  Toggle,
 } from '@ui-kitten/components';
 import Constants from 'expo-constants';
 import * as ImagePicker from 'expo-image-picker';
@@ -16,17 +18,22 @@ import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 
 import { useUser } from '../context/auth/configureContext';
 import { useSnackbar } from '../context/snackbar/configureContext';
+import { useThemeValue } from '../context/theme/configureContext';
+import i18n from '../i18n';
 import { updateavatar } from '../services/authenticate';
 import { removeData } from '../utils/asyncStorage';
-
 const SettingScreen = () => {
   const [isEnabled, setIsEnabled] = useState(false);
   const [image, setImage] = useState<string | undefined>();
-  const toggleSwitch = () => setIsEnabled(!isEnabled);
+  const [theme, setTheme] = React.useState(false);
+  const [lang, setLang] = React.useState(false);
   const navigation = useNavigation();
   const { state, dispatch } = useUser() as UserContextType;
   const snackbarContext = useSnackbar() as SnackBarContextType;
-
+  const themeValue = useThemeValue();
+  const changeLanguage = (lng: boolean) => {
+    i18n.changeLanguage(lng ? 'vi' : 'en');
+  };
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -99,10 +106,50 @@ const SettingScreen = () => {
       requireAuth: true,
     },
     {
-      title: 'Support',
+      title: 'Settings',
       data: [
-        { title: 'About ShiroEDU', screen: '' },
-        { title: 'Share ShiroEDU application', screen: '' },
+        {
+          title: 'Change theme',
+          screen: '',
+          right: () => (
+            <Toggle
+              style={{
+                margin: 2,
+              }}
+              checked={theme}
+              onChange={() => {
+                console.log(themeValue);
+                themeValue?.dispatch({
+                  type: 'THEME_CHANGE',
+                  payload: !!theme,
+                });
+                setTheme((prev) => !prev);
+              }}
+            >
+              {theme ? 'Light' : 'Dark'}
+            </Toggle>
+          ),
+        },
+        {
+          title: 'Change language',
+          screen: '',
+          right: () => (
+            <Toggle
+              style={{
+                margin: 2,
+              }}
+              checked={lang}
+              onChange={() => {
+                setLang((prev) => {
+                  changeLanguage(prev);
+                  return !prev;
+                });
+              }}
+            >
+              {lang ? 'Eng' : 'Vie'}
+            </Toggle>
+          ),
+        },
       ],
       requireAuth: false,
     },
@@ -117,10 +164,12 @@ const SettingScreen = () => {
     title,
     requireAuth,
     toScreen,
+    right: Right,
   }: {
     title: string;
     requireAuth: boolean;
     toScreen: string;
+    right: any;
   }) =>
     (requireAuth && state.user) || !requireAuth ? (
       <View>
@@ -129,9 +178,9 @@ const SettingScreen = () => {
           status="basic"
           appearance="ghost"
           onPress={() => navigation.navigate(toScreen, { id: state?.user?.id })}
-          accessoryRight={(props) => (
-            <Icon {...props} name="chevron-right-outline" />
-          )}
+          accessoryRight={(props) =>
+            Right ? <Right /> : <Icon {...props} name="chevron-right-outline" />
+          }
         >
           {title}
         </Button>
@@ -160,6 +209,7 @@ const SettingScreen = () => {
               title={props.item.title}
               requireAuth={props.section.requireAuth}
               toScreen={props.item.screen}
+              right={props.item.right}
             />
           );
         }}

@@ -16,13 +16,18 @@ const LessonSection = ({ section }: Props) => {
     btn: {
       backgroundColor: theme['color-basic-transparent-300'],
     },
+    wrap: {
+      flexWrap: 'wrap',
+      flexShrink: 1,
+      flexBasis: '80%',
+    },
   });
 
   const handleChangeExpand = () => setExpand((prev) => !prev);
   return (
     <Layout key={section.id} style={[styles.section, sstyles.btn]}>
       <Layout style={styles.row}>
-        <Layout style={styles.nobg}>
+        <Layout style={[styles.nobg, sstyles.wrap]}>
           <Text category="s1">{section.name}</Text>
         </Layout>
         <Button

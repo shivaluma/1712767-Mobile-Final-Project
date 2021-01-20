@@ -43,7 +43,6 @@ export default function MyCourseScreen({ currentSelect }: Props) {
           for (let i = 0; i < data.length; i++) {
             const course = data[i];
             const downloaded = await getData(course.id);
-
             course.downloaded = downloaded;
           }
           setAllCourses(() => data);
@@ -86,7 +85,7 @@ export default function MyCourseScreen({ currentSelect }: Props) {
               <TouchableHighlight
                 key={index}
                 onPress={() =>
-                  navigation.navigate('CourseDetail', { courseId: item.id })
+                  navigation.navigate('VideoCourse', { courseId: item.id })
                 }
               >
                 <CourseInProgress key={item.id} course={item} />

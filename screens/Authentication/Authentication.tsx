@@ -70,6 +70,7 @@ const LoginScreen = ({ navigation }) => {
     const { type, accessToken, user } = await Google.logInAsync({
       iosClientId: `796130238984-3g35877cuo3cgottjmq3df3mmnkr35hf.apps.googleusercontent.com`,
       androidClientId: `796130238984-e42447a5pj2tn09vm76bprhb8aeq6giv.apps.googleusercontent.com`,
+      androidStandaloneAppClientId: `796130238984-tl61ul7k9tc2qrtej065uo01anojokv9.apps.googleusercontent.com`,
     });
 
     if (type === 'success') {

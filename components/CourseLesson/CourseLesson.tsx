@@ -1,11 +1,12 @@
 import { Layout, Text, useTheme, Icon } from '@ui-kitten/components';
 import React from 'react';
+import { View } from 'react-native';
 import ProgressCircle from 'react-native-progress-circle';
 
 import styles from './style.scss';
 
 type Props = {
-  lesson: Lesson;
+  lesson: any;
   index: number;
   isSelected?: boolean;
   percent?: number;
@@ -42,9 +43,18 @@ const CourseLesson = ({
           <Text>{index + 1}</Text>
         </Layout>
         <Layout style={styles.info}>
-          <Text category="s2">{lesson.name}</Text>
+          <View style={styles.finish}>
+            {lesson.isFinish && (
+              <Icon
+                style={styles.icon}
+                fill="#006400"
+                name="checkmark-circle-2-outline"
+              ></Icon>
+            )}
+            <Text category="s2">{lesson.name}</Text>
+          </View>
           <Text category="p2">{`Video - ${parseHour(Number(lesson.hours))} ${
-            lesson.resource ? `Resources(${lesson.resource.length})` : ''
+            lesson.resource ? ` - Resources(${lesson.resource.length})` : ''
           } `}</Text>
         </Layout>
       </Layout>

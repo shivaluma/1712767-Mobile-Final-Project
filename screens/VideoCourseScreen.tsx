@@ -23,10 +23,12 @@ import YoutubePlayer from 'react-native-youtube-iframe';
 
 import CourseLesson from '../components/CourseLesson/CourseLesson';
 import { LessonSection } from '../components/LessonSection';
+import Loading from '../components/Loading';
 import { useSnackbar } from '../context/snackbar/configureContext';
 import { courses } from '../data/courses';
 import {
-  getcoursedetail,
+  detailwithlesson,
+  lastwatchedlesson,
   getvideourloflesson,
   updatetimelearningvideo,
   finishlesson,
@@ -34,9 +36,8 @@ import {
 import { storeData, getData } from '../utils/asyncStorage';
 import instance from '../utils/axios';
 const VideoCourseScreen = (props) => {
-  const course = props?.route?.params?.course;
   const courseId = props?.route?.params?.courseId;
-  const [currentCourse, setCurrentCourse] = useState(() => course);
+  const [currentCourse, setCurrentCourse] = useState(() => null);
   const snackbarContext = useSnackbar() as SnackBarContextType;
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const [downloadStatus, setDownloadStatus] = useState<Record<string, boolean>>(
@@ -46,9 +47,16 @@ const VideoCourseScreen = (props) => {
     () => null
   );
 
-  const [currentProgress, setCurrentProgress] = useState({
+  const [currentProgress, setCurrentProgress] = useState<any>({
     section: 0,
     lesson: 0,
+    lessonId: null,
+  });
+
+  const [preData, setPredata] = useState({
+    currentTime: 0,
+    lessonId: null,
+    videoUrl: null,
   });
 
   const [downloadStart, setDownloadStart] = useState(false);
@@ -61,28 +69,31 @@ const VideoCourseScreen = (props) => {
   });
 
   const [playing, setPlaying] = useState(false);
-  const saveURI = FileSystem.documentDirectory + 'courses/' + currentCourse.id;
+  const saveURI = FileSystem.documentDirectory + 'courses/' + currentCourse?.id;
 
-  const onStateChange = useCallback((state) => {
+  const handleVideoRef = useRef(null);
+  const seekRef = useRef(null);
+  const onStateChange = useCallback(async (state) => {
     if (state === 'ended') {
-      setPlaying(false);
-      Alert.alert('video has finished playing!');
+      await finishlesson(getLessonId(currentProgress));
     }
   }, []);
 
   const getLessonId = useCallback(
     (progress) => {
-      return currentCourse.section[progress.section].lesson[progress.lesson].id;
+      return currentCourse?.section[progress.section].lesson[progress.lesson]
+        .id;
     },
     [currentCourse]
   );
 
   useEffect(() => {
     (async () => {
-      if (!course) {
+      console.log(courseId);
+      if (courseId) {
         console.log('FETCH API');
         try {
-          const response = await getcoursedetail(courseId);
+          const response = await detailwithlesson(courseId);
 
           setCurrentCourse(() => response);
         } catch (err) {
@@ -91,9 +102,21 @@ const VideoCourseScreen = (props) => {
             payload: { show: true, content: err.response.data.message },
           });
         }
+
+        try {
+          console.log('LAST WATCHED LESSON');
+          const response = await lastwatchedlesson(courseId as string);
+          setPredata(response);
+        } catch (err) {
+          console.log(err);
+          snackbarContext?.dispatch({
+            type: 'SNACKBAR_CHANGE',
+            payload: { show: true, content: err.response.data.message },
+          });
+        }
       }
     })();
-  }, [course]);
+  }, [courseId]);
 
   useEffect(() => {
     if (!currentProgress || !currentCourse) return;
@@ -107,7 +130,7 @@ const VideoCourseScreen = (props) => {
           return;
         }
         const response = await getvideourloflesson(
-          currentCourse.id,
+          currentCourse?.id,
           getLessonId(currentProgress)
         );
 
@@ -123,6 +146,7 @@ const VideoCourseScreen = (props) => {
 
   useEffect(() => {
     (async () => {
+      if (!currentCourse) return;
       const dirInfo = await FileSystem.getInfoAsync(saveURI);
       if (!dirInfo.exists) return;
 
@@ -131,50 +155,91 @@ const VideoCourseScreen = (props) => {
         for (let j = 0; j < currentCourse.section[i].lesson.length; j++) {
           const currentPos = { section: i, lesson: j };
 
-          const lessonId = getLessonId(currentPos);
+          const lessonId = getLessonId({
+            section: Number(i),
+            lesson: Number(j),
+          });
           const fileInfo = await FileSystem.getInfoAsync(
-            saveURI + '/' + +'.mp4'
+            saveURI + '/' + lessonId + '.mp4'
           );
 
-          if (!fileInfo.exists) {
+          if (fileInfo.exists) {
             res[lessonId] = true;
           }
         }
       }
 
-      console.log(res);
       setDownloadStatus(res);
     })();
-  }, []);
+  }, [currentCourse]);
 
   const shouldLoadComponent = useCallback(
     (index: number) => index === selectedIndex,
     []
   );
 
-  const handlePlaybackStatusUpdate = useCallback(
-    _.throttle(async (data: any) => {
-      await updatetimelearningvideo(
-        getLessonId(currentProgress),
-        data.positionMillis
-      );
+  const handlePlaybackStatusUpdate = useCallback(async (data: any) => {
+    _.throttle(
+      async () =>
+        await updatetimelearningvideo(
+          getLessonId(currentProgress),
+          data.positionMillis / data.durationMillis
+        ),
+      3000
+    );
 
-      if (data.didJustFinish) {
+    if (seekRef.current && data.durationMillis) {
+      (handleVideoRef?.current as any).setPositionAsync(
+        (seekRef.current as any) * data.durationMillis
+      );
+      seekRef.current = null;
+    }
+
+    if (data.didJustFinish) {
+      console.log('RUN');
+      try {
         await finishlesson(getLessonId(currentProgress));
+      } catch (err) {
+        console.log(err.response);
       }
-    }, 3000),
-    []
-  );
+    }
+  }, []);
 
   const isYoutubeVideo = currentVideoUrl && currentVideoUrl?.includes('youtu');
-  const handleVideoRef = useRef(null);
+
   const timeOutRef = useRef(null);
   useEffect(() => {
     if (!isYoutubeVideo && handleVideoRef.current !== null) {
       (handleVideoRef?.current as any).setProgressUpdateIntervalAsync(4000);
+      if (preData?.lessonId && preData?.currentTime) {
+        for (let i = 0; i < currentCourse.section.length; i++) {
+          for (let j = 0; j < currentCourse.section[i].lesson.length; j++) {
+            if (
+              getLessonId({ section: Number(i), lesson: Number(j) }) ===
+              preData.lessonId
+            ) {
+              setCurrentProgress({
+                section: Number(i),
+                lesson: Number(j),
+                lessonId: preData.lessonId,
+              });
+              seekRef.current = preData.currentTime;
+              setPredata(null);
+            }
+          }
+        }
+      }
+
+      (handleVideoRef?.current as any).setProgressUpdateIntervalAsync(4000);
       (handleVideoRef?.current as any).setPositionAsync(0);
     }
-  }, [handleVideoRef.current, currentProgress.lesson, isYoutubeVideo]);
+  }, [
+    handleVideoRef.current,
+    currentCourse,
+    isYoutubeVideo,
+    preData,
+    currentProgress,
+  ]);
 
   const callback = useCallback((downloadProgress: any) => {
     const progress =
@@ -197,6 +262,7 @@ const VideoCourseScreen = (props) => {
 
   useEffect(() => {
     if (!downloadStart) return;
+    if (!currentCourse) return;
     if (typeof currentVideoUrl !== 'string') return;
     if (!currentVideoUrl) return;
     (async () => {
@@ -246,124 +312,128 @@ const VideoCourseScreen = (props) => {
         console.error(e);
       }
     })();
-  }, [saveURI, downloadStart, currentCourse.section, getLessonId]);
+  }, [saveURI, downloadStart, currentCourse, getLessonId]);
+
+  if (!currentCourse) return <Loading />;
 
   return (
-    <Layout style={styles.root}>
-      {!isYoutubeVideo && (
-        <Video
-          source={{
-            uri: currentVideoUrl,
-          }}
-          ref={handleVideoRef}
-          rate={1.0}
-          volume={1.0}
-          isMuted={false}
-          onPlaybackStatusUpdate={handlePlaybackStatusUpdate}
-          shouldPlay
-          useNativeControls
-          resizeMode="stretch"
-          isLooping={false}
-          style={styles.videocontainer}
-        />
-      )}
+    currentCourse && (
+      <Layout style={styles.root}>
+        {!isYoutubeVideo && (
+          <Video
+            source={{
+              uri: currentVideoUrl,
+            }}
+            ref={handleVideoRef}
+            rate={1.0}
+            volume={1.0}
+            isMuted={false}
+            onPlaybackStatusUpdate={handlePlaybackStatusUpdate}
+            shouldPlay
+            useNativeControls
+            resizeMode="stretch"
+            isLooping={false}
+            style={styles.videocontainer}
+          />
+        )}
 
-      {isYoutubeVideo && (
-        <YoutubePlayer
-          height={Math.round((Dimensions.get('window').height * 32) / 100)}
-          play
-          videoId={currentVideoUrl?.split('/').pop()}
-          onChangeState={onStateChange}
-        />
-      )}
+        {isYoutubeVideo && (
+          <YoutubePlayer
+            height={Math.round((Dimensions.get('window').height * 32) / 100)}
+            play
+            videoId={currentVideoUrl?.split('/').pop()}
+            onChangeState={onStateChange}
+          />
+        )}
 
-      <ScrollView stickyHeaderIndices={[2]}>
-        <Layout style={styles.info}>
-          <Text style={styles.title} category="s1">
-            {currentCourse.title}
-          </Text>
-
-          <Layout style={styles.withdownload}>
-            <Text style={styles.gap} category="p1">
-              {currentCourse.instructorName || currentCourse.instructor.name}
+        <ScrollView stickyHeaderIndices={[2]}>
+          <Layout style={styles.info}>
+            <Text style={styles.title} category="s1">
+              {currentCourse.title}
             </Text>
 
-            <TouchableOpacity onPress={handleToggleDownload}>
-              <Icon fill="#000" style={styles.button} name="download" />
-            </TouchableOpacity>
+            <Layout style={styles.withdownload}>
+              <Text style={styles.gap} category="p1">
+                {currentCourse.instructorName || currentCourse.instructor.name}
+              </Text>
+
+              <TouchableOpacity onPress={handleToggleDownload}>
+                <Icon fill="#000" style={styles.button} name="download" />
+              </TouchableOpacity>
+            </Layout>
+
+            <TabView
+              style={styles.gap}
+              indicatorStyle={{ height: 2 }}
+              selectedIndex={selectedIndex}
+              shouldLoadComponent={shouldLoadComponent}
+              onSelect={(index) => setSelectedIndex(index)}
+            >
+              <Tab title="Lectures">
+                <Layout style={styles.tabContainer}>
+                  {currentCourse?.section.map((section, sIndex) => (
+                    <React.Fragment key={section.name}>
+                      <Text style={styles.sectionname} category="c2">
+                        Section {sIndex + 1} - {section.name}
+                      </Text>
+
+                      <Layout style={styles.lessons}>
+                        {section.lesson.map((l, index) => (
+                          <TouchableOpacity
+                            key={sIndex * 100 + index}
+                            onPress={() => {
+                              if (
+                                currentProgress.lesson === index &&
+                                currentProgress.section === sIndex
+                              )
+                                return;
+                              setCurrentProgress(() => ({
+                                section: sIndex,
+                                lesson: index,
+                              }));
+                            }}
+                          >
+                            <CourseLesson
+                              lesson={l}
+                              isDownloaded={
+                                downloadStatus[
+                                  getLessonId({
+                                    section: sIndex,
+                                    lesson: index,
+                                  })
+                                ]
+                              }
+                              percent={
+                                sIndex === downloadProgress.section &&
+                                index === downloadProgress.lesson
+                                  ? downloadProgressPercent
+                                  : -1
+                              }
+                              isSelected={
+                                sIndex === currentProgress.section &&
+                                index === currentProgress.lesson
+                              }
+                              index={Number(
+                                sIndex * section.lesson.length + index
+                              )}
+                            />
+                          </TouchableOpacity>
+                        ))}
+                      </Layout>
+                    </React.Fragment>
+                  ))}
+                </Layout>
+              </Tab>
+              <Tab title="More">
+                <Layout style={styles.tabContainer}>
+                  <Text category="p1">More</Text>
+                </Layout>
+              </Tab>
+            </TabView>
           </Layout>
-
-          <TabView
-            style={styles.gap}
-            indicatorStyle={{ height: 2 }}
-            selectedIndex={selectedIndex}
-            shouldLoadComponent={shouldLoadComponent}
-            onSelect={(index) => setSelectedIndex(index)}
-          >
-            <Tab title="Lectures">
-              <Layout style={styles.tabContainer}>
-                {currentCourse?.section.map((section, sIndex) => (
-                  <React.Fragment key={section.name}>
-                    <Text style={styles.sectionname} category="c2">
-                      Section {sIndex + 1} - {section.name}
-                    </Text>
-
-                    <Layout style={styles.lessons}>
-                      {section.lesson.map((l, index) => (
-                        <TouchableOpacity
-                          key={sIndex * 100 + index}
-                          onPress={() => {
-                            if (
-                              currentProgress.lesson === index &&
-                              currentProgress.section === sIndex
-                            )
-                              return;
-                            setCurrentProgress(() => ({
-                              section: sIndex,
-                              lesson: index,
-                            }));
-                          }}
-                        >
-                          <CourseLesson
-                            lesson={l}
-                            isDownloaded={
-                              downloadStatus[
-                                getLessonId({
-                                  section: sIndex,
-                                  lesson: index,
-                                })
-                              ]
-                            }
-                            percent={
-                              sIndex === downloadProgress.section &&
-                              index === downloadProgress.lesson
-                                ? downloadProgressPercent
-                                : -1
-                            }
-                            isSelected={
-                              sIndex === currentProgress.section &&
-                              index === currentProgress.lesson
-                            }
-                            index={Number(
-                              sIndex * section.lesson.length + index
-                            )}
-                          />
-                        </TouchableOpacity>
-                      ))}
-                    </Layout>
-                  </React.Fragment>
-                ))}
-              </Layout>
-            </Tab>
-            <Tab title="More">
-              <Layout style={styles.tabContainer}>
-                <Text category="p1">More</Text>
-              </Layout>
-            </Tab>
-          </TabView>
-        </Layout>
-      </ScrollView>
-    </Layout>
+        </ScrollView>
+      </Layout>
+    )
   );
 };
 
