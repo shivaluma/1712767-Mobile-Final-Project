@@ -7,6 +7,7 @@ import CourseInSearch from '../components/CourseInSearch/CourseInSearch';
 import CourseInWishList from '../components/CourseInWishList/CourseInWishList';
 import Loading from '../components/Loading';
 import { useSnackbar } from '../context/snackbar/configureContext';
+import Authorization from '../hoc/Authorization';
 import { getfavoritecourses } from '../services/authenticate';
 import { getallcategories } from '../services/category';
 import { getcourseincategory } from '../services/search';
@@ -47,16 +48,18 @@ const CategoryScreen = ({ navigation, route }) => {
       <ScrollView>
         {courses?.map((course, index) => {
           return (
-            <TouchableHighlight
-              key={course.id}
+            <Authorization
               onPress={() =>
                 navigation.navigate('CourseDetail', {
                   courseId: course.id,
                 })
               }
-            >
-              <CourseInSearch key={course.id} course={course} />
-            </TouchableHighlight>
+              render={(onClick: any) => (
+                <TouchableHighlight key={course.id} onPress={onClick}>
+                  <CourseInSearch key={course.id} course={course} />
+                </TouchableHighlight>
+              )}
+            />
           );
         })}
       </ScrollView>

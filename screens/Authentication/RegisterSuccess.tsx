@@ -11,7 +11,8 @@ type Props = {
 
 export default function RegisterSuccess(props: Props) {
   const { navigation } = props;
-  console.log(props);
+
+  const isForgot = props?.route?.params.forgot;
 
   const [timer, setTimer] = useState(30);
   const intervalRef = useRef(null);
@@ -25,7 +26,9 @@ export default function RegisterSuccess(props: Props) {
   const handleSendEmail = async () => {
     setTimer(30);
     try {
-      const data = await authService.resendemail(props?.route?.params.email);
+      const data = isForgot
+        ? await authService.forgetpassemail(props?.route?.params.email)
+        : await authService.resendemail(props?.route?.params.email);
       console.log(data);
     } catch (err) {
       console.log(err.response);
@@ -35,15 +38,25 @@ export default function RegisterSuccess(props: Props) {
   return (
     <Layout style={styles.container}>
       <Text status="basic" category="h6" style={styles.header}>
-        Register Success
+        {isForgot ? 'Forgot Password' : 'Register Success'}
       </Text>
 
-      <Text category="s1">
-        We have sent you an email to verify for email, please check your email
-        and complete the verification. If you did not receive any email. press
-        the below button to receive new one {timer > 0 && `in ${timer} seconds`}
-        .
-      </Text>
+      {isForgot ? (
+        <Text>
+          {' '}
+          We have sent you an email to reset your password, please check your
+          email and complete the verification. If you did not receive any email.
+          press the below button to receive new one{' '}
+          {timer > 0 && `in ${timer} seconds`}.
+        </Text>
+      ) : (
+        <Text category="s1">
+          We have sent you an email to verify for email, please check your email
+          and complete the verification. If you did not receive any email. press
+          the below button to receive new one{' '}
+          {timer > 0 && `in ${timer} seconds`}.
+        </Text>
+      )}
       <Button
         disabled={timer > 0}
         style={styles.loginButton}

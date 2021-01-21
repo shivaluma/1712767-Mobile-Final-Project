@@ -10,7 +10,7 @@ interface Props {
   name: string;
   children?: ReactElement;
   courses: Course[];
-  apiKey: string;
+  apiKey?: string;
 }
 
 const CourseSection = ({ name, children, courses, apiKey }: Props) => {
@@ -26,6 +26,7 @@ const CourseSection = ({ name, children, courses, apiKey }: Props) => {
           onPress={() =>
             navigation.navigate('CourseList', {
               apiKey,
+              courses,
             })
           }
         >

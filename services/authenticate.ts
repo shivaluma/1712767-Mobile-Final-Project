@@ -93,3 +93,8 @@ export const getfavoritecourses = async () => {
   const { data } = await API.get(GETFAVORITECOURSEENDPOINT);
   return data.payload;
 };
+
+export const forgetpassemail = async (email: string) => {
+  const { data } = await API.post('user/forget-pass/send-email', { email });
+  return data.payload;
+};

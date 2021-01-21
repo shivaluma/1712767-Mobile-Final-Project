@@ -46,7 +46,7 @@ export default function MyCourseScreen({ currentSelect }: Props) {
             course.downloaded = downloaded;
           }
           setAllCourses(() => data);
-          console.log(data);
+
           setFilteredCourses(() => {
             if (currentSelect === 'Downloaded courses') {
               return data.filter((course: any) => course.downloaded !== null);

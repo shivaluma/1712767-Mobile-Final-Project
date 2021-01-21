@@ -8,15 +8,16 @@ import API from '../utils/axios';
 import styles from './styles/courselist.scss';
 
 export default function CourseListScreen(props: any) {
-  const [courses, setCourses] = useState([]);
+  const [courses, setCourses] = useState(props?.route?.params?.courses || []);
   const [paging, setPaging] = useState({ limit: 10, page: 1 });
 
   useEffect(() => {
+    if (!props.route.params.apiKey) return;
     (async () => {
       const courses = await API.post(props.route.params.apiKey, paging);
       setCourses((prev) => prev.concat(courses.data.payload));
     })();
-  }, [props.endpoint, paging]);
+  }, [props?.route?.params?.apiKey, paging]);
 
   useEffect(() => {
     props.navigation.setOptions({ title: props.route.params.title });

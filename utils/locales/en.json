@@ -54,5 +54,9 @@
   "settings": "Settings",
   "account_settings": "Account Settings",
   "change_profile": "Change Profile",
-  "change_password": "Change Password"
+  "change_password": "Change Password",
+  "rating_this_course": "Rate this Course",
+  "formality_point": "Formality Point",
+  "content_point": "Content Point",
+  "presentation_point": "Presentation Point"
 }

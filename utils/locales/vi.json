@@ -53,5 +53,9 @@
   "change_lang": "Đổi ngôn ngữ",
   "account_settings": "Cài đặt tài khoản",
   "change_profile": "Đổi thông tin cá nhân",
-  "change_password": "Đổi mật khẩu"
+  "change_password": "Đổi mật khẩu",
+  "rating_this_course": "Đánh giá khoá học",
+  "formality_point": "Điểm hình thức",
+  "content_point": "Điểm nội dung",
+  "presentation_point": "Điểm trình bày"
 }

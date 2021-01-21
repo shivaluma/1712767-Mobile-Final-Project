@@ -59,14 +59,10 @@ export default function SearchScreen({
 }: Props) {
   const navigate = useNavigation();
 
-  const theme = useTheme();
   const [categories, setCategories] = useState([]);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const [paging, setPaging] = useState({ limit: 10, offset: 1 });
-  const shouldLoadComponent = useCallback(
-    (index: any) => index === selectedIndex,
-    []
-  );
+
   const [searchResult, setSearchResult] = useState([]);
 
   useEffect(() => {

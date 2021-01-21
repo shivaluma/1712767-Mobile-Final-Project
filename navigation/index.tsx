@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   NavigationContainer,
   DefaultTheme,
@@ -86,6 +87,7 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   const userContext = useUser();
+  const themeContext = useThemeValue();
   const [courseId, setCourseId] = React.useState('');
   useEffect(() => {
     (async () => {
@@ -100,6 +102,12 @@ function RootNavigator() {
         userContext?.dispatch({
           type: 'UPDATE_USER',
           payload: { user: null, hasInit: true },
+        });
+      } finally {
+        const themeColor = await AsyncStorage.getItem('theme');
+        themeContext?.dispatch({
+          type: 'THEME_CHANGE',
+          payload: themeColor === 'Light',
         });
       }
     })();

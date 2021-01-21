@@ -23,7 +23,7 @@ const Field = (props: Props) => {
     error,
     defaultValue,
   } = props;
-  console.log(defaultValue);
+
   const [isSecured, setSecured] = useState(false);
 
   return (
@@ -34,6 +34,7 @@ const Field = (props: Props) => {
 
       <Controller
         control={control}
+        rules={rules}
         render={({ onChange, onBlur, value }) => (
           <Input
             onBlur={onBlur}
@@ -45,7 +46,7 @@ const Field = (props: Props) => {
             caption={
               error && (
                 <Text style={styles.gap} category="c2" status="danger">
-                  This is required!
+                  {error.message || 'This is required.'}
                 </Text>
               )
             }
@@ -53,7 +54,6 @@ const Field = (props: Props) => {
           />
         )}
         name={name}
-        rules={{ required: true }}
         defaultValue=""
       />
     </Layout>

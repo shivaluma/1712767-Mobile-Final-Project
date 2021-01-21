@@ -22,3 +22,4 @@ jobs:
         - npm ci
         - npx expo login -u shivaluma -p nguhamay
         - npx expo publish --non-interactive
+        - npx expo build:apk

@@ -1,4 +1,5 @@
 import { light } from '@eva-design/eva';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import {
   Avatar,
@@ -125,6 +126,7 @@ const SettingScreen = () => {
                   type: 'THEME_CHANGE',
                   payload: !!theme,
                 });
+                AsyncStorage.setItem('theme', theme ? 'Light' : 'Dark');
                 setTheme((prev) => !prev);
               }}
             >

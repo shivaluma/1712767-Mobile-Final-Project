@@ -112,7 +112,13 @@ const LoginScreen = ({ navigation }) => {
             // <RegisterForm  />
           )}
 
-          <Button onPress={handleGoogleLogin}>Sign in with Google</Button>
+          <Button
+            appearance="outline"
+            status="danger"
+            onPress={handleGoogleLogin}
+          >
+            Sign in with Google
+          </Button>
           <Button appearance="ghost" onPress={onForgotPasswordHandler}>
             FORGOT PASSWORD?
           </Button>

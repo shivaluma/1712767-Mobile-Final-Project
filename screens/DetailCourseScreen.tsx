@@ -429,7 +429,7 @@ export default function CourseDetailScreen({ route, navigation, setCourseId }) {
 
                       <Modal
                         visible={ratingVisible}
-                        style={{ flexBasis: '70%', width: '70%' }}
+                        style={{ flexBasis: '90%', width: '90%' }}
                         backdropStyle={sstyles.backdrop}
                         onBackdropPress={() => setRatingVisible(false)}
                       >
